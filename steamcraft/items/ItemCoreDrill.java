@@ -13,10 +13,10 @@ public class ItemCoreDrill extends Item
 		maxStackSize = 1;
 		setMaxDamage(256);
     }
-
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l)
+    @Override
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10)
     {
-		world.createExplosion(null, i, j, k, 2F);
+		world.createExplosion(null, i, j, k, 2F, false);
         double d = (double)((float)i + 0.5F) + (double)(0.5F) * 2.0000000000000001D;
         double d1 = (double)((float)j + 0.7F) + (double)(0.5F) * 2.0000000000000001D;
         double d2 = (double)((float)k + 0.5F) + (double)(0.5F) * 2.0000000000000001D;

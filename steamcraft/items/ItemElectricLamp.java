@@ -13,8 +13,8 @@ public class ItemElectricLamp extends Item
         super(i);
 		spawnID = block.blockID;
     }
-
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l)
+    @Override
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10)
     {
         if(world.getBlockId(i, j, k) != Block.snow.blockID)
         {

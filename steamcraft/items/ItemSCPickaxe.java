@@ -11,15 +11,15 @@ public class ItemSCPickaxe extends ItemPickaxe
 {
 	 public ItemSCPickaxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(i, 2, enumtoolmaterial, xblocksEffectiveAgainst);
+        super(i, enumtoolmaterial);
 		xefficiencyOnProperMaterial = 4F;
         xefficiencyOnProperMaterial = enumtoolmaterial.getEfficiencyOnProperMaterial();
 		toolMaterial = enumtoolmaterial;
     }
-
+	 @Override
     public boolean canHarvestBlock(Block block)
     {
-       if(block == mod_Steamcraft.oreQuartz || block == mod_Steamcraft.oreQuartzActive ||  block == mod_Steamcraft.blockQuartz || block == mod_Steamcraft.decorQuartz){
+       if(block == mod_Steamcraft.oreQuartz || block == mod_Steamcraft.oreQuartzActive ||  block == Block.blockNetherQuartz || block == mod_Steamcraft.decorQuartz){
             return toolMaterial.getHarvestLevel() >= 2;
         }
 		if(block == mod_Steamcraft.oreVolucite || block == mod_Steamcraft.blockVolucite || block == mod_Steamcraft.decorVolucite){
@@ -43,7 +43,7 @@ public class ItemSCPickaxe extends ItemPickaxe
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
-        if(block == Block.blockSteel || block == Block.oreIron || block == mod_Steamcraft.blockCastIron || block == mod_Steamcraft.decorIron || block == mod_Steamcraft.decorCastIron)
+        if(block == Block.blockIron || block == Block.oreIron || block == mod_Steamcraft.blockCastIron || block == mod_Steamcraft.decorIron || block == mod_Steamcraft.decorCastIron)
         {
             return toolMaterial.getHarvestLevel() >= 1;
         }
@@ -77,7 +77,7 @@ public class ItemSCPickaxe extends ItemPickaxe
     static
     {
         xblocksEffectiveAgainst = (new Block[] {
-            Block.cobblestone, Block.stairDouble, Block.stairSingle, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockSteel, Block.oreCoal, Block.blockGold,
+            Block.cobblestone, Block.stairDouble, Block.stairSingle, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold,
             Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstoneGlowing, Block.oreRedstone, Block.obsidian
         });
     }
@@ -85,23 +85,23 @@ public class ItemSCPickaxe extends ItemPickaxe
     public static void addSteamcraftBlocks ()
     {
         xblocksEffectiveAgainst = (new Block[] {
-            Block.cobblestone, Block.stairDouble, Block.stairSingle, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockSteel, Block.oreCoal, Block.blockGold,
+            Block.cobblestone, Block.stairDouble, Block.stairSingle, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold,
             Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstoneGlowing, Block.oreRedstone, mod_Steamcraft.brimstone,
 			mod_Steamcraft.borniteOre, mod_Steamcraft.orePhosphate, mod_Steamcraft.oreUranite, mod_Steamcraft.oreQuartz, mod_Steamcraft.oreQuartzActive, mod_Steamcraft.oreVolucite,
 			mod_Steamcraft.roofTile, mod_Steamcraft.blockCastIron, mod_Steamcraft.blockVolucite, mod_Steamcraft.blockBrass, mod_Steamcraft.lamp, mod_Steamcraft.woodBrass, mod_Steamcraft.leavesLamp,
 			mod_Steamcraft.railingCastIron, mod_Steamcraft.decorIron, mod_Steamcraft.decorGold, mod_Steamcraft.decorBrass, mod_Steamcraft.decorDiamond, mod_Steamcraft.decorCastIron,
-			mod_Steamcraft.decorVolucite, mod_Steamcraft.decorLapis, mod_Steamcraft.carvedStone, mod_Steamcraft.blockQuartz, mod_Steamcraft.blockUranium, mod_Steamcraft.decorUranium,
+			mod_Steamcraft.decorVolucite, mod_Steamcraft.decorLapis, mod_Steamcraft.carvedStone, Block.blockNetherQuartz, mod_Steamcraft.blockUranium, mod_Steamcraft.decorUranium,
 			mod_Steamcraft.decorQuartz, Block.obsidian, mod_Steamcraft.oreSCDiamond, mod_Steamcraft.oreSCCoal, Block.stoneBrick
         });
     }
-   
+    @Override
     public float getStrVsBlock(ItemStack itemstack, Block block)
     {
         for(int i = 0; i < xblocksEffectiveAgainst.length; i++)
         {
             if(xblocksEffectiveAgainst[i] == block)
             {
-			if(toolMaterial == EnumToolSteamcraft.STEAM){
+			if(toolMaterial == mod_Steamcraft.STEAM){
 				return (xefficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 				}
                 return xefficiencyOnProperMaterial;
@@ -110,7 +110,7 @@ public class ItemSCPickaxe extends ItemPickaxe
 
         return 1.0F;
     }
-   protected EnumToolSteamcraft toolMaterial;
+   protected EnumToolMaterial toolMaterial;
 
 }
 

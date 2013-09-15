@@ -16,18 +16,18 @@ public class BlockLamp extends Block
         super(i, material);
 		isPowered = false;
     }
-	
-	public int tickRate()
+    @Override
+	public int tickRate(World world)
     {
         return 1;
     }
-	
+    @Override
 	public boolean isOpaqueCube()
     {
         return true;
     }
-	
-	 public void onBlockAdded(World world, int i, int j, int k)
+    @Override
+    public void onBlockAdded(World world, int i, int j, int k)
     {
         world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
         world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
@@ -46,8 +46,8 @@ public class BlockLamp extends Block
         world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
         world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
     }
-	
-	 public void updateTick(World world, int i, int j, int k, Random random)
+    @Override
+    public void updateTick(World world, int i, int j, int k, Random random)
     {
 		isPowered = func_30002_h(world, i, j, k);
 		if(isPowered){
@@ -56,14 +56,14 @@ public class BlockLamp extends Block
 			world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k));
 		}
 	}
-	
+    @Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
         super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
         return mod_Steamcraft.lamp.blockID;
     }
@@ -92,12 +92,7 @@ public class BlockLamp extends Block
         }
         return world.isBlockProvidingPowerTo(i + 1, j, k, 5);
     }
-
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)
-    {
-        super.harvestBlock(world, entityplayer, i, j, k, l);
-    }
-	
+	@Override
 	public boolean canProvidePower()
     {
         return false;

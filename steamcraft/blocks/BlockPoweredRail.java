@@ -12,7 +12,8 @@ public class BlockPoweredRail extends BlockRail
         super(i);
 		isPowered = flag;
     }
-	public Icon getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+	public Icon getIcon(int i, int j)
     {
         if(isPowered)
         {

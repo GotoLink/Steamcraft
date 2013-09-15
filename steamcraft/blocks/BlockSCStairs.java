@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -23,17 +24,17 @@ public class BlockSCStairs extends BlockStairs
 		blockDrop = blockdrop;
 		dropQuantity = quantity;
     }
-
+    @Override
     public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k)
     {
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
-
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
         return super.getCollisionBoundingBoxFromPool(world, i, j, k);
     }
-
+    @Override
     public void getCollidingBoundingBoxes(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, ArrayList arraylist)
     {
         int l = world.getBlockMetadata(i, j, k);
@@ -68,36 +69,36 @@ public class BlockSCStairs extends BlockStairs
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
 		if(blockDrop == -1){
 		blockDrop = modelBlock.idDropped(i, random);
 		}
         return blockDrop;
     }
-
+    @Override
     public int quantityDropped(Random random)
     {
 		if(dropQuantity == -1){
-		dropQuantity = modelBlock.quantityDropped(random);
+			dropQuantity = modelBlock.quantityDropped(random);
 		}
         return dropQuantity;
     }
-
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+    public Icon getIcon(int i, int j)
     {
-        return modelBlock.getBlockTextureFromSideAndMetadata(i, 0);
+        return modelBlock.getIcon(i, 0);
     }
 
     /*public int getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         return modelBlock.getBlockTexture(iblockaccess, i, j, k, 0);
     }*/
-	
-	public void dropBlockAsItemWithChance(World world, int i, int j, int k, int l, float f)
+    @Override
+	public void dropBlockAsItemWithChance(World world, int i, int j, int k, int l, float f, int g)
     {
-        modelBlock.dropBlockAsItemWithChance(world, i, j, k, 0, f);
+        modelBlock.dropBlockAsItemWithChance(world, i, j, k, 0, f, g);
     }
 
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)

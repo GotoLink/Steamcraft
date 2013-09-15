@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -23,37 +24,37 @@ public class BlockSCCopperWire extends Block
         blocksNeedingUpdate = new HashSet();
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
     }
-
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+    public Icon getIcon(int i, int j)
     {
         return blockIndexInTexture;
     }
-
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
         return null;
     }
-
+    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
-
+    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
     }
-
+    @Override
     public int getRenderType()
     {
         return mod_Steamcraft.CopperModelID;
     }
-	
-	 public int colorMultiplier(IBlockAccess iblockaccess, int i, int j, int k)
+    @Override
+    public int colorMultiplier(IBlockAccess iblockaccess, int i, int j, int k)
     {
         return 0x800000;
     }
-
+    @Override
     public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {
 		return world.isBlockNormalCube(i, j - 1, k);
@@ -69,7 +70,6 @@ public class BlockSCCopperWire extends Block
             ChunkPosition chunkposition = (ChunkPosition)arraylist.get(l);
             world.notifyBlocksOfNeighborChange(chunkposition.x, chunkposition.y, chunkposition.z, blockID);
         }
-
     }
 
     private void calculateCurrentChanges(World world, int i, int j, int k, int l, int i1, int j1)
@@ -214,11 +214,11 @@ public class BlockSCCopperWire extends Block
             return;
         }
     }
-
+    @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
         super.onBlockAdded(world, i, j, k);
-        if(world.multiplayerWorld)
+        if(world.isRemote)
         {
             return;
         }
@@ -262,7 +262,7 @@ public class BlockSCCopperWire extends Block
     public void onBlockRemoval(World world, int i, int j, int k)
     {
         super.onBlockRemoval(world, i, j, k);
-        if(world.multiplayerWorld)
+        if(world.isRemote)
         {
             return;
         }
@@ -318,10 +318,10 @@ public class BlockSCCopperWire extends Block
             return l;
         }
     }
-
+    @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-        if(world.multiplayerWorld)
+        if(world.isRemote)
         {
             return;
         }
@@ -337,10 +337,10 @@ public class BlockSCCopperWire extends Block
         }
         super.onNeighborBlockChange(world, i, j, k, l);
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
-        return Item.redstone.shiftedIndex;
+        return Item.redstone.itemID;
     }
 
     public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
@@ -409,12 +409,12 @@ public class BlockSCCopperWire extends Block
         }
         return l == 5 && flag1 && !flag2 && !flag3;
     }
-
+    @Override
     public boolean canProvidePower()
     {
         return wiresProvidePower;
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         int l = world.getBlockMetadata(i, j, k);

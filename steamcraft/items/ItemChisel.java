@@ -10,6 +10,7 @@ public class ItemChisel extends Item
         maxStackSize = 1;
         setMaxDamage(j);
     }
+    @Override
 	public boolean isFull3D()
     {
         return true;

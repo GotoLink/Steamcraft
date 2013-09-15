@@ -19,7 +19,7 @@ public class EntityHighwayman extends EntityMob
     {
         super(world);
 		if(heldItemNumber == -1){
-		heldItemNumber = rand.nextInt(10);
+			heldItemNumber = rand.nextInt(10);
 		}
     }
     @Override
@@ -45,9 +45,9 @@ public class EntityHighwayman extends EntityMob
         if(entityplayer != null && canEntityBeSeen(entityplayer) && !entityplayer.isDead)
         {
 			if(rand.nextInt(2) == 0){
-			entityplayer.addChatMessage("Highwayman: Your money or your life!");
+				entityplayer.addChatMessage("Highwayman: Your money or your life!");
 			}else{
-			entityplayer.addChatMessage("Highwayman: Stand and deliver!");
+				entityplayer.addChatMessage("Highwayman: Stand and deliver!");
 			}
             return entityplayer;
         } else
@@ -93,29 +93,21 @@ public class EntityHighwayman extends EntityMob
     @Override
 	public void onStruckByLightning(EntityLightningBolt entitylightningbolt)
     {
-        if(worldObj.isRemote)
-        {
-            return;
-        } else
+        if(!worldObj.isRemote)
         {
             EntityZombie entityzombie = new EntityZombie(worldObj);
             entityzombie.setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
             worldObj.spawnEntityInWorld(entityzombie);
             setDead();
-            return;
         }
     }
     @Override
     protected int getDropItemId()
     {
-		if(!percussion){
-        return mod_Steamcraft.musketRound.itemID;
-		}else{
-		return mod_Steamcraft.percussionRound.itemID;
-		}
+		return percussion?mod_Steamcraft.percussionRound.itemID:mod_Steamcraft.musketRound.itemID;
     }
     @Override
-	protected void dropFewItems(boolean flag)
+	protected void dropFewItems(boolean flag,int fortune)
     {
 		/*if(heldItemNumber == -1){
 		heldItemNumber = rand.nextInt(10);
@@ -197,10 +189,10 @@ public class EntityHighwayman extends EntityMob
    
 	public ItemStack setHeldItem()
 	{
-	if(heldItemNumber == -1){
-	heldItemNumber = rand.nextInt(10);
-	}
-	System.out.println(heldItemNumber);
+		if(heldItemNumber == -1){
+			heldItemNumber = rand.nextInt(10);
+		}
+		System.out.println(heldItemNumber);
 	if(heldItemNumber >= 2 && heldItemNumber < 4){
 		rifled = true;
 		percussion = false;

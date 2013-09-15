@@ -43,7 +43,7 @@ public class BlockSteamFurnace extends BlockFurnace
         this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "steamfurnaceactive" : "steamfurnaceidle");
         this.furnaceIconTop = par1IconRegister.registerIcon("steamfurnacetop");
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         if(!isActive)

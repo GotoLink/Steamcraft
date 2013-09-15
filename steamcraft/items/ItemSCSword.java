@@ -1,8 +1,11 @@
 package steamcraft.items;
 
+import steamcraft.mod_Steamcraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import steamcraft.EnumToolSteamcraft;
 
 public class ItemSCSword extends ItemSword
 {
@@ -10,21 +13,18 @@ public class ItemSCSword extends ItemSword
     {
         super(i, enumtoolmaterial);
         weaponDamage = 4 + enumtoolmaterial.getDamageVsEntity() * 2;
-		itemDamage = 0;
     }
-
-    public int getDamageVsEntity(Entity entity)
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
     {
-		if(toolMaterial == EnumToolSteamcraft.STEAM){
-		return weaponDamage - (int)Math.round(itemDamage*10/320);
+		if(toolMaterial == mod_Steamcraft.STEAM){
+			weaponDamage-= (int)Math.round(stack.getItemDamage()*10/320);
 		}
-		return weaponDamage;
+		return super.hitEntity(stack, livingBase1, livingBase2);
     }
-
+    @Override
     public int getMaxItemUseDuration(ItemStack itemstack)
     {
         return 0x11940;
     }
-	
-	private int itemDamage;
 }

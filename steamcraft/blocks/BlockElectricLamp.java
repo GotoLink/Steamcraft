@@ -11,11 +11,11 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockElectricLamp extends BlockContainer
 {
-
     public BlockElectricLamp(int i, Class class1, boolean flag)
     {
         super(i, Material.circuits);
@@ -26,23 +26,23 @@ public class BlockElectricLamp extends BlockContainer
         float f1 = 1.0F;
         setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
     }
-	
-	public int getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+	public Icon getIcon(int i, int j)
     {
         if(i == 1)
         {
-            return Block.redstoneWire.getBlockTextureFromSideAndMetadata(i, j);
+            return Block.redstoneWire.getIcon(i, j);
         } else
         {
-            return super.getBlockTextureFromSideAndMetadata(i, j);
+            return super.getIcon(i, j);
         }
     }
-
-    public int tickRate()
+    @Override
+    public int tickRate(World world)
     {
         return 2;
     }
-	
+    @Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
         return null;
@@ -53,28 +53,23 @@ public class BlockElectricLamp extends BlockContainer
         setBlockBoundsBasedOnState(world, i, j, k);
         return super.getSelectedBoundingBoxFromPool(world, i, j, k);
     }
-	
+    @Override
 	public int getRenderType()
     {
         return -1;
     }
-
+    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
     }
-
+    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
-
-    public TileEntity getBlockEntity()
-    {
-        
-    }
 	
-	 private boolean canPlaceTop(World world, int i, int j, int k)
+    private boolean canPlaceTop(World world, int i, int j, int k)
     {
         return (world.isBlockNormalCube(i, j, k) || world.getBlockId(i, j, k) == Block.fence.blockID
 		|| world.getBlockId(i, j, k) == mod_Steamcraft.railingCastIron.blockID
@@ -110,7 +105,7 @@ public class BlockElectricLamp extends BlockContainer
 		|| world.getBlockId(i, j, k) == mod_Steamcraft.teslaReceiverActive.blockID
 		|| world.getBlockId(i, j, k) == mod_Steamcraft.battery.blockID);
 	}
-	
+	@Override
 	public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {
         if(canPlaceSide(world, i - 1, j , k))
@@ -165,7 +160,7 @@ public class BlockElectricLamp extends BlockContainer
         }
 		 world.setBlockMetadataWithNotify(i, j, k, i1);
     }
-
+	@Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
 		if(world.getBlockMetadata(i, j, k) == 0)
@@ -247,10 +242,9 @@ public class BlockElectricLamp extends BlockContainer
         }
         return l == 2 && world.isBlockIndirectlyProvidingPowerTo(i + 1, j, k, 5);
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-	
 		super.updateTick(world, i, j, k, random);
         if(world.getBlockMetadata(i, j, k) == 0)
         {
@@ -270,7 +264,7 @@ public class BlockElectricLamp extends BlockContainer
 				world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.torchElectricIdle.blockID, world.getBlockMetadata(i, j, k));
 			}
     }
-
+    @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
 			if(dropTorchIfCantStay(world, i, j, k))
@@ -319,18 +313,17 @@ public class BlockElectricLamp extends BlockContainer
             return true;
         }
     }
-
-    public int idDropped(int i, Random random)
+	@Override
+    public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.electricLamp.shiftedIndex;
+        return mod_Steamcraft.electricLamp.itemID;
     }
-	
-
+	@Override
     public boolean canProvidePower()
     {
         return false;
     }
-
+	@Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         if(!torchActive)

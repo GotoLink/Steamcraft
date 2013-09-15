@@ -6,6 +6,7 @@ import java.util.Random;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -15,17 +16,17 @@ public class BlockInverter extends BlockSCTorch
     {
         super(i);
         torchActive = flag;
-        setTick(true);
+        setTickRandomly(true);
     }
-	
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+	@Override
+    public Icon getIcon(int i, int j)
     {
         if(i == 1)
         {
-            return Block.redstoneWire.getBlockTextureFromSideAndMetadata(i, j);
+            return Block.redstoneWire.getIcon(i, j);
         } else
         {
-			return super.getBlockTextureFromSideAndMetadata(i, j);
+			return super.getIcon(i, j);
 		}
     }
 
@@ -47,12 +48,12 @@ public class BlockInverter extends BlockSCTorch
 
         return false;
     }
-
-    public int tickRate()
+    @Override
+    public int tickRate(World world)
     {
         return 2;
     }
-
+    @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
         if(world.getBlockMetadata(i, j, k) == 0)
@@ -130,7 +131,7 @@ public class BlockInverter extends BlockSCTorch
         }
         return l == 2 && world.isBlockIndirectlyProvidingPowerTo(i + 1, j, k, 5);
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         boolean flag = func_30002_h(world, i, j, k);
@@ -159,11 +160,11 @@ public class BlockInverter extends BlockSCTorch
             world.setBlockAndMetadataWithNotify(i, j, k, Block.torchRedstoneActive.blockID, world.getBlockMetadata(i, j, k));
         }
     }
-
+    @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
         super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 
     public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
@@ -176,17 +177,17 @@ public class BlockInverter extends BlockSCTorch
             return false;
         }
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
         return Block.torchRedstoneActive.blockID;
     }
-
+    @Override
     public boolean canProvidePower()
     {
         return true;
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         if(!torchActive)

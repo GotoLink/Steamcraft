@@ -12,10 +12,10 @@ public class BlockUraniteOre extends Block
     public BlockUraniteOre(int i)
     {
         super(i, Material.rock);
-        setTickOnLoad(true);
+        setTickRandomly(true);
     }
-
-    public int tickRate()
+    @Override
+    public int tickRate(World world)
     {
         return 30;
     }
@@ -42,21 +42,21 @@ public class BlockUraniteOre extends Block
     {
         func_319_i(world, i, j, k);
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
         return mod_Steamcraft.oreUranite.blockID;
     }
-
+    @Override
     public int quantityDropped(Random random)
     {
         return 1;
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
             func_319_i(world, i, j, k);

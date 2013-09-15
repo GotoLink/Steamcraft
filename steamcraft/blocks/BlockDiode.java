@@ -21,7 +21,7 @@ public class BlockDiode extends BlockRedstoneRepeater
     {
         super(i, flag);
     }
-
+    @Override
     public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {
         if(!world.isBlockNormalCube(i, j - 1, k))
@@ -32,7 +32,7 @@ public class BlockDiode extends BlockRedstoneRepeater
             return super.canPlaceBlockAt(world, i, j, k);
         }
     }
-
+    @Override
     public boolean canBlockStay(World world, int i, int j, int k)
     {
         if(!world.isBlockNormalCube(i, j - 1, k))
@@ -43,7 +43,7 @@ public class BlockDiode extends BlockRedstoneRepeater
             return super.canBlockStay(world, i, j, k);
         }
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         int l = world.getBlockMetadata(i, j, k);
@@ -62,8 +62,8 @@ public class BlockDiode extends BlockRedstoneRepeater
             }
         }
     }
-
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+    public Icon getIcon(int i, int j)
     {
     	if(i == 0)
         {
@@ -77,7 +77,7 @@ public class BlockDiode extends BlockRedstoneRepeater
             return 5;
         }
     }
-
+    @Override
     public int getRenderType()
     {
         return 15;
@@ -109,12 +109,12 @@ public class BlockDiode extends BlockRedstoneRepeater
         }
         return i1 == 3 && l == 5;
     }
-
+    @Override
     public boolean canProvidePower()
     {
         return false;
     }
-
+    @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
         world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);

@@ -17,12 +17,12 @@ public class BlockBrassLog extends Block
     {
         super(i, Material.iron);
     }
-
-    public int idDropped(int i, Random random)
+	@Override
+    public int idDropped(int i, Random random, int j)
     {
         return mod_Steamcraft.woodBrass.blockID;
     }
-
+	@Override
     public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         if(l == 1)

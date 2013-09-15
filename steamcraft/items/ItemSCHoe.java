@@ -6,7 +6,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import steamcraft.EnumToolSteamcraft;
+import steamcraft.mod_Steamcraft;
 
 public class ItemSCHoe extends ItemHoe
 {
@@ -14,8 +14,8 @@ public class ItemSCHoe extends ItemHoe
     {
         super(i, enumtoolmaterial);
     }
-
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l)
+    @Override
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10)
     {
 		 if(!entityplayer.func_35190_e(i, j, k))
         {
@@ -32,8 +32,8 @@ public class ItemSCHoe extends ItemHoe
                 return true;
             } else
             {
-                world.setBlockWithNotify(i, j, k, block.blockID);
-				if(toolMaterial == EnumToolSteamcraft.STEAM){
+                world.setBlock(i, j, k, block.blockID);
+				if(theToolMaterial == mod_Steamcraft.STEAM){
 				itemstack.damageItem(1 +  (int)Math.round(itemstack.getItemDamage()*5/320), entityplayer);
 				return true;
 				}

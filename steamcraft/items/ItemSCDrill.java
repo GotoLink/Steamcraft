@@ -1,7 +1,3 @@
-// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) braces deadcode 
-
 package steamcraft.items;
 
 import net.minecraft.block.Block;
@@ -9,11 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import steamcraft.mod_Steamcraft;
-
-
-// Referenced classes of package net.minecraft.src:
-//            ItemTool, EnumToolMaterial, Item, Material, 
-//            Block
 
 public class ItemSCDrill extends ItemSCTool
 {
@@ -24,13 +15,13 @@ public class ItemSCDrill extends ItemSCTool
         xefficiencyOnProperMaterial = enumtoolmaterial.getEfficiencyOnProperMaterial()*1.5F;
 		toolMaterial = enumtoolmaterial;
     }
-
+	@Override
     public boolean canHarvestBlock(Block block)
     {
 		if(block == mod_Steamcraft.oreQuartz || block == mod_Steamcraft.oreQuartzActive){
             return false;
         }
-		if(block == mod_Steamcraft.blockQuartz || block == mod_Steamcraft.decorQuartz){
+		if(block == Block.blockNetherQuartz || block == mod_Steamcraft.decorQuartz){
             return toolMaterial.getHarvestLevel() >= 2;
         }
 		if(block == mod_Steamcraft.oreVolucite){
@@ -67,7 +58,7 @@ public class ItemSCDrill extends ItemSCTool
 		if(block == Block.blockGold || block == mod_Steamcraft.decorGold){
 			return toolMaterial.getHarvestLevel() >= 2;
         }
-        if(block == Block.blockSteel || block == Block.oreIron || block == mod_Steamcraft.blockCastIron || block == mod_Steamcraft.decorIron || block == mod_Steamcraft.decorCastIron)
+        if(block == Block.blockIron || block == Block.oreIron || block == mod_Steamcraft.blockCastIron || block == mod_Steamcraft.decorIron || block == mod_Steamcraft.decorCastIron)
         {
             return toolMaterial.getHarvestLevel() >= 1;
         }
@@ -122,12 +113,12 @@ public class ItemSCDrill extends ItemSCTool
 			mod_Steamcraft.blockUranium, mod_Steamcraft.decorUranium, mod_Steamcraft.decorQuartz, Block.obsidian
         });
     }
-   
+    @Override
     public float getStrVsBlock(ItemStack itemstack, Block block)
     {
         for(int i = 0; i < xblocksEffectiveAgainst.length; i++)
         {
-           if(toolMaterial == EnumToolSteamcraft.STEAM){
+           if(toolMaterial == mod_Steamcraft.STEAM){
 				return (xefficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 				}
                 return xefficiencyOnProperMaterial;
@@ -136,7 +127,7 @@ public class ItemSCDrill extends ItemSCTool
         return 1.0F;
     }
 	
-   protected EnumToolSteamcraft toolMaterial;
+   protected EnumToolMaterial toolMaterial;
 
 }
 

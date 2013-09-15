@@ -19,7 +19,7 @@ public class ItemTeacup extends ItemFood
     {
         this(i, j, 0.0F);
     }
-	
+    @Override
     protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
         super.onFoodEaten(par1ItemStack, par2World, par3EntityPlayer);

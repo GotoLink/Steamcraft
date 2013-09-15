@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.mod_Steamcraft;
 
@@ -15,15 +16,15 @@ public class BlockTeslaCoil extends BlockSCTorch
         super(i);
         torchActive = flag;
     }
-	
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+	@Override
+    public Icon getIcon(int i, int j)
     {
         if(i == 1)
         {
-            return Block.redstoneWire.getBlockTextureFromSideAndMetadata(i, j);
+            return Block.redstoneWire.getIcon(i, j);
         } else
         {
-            return super.getBlockTextureFromSideAndMetadata(i, j);
+            return super.getIcon(i, j);
         }
     }
 
@@ -45,12 +46,12 @@ public class BlockTeslaCoil extends BlockSCTorch
 
         return false;
     }
-
-    public int tickRate()
+    @Override
+    public int tickRate(World world)
     {
         return 1;
     }
-
+    @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
         if(world.getBlockMetadata(i, j, k) == 0)
@@ -67,12 +68,12 @@ public class BlockTeslaCoil extends BlockSCTorch
             world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
         }
 		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 
     public void onBlockRemoval(World world, int i, int j, int k)
     {
-	int l2 = world.getBlockMetadata(i, j, k);
+    	int l2 = world.getBlockMetadata(i, j, k);
         int f = 0;
         int f1 = 0;
 		int f2 = 0;
@@ -166,19 +167,19 @@ public class BlockTeslaCoil extends BlockSCTorch
         }
         return l == 2 && world.isBlockIndirectlyProvidingPowerTo(i + 1, j, k, 5);
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         byte nnum = 1;
 
-          if(torchActive)
-			{
-			nnum = 2;
-			}
-			else	
-			{
+        if(torchActive)
+		{
+    	  nnum = 2;
+		}
+		else	
+		{
 			nnum = 1;
-			}
+		}
 		
         int l2 = world.getBlockMetadata(i, j, k);
         int f = 0;
@@ -221,18 +222,17 @@ public class BlockTeslaCoil extends BlockSCTorch
 		int t2 = (k + f1 * nn);
 		int t3 = (j + f2 * nn);
 
-           if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
-                 world.setBlockMetadataWithNotify(t1, t3, t2, nnum);
-
-            world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
-           }
-		   if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+       if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+    	   world.setBlockMetadataWithNotify(t1, t3, t2, nnum);
+	        world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
+	        world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
+	        world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
+	        world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
+	        world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
+	        world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
+	        world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
+       }
+	   	if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
 			world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
@@ -271,27 +271,25 @@ public class BlockTeslaCoil extends BlockSCTorch
         }
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
     }
-
+    @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-
         super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
         return mod_Steamcraft.torchTeslaIdle.blockID;
     }
-
+    @Override
     public boolean canProvidePower()
     {
         return false;
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-	
         if(!torchActive)
         {
             return;
@@ -321,7 +319,7 @@ public class BlockTeslaCoil extends BlockSCTorch
         {
             world.spawnParticle("reddust", d, d1, d2, -1.0D, 0.7D, 1.0D);
         }
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 
     private boolean torchActive;

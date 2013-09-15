@@ -13,7 +13,7 @@ public class BlockSCFarmland extends BlockFarmland
     {
         super(i);
     }
-
+    @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         if(random.nextInt(5) == 0)

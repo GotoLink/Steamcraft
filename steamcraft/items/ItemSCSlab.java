@@ -1,8 +1,10 @@
 package steamcraft.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStep;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import steamcraft.blocks.BlockSCStep;
 
 public class ItemSCSlab extends ItemBlock
@@ -13,24 +15,24 @@ public class ItemSCSlab extends ItemBlock
         setMaxDamage(0);
         setHasSubtypes(true);
     }
-
-    public int getIconFromDamage(int i)
+    @Override
+    public Icon getIconFromDamage(int i)
     {
-        return Block.stairSingle.getBlockTextureFromSideAndMetadata(2, i);
+        return Block.stairsWoodJungle.getIcon(2, i);
     }
-
-    public int getPlacedBlockMetadata(int i)
+    @Override
+    public int getMetadata(int i)
     {
         return i;
     }
-
-    public String getItemNameIS(ItemStack itemstack)
+    @Override
+    public String getUnlocalizedName(ItemStack itemstack)
     {
         int i = itemstack.getItemDamage();
-        if(i < 0 || i >= BlockSCStep.field_22037_a.length)
+        if(i < 0 || i >= BlockStep.blockStepTypes.length)
         {
             i = 0;
         }
-        return (new StringBuilder()).append(super.getItemName()).append(".").append(BlockSCStep.field_22037_a[i]).toString();
+        return (new StringBuilder()).append(super.getUnlocalizedName()).append(".").append(BlockStep.blockStepTypes[i]).toString();
     }
 }

@@ -19,7 +19,7 @@ public class ItemFirearm extends Item
 		weaponPower = k;
         maxStackSize = 1;
     }
-
+    @Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
 		if(itemstack.getItemDamage() == 0 && entityplayer.isInsideOfMaterial(Material.water) == false){
@@ -53,7 +53,7 @@ public class ItemFirearm extends Item
 	public boolean getIsRifled(){
 	return isWeaponRifled;
 	}
-
+	@Override
 	public boolean isFull3D()
     {
         return true;

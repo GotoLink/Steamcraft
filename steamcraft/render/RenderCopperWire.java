@@ -4,11 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 
 public class RenderCopperWire extends RenderBlocks
 {
-
     public RenderCopperWire()
     {
         //overrideBlockTexture = 0;
@@ -59,12 +59,12 @@ public class RenderCopperWire extends RenderBlocks
         */
         Tessellator tessellator = Tessellator.instance;
         int l = iblockaccess.getBlockMetadata(i, j, k);
-        int i1 = block.getBlockTextureFromSideAndMetadata(1, l);
+        Icon i1 = block.getIcon(1, l);
         if(overrideBlockTexture >= 0)
         {
             i1 = overrideBlockTexture;
         }
-        tessellator.setBrightness(block.func_35275_c(iblockaccess, i, j, k));
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(iblockaccess, i, j, k));
         float f = 1.0F;
         float f1 = (float)l / 15F;
         float f2 = -f1 * 0.4F + 0.5F;

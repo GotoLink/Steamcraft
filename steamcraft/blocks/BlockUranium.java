@@ -15,18 +15,18 @@ public class BlockUranium extends Block
     {
         super(i, Material.rock);
     }
-	
+    @Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
         float f = 0.1F;
-        return AxisAlignedBB.getBoundingBoxFromPool((float)i + f, j, (float)k + f, (float)(i + 1) - f, (float)(j + 1) - f, (float)(k + 1) - f);
+        return AxisAlignedBB.getBoundingBox((float)i + f, j, (float)k + f, (float)(i + 1) - f, (float)(j + 1) - f, (float)(k + 1) - f);
     }
-	
+    @Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)
     {
         entity.attackEntityFrom(DamageSource.magic, 1);
     }
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
             func_319_i(world, i, j, k);

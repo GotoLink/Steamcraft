@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStep;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import steamcraft.mod_Steamcraft;
@@ -16,8 +17,8 @@ public class BlockSCStep extends BlockStep
         super(i, flag);
         setLightOpacity(0);
     }
-
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    @Override
+    public Icon getIcon(int i, int j)
     {
         if(j == 0)
         {
@@ -54,17 +55,12 @@ public class BlockSCStep extends BlockStep
             return 6;
         }
     }
-
-    public int getBlockTextureFromSide(int i)
-    {
-        return getBlockTextureFromSideAndMetadata(i, 0);
-    }
-
+    @Override
     public boolean isOpaqueCube()
     {
         return isDoubleSlab;
     }
-
+    @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
         if(this != Block.stairSingle)
@@ -80,31 +76,31 @@ public class BlockSCStep extends BlockStep
         }
         if(l == stairSingle.blockID)
         {
-            world.setBlockWithNotify(i, j, k, 0);
+            world.setBlockToAir(i, j, k);
             world.setBlockAndMetadataWithNotify(i, j - 1, k, Block.stairDouble.blockID, i1);
         }
     }
-
-    public int idDropped(int i, Random random)
+    @Override
+    public int idDropped(int i, Random random, int j)
     {
         return Block.stairSingle.blockID;
     }
-
+    @Override
     public int quantityDropped(Random random)
     {
         return !isDoubleSlab ? 1 : 2;
     }
-
-    protected int damageDropped(int i)
+    @Override
+	public int damageDropped(int i)
     {
         return i;
     }
-
+    @Override
     public boolean renderAsNormalBlock()
     {
         return isDoubleSlab;
     }
-
+    @Override
     public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         if(this != Block.stairSingle)
