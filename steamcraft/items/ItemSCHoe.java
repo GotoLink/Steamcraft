@@ -17,7 +17,7 @@ public class ItemSCHoe extends ItemHoe
     @Override
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10)
     {
-		 if(!entityplayer.func_35190_e(i, j, k))
+		 if(!entityplayer.canPlayerEdit(i, j, k, l, itemstack))
         {
             return false;
         }
@@ -26,7 +26,7 @@ public class ItemSCHoe extends ItemHoe
         if(l != 0 && j1 == 0 && i1 == Block.grass.blockID || i1 == Block.dirt.blockID)
         {
             Block block = Block.tilledField;
-            world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, block.stepSound.stepSoundDir2(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+            world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, block.stepSound.getStepSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
             if(world.isRemote)
             {
                 return true;

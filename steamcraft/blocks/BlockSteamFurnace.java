@@ -108,13 +108,13 @@ public class BlockSteamFurnace extends BlockFurnace
 		keepFurnaceInventory = true;
         if(flag)
         {
-            world.setBlockWithNotify(i, j, k, mod_Steamcraft.steamOvenActive.blockID);
+            world.setBlock(i, j, k, mod_Steamcraft.steamOvenActive.blockID);
         } else
         {
-            world.setBlockWithNotify(i, j, k, mod_Steamcraft.steamOvenIdle.blockID);
+            world.setBlock(i, j, k, mod_Steamcraft.steamOvenIdle.blockID);
         }
         keepFurnaceInventory = false;
-        world.setBlockMetadataWithNotify(i, j, k, l);
+        world.setBlockMetadataWithNotify(i, j, k, l, 2);
         if(tileentity != null)
         {
             tileentity.validate();
@@ -127,19 +127,19 @@ public class BlockSteamFurnace extends BlockFurnace
         int l = MathHelper.floor_double((double)((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         if(l == 0)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 2);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
         }
         if(l == 1)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 5);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
         }
         if(l == 2)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 3);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
         }
         if(l == 3)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
         }
     }
 	

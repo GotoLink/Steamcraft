@@ -20,17 +20,17 @@ public class BlockSCFarmland extends BlockFarmland
         {
             if(isWaterNearby(world, i, j, k) || world.canLightningStrikeAt(i, j + 1, k))
             {
-                world.setBlockMetadataWithNotify(i, j, k, 7);
+                world.setBlockMetadataWithNotify(i, j, k, 7, 2);
             } else
             {
                 int l = world.getBlockMetadata(i, j, k);
                 if(l > 0)
                 {
-                    world.setBlockMetadataWithNotify(i, j, k, l - 1);
+                    world.setBlockMetadataWithNotify(i, j, k, l - 1, 2);
                 } else
                 if(!isCropsNearby(world, i, j, k))
                 {
-                    world.setBlockWithNotify(i, j, k, Block.dirt.blockID);
+                    world.setBlock(i, j, k, Block.dirt.blockID);
                 }
             }
         }

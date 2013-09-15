@@ -47,7 +47,7 @@ public class ItemElectricLamp extends Item
                 return false;
             }
         }
-        if(!entityplayer.func_35190_e(i, j, k))
+        if(!entityplayer.canPlayerEdit(i, j, k, l, itemstack))
         {
             return false;
         }
@@ -55,17 +55,17 @@ public class ItemElectricLamp extends Item
         {
             return false;
         }
-        if(world.canBlockBePlacedAt(spawnID, i, j, k, false, l))
+        Block block = Block.blocksList[spawnID];
+        if(block.canPlaceBlockAt(world, i, j, k))
         {
-            Block block = Block.blocksList[spawnID];
-            if(world.setBlockWithNotify(i, j, k, spawnID))
+            if(world.setBlock(i, j, k, spawnID))
             {
                 if(world.getBlockId(i, j, k) == spawnID)
                 {
-                    Block.blocksList[spawnID].onBlockPlaced(world, i, j, k, l);
-                    Block.blocksList[spawnID].onBlockPlacedBy(world, i, j, k, entityplayer);
+                    Block.blocksList[spawnID].onBlockPlaced(world, i, j, k, l, par8, par9, par10, 0);
+                    Block.blocksList[spawnID].onBlockPlacedBy(world, i, j, k, entityplayer, itemstack);
                 }
-                world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, block.stepSound.stepSoundDir2(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                 itemstack.stackSize--;
             }
         }

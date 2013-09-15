@@ -50,11 +50,11 @@ public class BlockDiode extends BlockRedstoneRepeater
         boolean flag = ignoreTick(world, i, j, k, l);
         if(isRepeaterPowered && !flag)
         {
-            world.setBlockAndMetadataWithNotify(i, j, k, Block.redstoneRepeaterIdle.blockID, l);
+            world.setBlock(i, j, k, Block.redstoneRepeaterIdle.blockID, l, 2);
         } else
         if(!isRepeaterPowered)
         {
-            world.setBlockAndMetadataWithNotify(i, j, k, Block.redstoneRepeaterActive.blockID, l);
+            world.setBlock(i, j, k, Block.redstoneRepeaterActive.blockID, l, 2);
             if(!flag)
             {
                 int i1 = (l & 0xc) >> 2;

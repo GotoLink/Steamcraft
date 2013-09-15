@@ -57,11 +57,11 @@ public class BlockTeslaReceiver extends Block
 	    world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
 	    world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
 	    world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-	    world.markBlocksDirty(i, j, k, i, j, k);
+	    world.markBlockForUpdate(i, j, k);
 		if(world.getBlockMetadata(i, j, k) == 2){
-			world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.teslaReceiverActive.blockID, 2);
+			world.setBlock(i, j, k, mod_Steamcraft.teslaReceiverActive.blockID, 2, 2);
 		}else{
-			world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.teslaReceiver.blockID, 1);
+			world.setBlock(i, j, k, mod_Steamcraft.teslaReceiver.blockID, 1, 2);
 		}
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}

@@ -113,23 +113,23 @@ public class BlockInverter extends BlockSCTorch
     private boolean func_30002_h(World world, int i, int j, int k)
     {
         int l = world.getBlockMetadata(i, j, k);
-        if(l == 5 && world.isBlockIndirectlyProvidingPowerTo(i, j - 1, k, 0))
+        if(l == 5 && world.getIndirectPowerOutput(i, j - 1, k, 0))
         {
             return true;
         }
-        if(l == 3 && world.isBlockIndirectlyProvidingPowerTo(i, j, k - 1, 2))
+        if(l == 3 && world.getIndirectPowerOutput(i, j, k - 1, 2))
         {
             return true;
         }
-        if(l == 4 && world.isBlockIndirectlyProvidingPowerTo(i, j, k + 1, 3))
+        if(l == 4 && world.getIndirectPowerOutput(i, j, k + 1, 3))
         {
             return true;
         }
-        if(l == 1 && world.isBlockIndirectlyProvidingPowerTo(i - 1, j, k, 4))
+        if(l == 1 && world.getIndirectPowerOutput(i - 1, j, k, 4))
         {
             return true;
         }
-        return l == 2 && world.isBlockIndirectlyProvidingPowerTo(i + 1, j, k, 5);
+        return l == 2 && world.getIndirectPowerOutput(i + 1, j, k, 5);
     }
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
@@ -140,7 +140,7 @@ public class BlockInverter extends BlockSCTorch
         {
             if(flag)
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, Block.torchRedstoneIdle.blockID, world.getBlockMetadata(i, j, k));
+                world.setBlock(i, j, k, Block.torchRedstoneIdle.blockID, world.getBlockMetadata(i, j, k), 2);
                 if(checkForBurnout(world, i, j, k, true))
                 {
                     world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
@@ -157,7 +157,7 @@ public class BlockInverter extends BlockSCTorch
         } else
         if(!flag && !checkForBurnout(world, i, j, k, false))
         {
-            world.setBlockAndMetadataWithNotify(i, j, k, Block.torchRedstoneActive.blockID, world.getBlockMetadata(i, j, k));
+            world.setBlock(i, j, k, Block.torchRedstoneActive.blockID, world.getBlockMetadata(i, j, k), 2);
         }
     }
     @Override

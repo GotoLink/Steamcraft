@@ -132,10 +132,8 @@ public class BlockSCCopperWire extends Block
         }
         if(k1 != l1)
         {
-            world.editingBlocks = true;
-            world.setBlockMetadataWithNotify(i, j, k, l1);
-            world.markBlocksDirty(i, j, k, i, j, k);
-            world.editingBlocks = false;
+            world.setBlockMetadataWithNotify(i, j, k, l1, 2);
+            world.markBlockForUpdate(i, j, k);
             for(int j2 = 0; j2 < 4; j2++)
             {
                 int l2 = i;
@@ -329,8 +327,8 @@ public class BlockSCCopperWire extends Block
         boolean flag = canPlaceBlockAt(world, i, j, k);
         if(!flag)
         {
-            dropBlockAsItem(world, i, j, k, i1);
-            world.setBlockWithNotify(i, j, k, 0);
+            dropBlockAsItem(world, i, j, k, i1, 0);
+            world.setBlockToAir(i, j, k);
         } else
         {
             updateAndPropagateCurrentStrength(world, i, j, k);

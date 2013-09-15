@@ -36,8 +36,8 @@ public class BlockLamp extends Block
         world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
         world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
     }
-
-    public void onBlockRemoval(World world, int i, int j, int k)
+    @Override
+    public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
         world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
         world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
@@ -49,11 +49,11 @@ public class BlockLamp extends Block
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-		isPowered = func_30002_h(world, i, j, k);
+		isPowered = isPowered(world, i, j, k);
 		if(isPowered){
-			world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.lampoff.blockID, world.getBlockMetadata(i, j, k));
+			world.setBlock(i, j, k, mod_Steamcraft.lampoff.blockID, world.getBlockMetadata(i, j, k), 2);
 		}else{
-			world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k));
+			world.setBlock(i, j, k, mod_Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k), 2);
 		}
 	}
     @Override
@@ -68,29 +68,29 @@ public class BlockLamp extends Block
         return mod_Steamcraft.lamp.blockID;
     }
 	
-	private boolean func_30002_h(World world, int i, int j, int k)
+	private static boolean isPowered(World world, int i, int j, int k)
     {
-      if(world.isBlockProvidingPowerTo(i, j - 1, k, 0))
+      if(world.isBlockProvidingPowerTo(i, j - 1, k, 0)>0)
         {
             return true;
         }
-        if(world.isBlockProvidingPowerTo(i, j + 1, k, 1))
+        if(world.isBlockProvidingPowerTo(i, j + 1, k, 1)>0)
         {
             return true;
         }
-        if(world.isBlockProvidingPowerTo(i, j, k - 1, 2))
+        if(world.isBlockProvidingPowerTo(i, j, k - 1, 2)>0)
         {
             return true;
         }
-        if(world.isBlockProvidingPowerTo(i, j, k + 1, 3))
+        if(world.isBlockProvidingPowerTo(i, j, k + 1, 3)>0)
         {
             return true;
         }
-        if(world.isBlockProvidingPowerTo(i - 1, j, k, 4))
+        if(world.isBlockProvidingPowerTo(i - 1, j, k, 4)>0)
         {
             return true;
         }
-        return world.isBlockProvidingPowerTo(i + 1, j, k, 5);
+        return world.isBlockProvidingPowerTo(i + 1, j, k, 5)>0;
     }
 	@Override
 	public boolean canProvidePower()

@@ -77,9 +77,9 @@ public class BlockNukeFurnace extends BlockFurnace
         }
 		world.spawnParticle("reddust", f, f1+0.6F, f2, 0.0D, 0.0D, 1.0D);
 		world.spawnParticle("reddust", f, f1+0.6F, f2, 0.0D, 0.0D, 1.0D);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
-
+    @Override
     public Icon getBlockTextureFromSide(int i)
     {
          if(i == 1)
@@ -123,11 +123,11 @@ public class BlockNukeFurnace extends BlockFurnace
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.ghast.fireball", 1.0F, 0.8F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F);
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.zombiepig.zpigdeath", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.6F);
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "fire.ignite", 1.5F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlockWithNotify(i, j, k, mod_Steamcraft.nukeOvenActive.blockID);
+            world.setBlock(i, j, k, mod_Steamcraft.nukeOvenActive.blockID);
         } else
         {
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "ambient.cave.cave", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlockWithNotify(i, j, k, mod_Steamcraft.nukeOvenIdle.blockID);
+            world.setBlock(i, j, k, mod_Steamcraft.nukeOvenIdle.blockID);
         }
 		keepFurnaceInventory = false;
         world.setBlockMetadataWithNotify(i, j, k, l, 3);
@@ -143,19 +143,19 @@ public class BlockNukeFurnace extends BlockFurnace
         int l = MathHelper.floor_double((double)((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         if(l == 0)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 2);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
         }
         if(l == 1)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 5);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
         }
         if(l == 2)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 3);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
         }
         if(l == 3)
         {
-            world.setBlockMetadataWithNotify(i, j, k, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
         }
     }
 	public static void meltdown(World world, int i, int j, int k){
@@ -326,7 +326,7 @@ public class BlockNukeFurnace extends BlockFurnace
                     entityitem.motionX = (float)furnaceRand.nextGaussian() * f3;
                     entityitem.motionY = (float)furnaceRand.nextGaussian() * f3 + 0.2F;
                     entityitem.motionZ = (float)furnaceRand.nextGaussian() * f3;
-                    world.entityJoinedWorld(entityitem);
+                    world.spawnEntityInWorld(entityitem);
                 } while(true);
             }
 			}

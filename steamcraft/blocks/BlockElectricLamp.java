@@ -47,7 +47,7 @@ public class BlockElectricLamp extends BlockContainer
     {
         return null;
     }
-
+    @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k)
     {
         setBlockBoundsBasedOnState(world, i, j, k);
@@ -158,7 +158,7 @@ public class BlockElectricLamp extends BlockContainer
 		{
                i1 = 1;
         }
-		 world.setBlockMetadataWithNotify(i, j, k, i1);
+		 world.setBlockMetadataWithNotify(i, j, k, i1, 2);
     }
 	@Override
     public void onBlockAdded(World world, int i, int j, int k)
@@ -178,27 +178,27 @@ public class BlockElectricLamp extends BlockContainer
 		if(world.getBlockMetadata(i, j, k) == 0){
 		if(canPlaceBottom(world, i, j + 1, k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 6);
+            world.setBlockMetadataWithNotify(i, j, k, 6, 2);
         } else	
         if(canPlaceSide(world, i - 1, j , k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 1);
+            world.setBlockMetadataWithNotify(i, j, k, 1, 2);
         } else
         if(canPlaceSide(world, i + 1, j , k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 2);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
         } else
         if(canPlaceSide(world, i, j , k - 1))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 3);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
         } else
         if(canPlaceSide(world, i, j , k + 1))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
         } else
         if(canPlaceTop(world, i, j - 1, k))
         {
-            world.setBlockMetadataWithNotify(i, j, k, 5);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
 		}
 		}
         dropTorchIfCantStay(world, i, j, k);
@@ -217,30 +217,30 @@ public class BlockElectricLamp extends BlockContainer
         }
     }
 
-    private boolean func_22026_h(World world, int i, int j, int k)
+    private boolean isPowering(World world, int i, int j, int k)
     {
         int l = world.getBlockMetadata(i, j, k);
-        if(l == 5 && world.isBlockIndirectlyProvidingPowerTo(i, j - 1, k, 0))
+        if(l == 5 && world.getIndirectPowerOutput(i, j - 1, k, 0))
         {
             return true;
         }
-        if(l == 3 && world.isBlockIndirectlyProvidingPowerTo(i, j, k - 1, 2))
+        if(l == 3 && world.getIndirectPowerOutput(i, j, k - 1, 2))
         {
             return true;
         }
-        if(l == 4 && world.isBlockIndirectlyProvidingPowerTo(i, j, k + 1, 3))
+        if(l == 4 && world.getIndirectPowerOutput(i, j, k + 1, 3))
         {
             return true;
         }
-        if(l == 1 && world.isBlockIndirectlyProvidingPowerTo(i - 1, j, k, 4))
+        if(l == 1 && world.getIndirectPowerOutput(i - 1, j, k, 4))
         {
             return true;
         }
-		 if(l == 6 && world.isBlockIndirectlyProvidingPowerTo(i, j + 1, k, 1))
+		 if(l == 6 && world.getIndirectPowerOutput(i, j + 1, k, 1))
         {
             return true;
         }
-        return l == 2 && world.isBlockIndirectlyProvidingPowerTo(i + 1, j, k, 5);
+        return l == 2 && world.getIndirectPowerOutput(i + 1, j, k, 5);
     }
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
@@ -250,24 +250,24 @@ public class BlockElectricLamp extends BlockContainer
         {
             onBlockAdded(world, i, j, k);
         }
-        boolean flag = func_22026_h(world, i, j, k);
+        boolean flag = isPowering(world, i, j, k);
         for(; torchUpdates.size() > 0 && world.getWorldTime() - ((RedstoneUpdateInfo)torchUpdates.get(0)).updateTime > 100L; torchUpdates.remove(0)) { }
         if(!torchActive)
         {
             if(flag)
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.torchElectricActive.blockID, world.getBlockMetadata(i, j, k));
+                world.setBlock(i, j, k, mod_Steamcraft.torchElectricActive.blockID, world.getBlockMetadata(i, j, k), 2);
             }
         } else
 			if(!flag)
 			{
-				world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.torchElectricIdle.blockID, world.getBlockMetadata(i, j, k));
+				world.setBlock(i, j, k, mod_Steamcraft.torchElectricIdle.blockID, world.getBlockMetadata(i, j, k), 2);
 			}
     }
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-			if(dropTorchIfCantStay(world, i, j, k))
+		if(dropTorchIfCantStay(world, i, j, k))
         {
             int i1 = world.getBlockMetadata(i, j, k);
             boolean flag = false;
@@ -293,20 +293,20 @@ public class BlockElectricLamp extends BlockContainer
             }
             if(flag)
             {
-                dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-                world.setBlockWithNotify(i, j, k, 0);
+                dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
+                world.setBlockToAir(i, j, k);
             }
         }
 		super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 	
 	private boolean dropTorchIfCantStay(World world, int i, int j, int k)
     {
         if(!canPlaceBlockAt(world, i, j, k))
         {
-            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-            world.setBlockWithNotify(i, j, k, 0);
+            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k),0);
+            world.setBlockToAir(i, j, k);
             return false;
         } else
         {

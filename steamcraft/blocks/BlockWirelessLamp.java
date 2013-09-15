@@ -83,27 +83,27 @@ public class BlockWirelessLamp extends BlockContainer
     {
 		if(l == 0 && canPlaceBottom(world, i, j + 1 , k))
 		{
-              world.setBlockMetadataWithNotify(i, j, k, 6);
+              world.setBlockMetadataWithNotify(i, j, k, 6, 2);
         }
         if(l == 1 && canPlaceTop(world, i, j - 1, k))
         {
-              world.setBlockMetadataWithNotify(i, j, k, 5);
+              world.setBlockMetadataWithNotify(i, j, k, 5, 2);
         }
         if(l == 2 && canPlaceSide(world, i, j , k + 1))
 		{
-              world.setBlockMetadataWithNotify(i, j, k, 4);
+              world.setBlockMetadataWithNotify(i, j, k, 4, 2);
         }
         if(l == 3 && canPlaceSide(world, i, j , k - 1))
 		{
-              world.setBlockMetadataWithNotify(i, j, k, 3);
+              world.setBlockMetadataWithNotify(i, j, k, 3, 2);
         }
         if(l == 4 && canPlaceSide(world, i + 1, j , k))
 		{
-              world.setBlockMetadataWithNotify(i, j, k, 2);
+              world.setBlockMetadataWithNotify(i, j, k, 2, 2);
         }
         if(l == 5 && canPlaceSide(world, i - 1, j , k))
 		{
-              world.setBlockMetadataWithNotify(i, j, k, 1);
+              world.setBlockMetadataWithNotify(i, j, k, 1, 2);
         }
     }
 	@Override
@@ -187,27 +187,27 @@ public class BlockWirelessLamp extends BlockContainer
 			
 		if(canPlaceBottom(world, i, j + 1, k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 6);
+            world.setBlockMetadataWithNotify(i, j, k, 6, 2);
         } else	
         if(canPlaceSide(world, i - 1, j , k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 1);
+            world.setBlockMetadataWithNotify(i, j, k, 1, 2);
         } else
         if(canPlaceSide(world, i + 1, j , k))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 2);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
         } else
         if(canPlaceSide(world, i, j , k - 1))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 3);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
         } else
         if(canPlaceSide(world, i, j , k + 1))
 		{
-            world.setBlockMetadataWithNotify(i, j, k, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
         } else
         if(canPlaceTop(world, i, j - 1, k))
         {
-            world.setBlockMetadataWithNotify(i, j, k, 5);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
         }
 		}
         dropTorchIfCantStay(world, i, j, k);
@@ -276,12 +276,12 @@ public class BlockWirelessLamp extends BlockContainer
         {
             if(flag)
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.wirelessLampActive.blockID, world.getBlockMetadata(i, j, k));
+                world.setBlock(i, j, k, mod_Steamcraft.wirelessLampActive.blockID, world.getBlockMetadata(i, j, k), 2);
             }
         } else
 			if(!flag)
 			{
-				world.setBlockAndMetadataWithNotify(i, j, k, mod_Steamcraft.wirelessLampIdle.blockID, world.getBlockMetadata(i, j, k));
+				world.setBlock(i, j, k, mod_Steamcraft.wirelessLampIdle.blockID, world.getBlockMetadata(i, j, k), 2);
 			}
     }
     @Override
@@ -313,20 +313,20 @@ public class BlockWirelessLamp extends BlockContainer
             }
             if(flag)
             {
-                dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-                world.setBlockWithNotify(i, j, k, 0);
+                dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
+                world.setBlockToAir(i, j, k);
             }
         }
 		super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
+        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 	
 	private boolean dropTorchIfCantStay(World world, int i, int j, int k)
     {
         if(!canPlaceBlockAt(world, i, j, k))
         {
-            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-            world.setBlockWithNotify(i, j, k, 0);
+            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
+            world.setBlockToAir(i, j, k);
             return false;
         } else
         {

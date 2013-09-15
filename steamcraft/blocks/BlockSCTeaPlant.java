@@ -16,7 +16,7 @@ public class BlockSCTeaPlant extends BlockCrops
     {
         world.setBlockMetadataWithNotify(i, j, k, 7, 2);
     }
-
+    @Override
     public Icon getIcon(int i, int j)
     {
         if(j < 0)
