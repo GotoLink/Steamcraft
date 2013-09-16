@@ -1,23 +1,22 @@
 package steamcraft.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.mod_Steamcraft;
 
-public class BlockWirelessLamp extends BlockContainer
+public class BlockWirelessLamp extends BlockRedstoneTorch
 {
+    public boolean torchActive;
+	private Class EntityClass;
 	public BlockWirelessLamp(int i, Class class1, boolean flag)
     {
-        super(i, Material.circuits);
+        super(i, flag);
 		EntityClass = class1;
         torchActive = flag;
 		float f = 0.25F;
@@ -41,11 +40,6 @@ public class BlockWirelessLamp extends BlockContainer
         return 1;
     }
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
-    {
-        return null;
-    }
-	@Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k)
     {
         setBlockBoundsBasedOnState(world, i, j, k);
@@ -57,17 +51,12 @@ public class BlockWirelessLamp extends BlockContainer
         return -1;
     }
 	@Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
+	public boolean hasTileEntity()
+	{
+		return true;
+	}
 	@Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-	@Override
-    public TileEntity createNewTileEntity(World world)
+    public TileEntity createTileEntity(World world,int meta)
     {
         try
         {
@@ -78,155 +67,8 @@ public class BlockWirelessLamp extends BlockContainer
             throw new RuntimeException(exception);
         }
     }
-	
-	public void onBlockPlaced(World world, int i, int j, int k, int l)
-    {
-		if(l == 0 && canPlaceBottom(world, i, j + 1 , k))
-		{
-              world.setBlockMetadataWithNotify(i, j, k, 6, 2);
-        }
-        if(l == 1 && canPlaceTop(world, i, j - 1, k))
-        {
-              world.setBlockMetadataWithNotify(i, j, k, 5, 2);
-        }
-        if(l == 2 && canPlaceSide(world, i, j , k + 1))
-		{
-              world.setBlockMetadataWithNotify(i, j, k, 4, 2);
-        }
-        if(l == 3 && canPlaceSide(world, i, j , k - 1))
-		{
-              world.setBlockMetadataWithNotify(i, j, k, 3, 2);
-        }
-        if(l == 4 && canPlaceSide(world, i + 1, j , k))
-		{
-              world.setBlockMetadataWithNotify(i, j, k, 2, 2);
-        }
-        if(l == 5 && canPlaceSide(world, i - 1, j , k))
-		{
-              world.setBlockMetadataWithNotify(i, j, k, 1, 2);
-        }
-    }
-	@Override
-	public boolean canPlaceBlockAt(World world, int i, int j, int k)
-    {
-        if(canPlaceSide(world, i - 1, j , k))
-        {
-            return true;
-        }
-        if(canPlaceSide(world, i + 1, j , k))
-        {
-            return true;
-        }
-        if(canPlaceSide(world, i, j , k - 1))
-        {
-            return true;
-        }
-        if(canPlaceSide(world, i, j , k + 1))
-        {
-            return true;
-        }
-		if(canPlaceBottom(world, i, j + 1 , k))
-        {
-            return true;
-        }
-        return canPlaceTop(world, i, j - 1, k);
-    }
-	
-	private boolean canPlaceTop(World world, int i, int j, int k)
-    {
-        return (world.isBlockNormalCube(i, j, k) || world.getBlockId(i, j, k) == Block.fence.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.railingCastIron.blockID
-		|| world.getBlockId(i, j, k) == Block.glass.blockID);
-    }
-	
-	private boolean canPlaceSide(World world, int i, int j, int k)
-    {
-        return (world.isBlockNormalCube(i, j, k) || world.getBlockId(i, j, k) == Block.glass.blockID
-		|| world.getBlockId(i, j, k) == Block.stairSingle.blockID
-		|| world.getBlockId(i, j, k) == Block.stairCompactCobblestone.blockID
-		|| world.getBlockId(i, j, k) == Block.stairCompactPlanks.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.stairCompactStone.blockID
-		|| world.getBlockId(i, j, k) == Block.stairsStoneBrickSmooth.blockID
-		|| world.getBlockId(i, j, k) == Block.stairsBrick.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.stairRoof.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.teslaReceiver.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.teslaReceiverActive.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.battery.blockID);
-    }
-	
-	private boolean canPlaceBottom(World world, int i, int j, int k)
-    {
-        return (world.isBlockNormalCube(i, j, k) || world.getBlockId(i, j, k) == Block.glass.blockID
-		|| world.getBlockId(i, j, k) == Block.stairSingle.blockID
-		|| world.getBlockId(i, j, k) == Block.stairCompactCobblestone.blockID
-		|| world.getBlockId(i, j, k) == Block.stairCompactPlanks.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.stairCompactStone.blockID
-		|| world.getBlockId(i, j, k) == Block.stairsStoneBrickSmooth.blockID
-		|| world.getBlockId(i, j, k) == Block.stairsBrick.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.stairRoof.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.teslaReceiver.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.teslaReceiverActive.blockID
-		|| world.getBlockId(i, j, k) == mod_Steamcraft.battery.blockID);
-	}
-	@Override
-    public void onBlockAdded(World world, int i, int j, int k)
-    {
-	      if(world.getBlockMetadata(i, j, k) == 0)
-	      {
-	           super.onBlockAdded(world, i, j, k);
-		  }
-        world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-			
-		if(world.getBlockMetadata(i, j, k) == 0){	
-			
-		if(canPlaceBottom(world, i, j + 1, k))
-		{
-            world.setBlockMetadataWithNotify(i, j, k, 6, 2);
-        } else	
-        if(canPlaceSide(world, i - 1, j , k))
-		{
-            world.setBlockMetadataWithNotify(i, j, k, 1, 2);
-        } else
-        if(canPlaceSide(world, i + 1, j , k))
-		{
-            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
-        } else
-        if(canPlaceSide(world, i, j , k - 1))
-		{
-            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
-        } else
-        if(canPlaceSide(world, i, j , k + 1))
-		{
-            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
-        } else
-        if(canPlaceTop(world, i, j - 1, k))
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
-        }
-		}
-        dropTorchIfCantStay(world, i, j, k);
-	}
 
-    public void onBlockRemoval(World world, int i, int j, int k)
-    {
-        if(torchActive)
-        {
-            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-        }
-    }
-
-    private boolean func_22026_h(World world, int i, int j, int k)
+    private boolean isPowering(World world, int i, int j, int k)
     {
 		int i1;
 		int i2;
@@ -270,8 +112,7 @@ public class BlockWirelessLamp extends BlockContainer
         {
             onBlockAdded(world, i, j, k);
         }
-        boolean flag = func_22026_h(world, i, j, k);
-        for(; torchUpdates.size() > 0 && world.getWorldTime() - ((RedstoneUpdateInfo)torchUpdates.get(0)).updateTime > 100L; torchUpdates.remove(0)) { }
+        boolean flag = isPowering(world, i, j, k);
         if(!torchActive)
         {
             if(flag)
@@ -287,51 +128,8 @@ public class BlockWirelessLamp extends BlockContainer
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-		if(dropTorchIfCantStay(world, i, j, k))
-        {
-            int i1 = world.getBlockMetadata(i, j, k);
-            boolean flag = false;
-            if(!canPlaceSide(world, i - 1, j , k) && i1 == 1)
-            {
-                flag = true;
-            }
-            if(!canPlaceSide(world, i + 1, j , k) && i1 == 2)
-            {
-                flag = true;
-            }
-            if(!canPlaceSide(world, i, j , k - 1) && i1 == 3)
-            {
-                flag = true;
-            }
-            if(!canPlaceSide(world, i, j , k + 1) && i1 == 4)
-            {
-                flag = true;
-            }
-            if(!canPlaceTop(world, i, j - 1, k) && i1 == 5)
-            {
-                flag = true;
-            }
-            if(flag)
-            {
-                dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
-                world.setBlockToAir(i, j, k);
-            }
-        }
 		super.onNeighborBlockChange(world, i, j, k, l);
         world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
-    }
-	
-	private boolean dropTorchIfCantStay(World world, int i, int j, int k)
-    {
-        if(!canPlaceBlockAt(world, i, j, k))
-        {
-            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
-            world.setBlockToAir(i, j, k);
-            return false;
-        } else
-        {
-            return true;
-        }
     }
 	@Override
     public int idDropped(int i, Random random, int j)
@@ -376,9 +174,5 @@ public class BlockWirelessLamp extends BlockContainer
             world.spawnParticle("reddust", d, d1, d2, -1.0D, 0.7D, 1.0D);
         }
     }
-
-    private boolean torchActive;
-	private Class EntityClass;
-    private static List torchUpdates = new ArrayList();
 
 }

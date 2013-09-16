@@ -29,7 +29,7 @@ public class BlockUranium extends Block
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-            func_319_i(world, i, j, k);
+        func_319_i(world, i, j, k);
     }
 
     private void func_319_i(World world, int i, int j, int k)

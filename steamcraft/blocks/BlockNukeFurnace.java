@@ -10,12 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.TileEntityNukeFurnace;
 import steamcraft.mod_Steamcraft;
-import steamcraft.inventories.GuiNukeFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,8 +41,8 @@ public class BlockNukeFurnace extends BlockFurnace
 	public void registerIcons(IconRegister par1IconRegister)
 	{
 	    this.blockIcon = par1IconRegister.registerIcon("steamcraft:nukefurnaceside");
-	    this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "nukefurnaceactive" : "nukefurnaceidle");
-	    this.furnaceIconTop = par1IconRegister.registerIcon("nukefurnacetop");
+	    this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "nukefurnaceactive" : "nukefurnaceidle"));
+	    this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:nukefurnacetop");
 	}
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -78,25 +76,6 @@ public class BlockNukeFurnace extends BlockFurnace
 		world.spawnParticle("reddust", f, f1+0.6F, f2, 0.0D, 0.0D, 1.0D);
 		world.spawnParticle("reddust", f, f1+0.6F, f2, 0.0D, 0.0D, 1.0D);
         world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
-    }
-    @Override
-    public Icon getBlockTextureFromSide(int i)
-    {
-         if(i == 1)
-        {
-            return topIndexInTexture;
-        }
-        if(i == 0)
-        {
-            return baseIndexInTexture;
-        }
-        if(i == 3)
-        {
-			return blockIndexInTexture;
-        } else
-        {
-            return sideIndexInTexture;
-        }
     }
 
     public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
@@ -291,7 +270,8 @@ public class BlockNukeFurnace extends BlockFurnace
         world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
 	
-	public void onBlockRemoval(World world, int i, int j, int k)
+	@Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
         if(!keepFurnaceInventory)
         {
@@ -332,7 +312,7 @@ public class BlockNukeFurnace extends BlockFurnace
 			}
 
         }
-        super.onBlockRemoval(world, i, j, k);
+        super.breakBlock(world, i, j, k, par5, par6);
     }
 
 	@Override

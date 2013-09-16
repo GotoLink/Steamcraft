@@ -2,15 +2,16 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 
-public class BlockTorchPhosphorus extends BlockSCTorch
+public class BlockTorchPhosphorus extends BlockTorch
 {
     public BlockTorchPhosphorus(int i)
     {
 		super(i);
     }
-    
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         int l = world.getBlockMetadata(i, j, k);

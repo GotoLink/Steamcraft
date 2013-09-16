@@ -1,20 +1,19 @@
 package steamcraft.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockInverter extends BlockSCTorch
+public class BlockInverter extends BlockRedstoneTorch
 {
+    private boolean torchActive;
 	public BlockInverter(int i, boolean flag)
     {
-        super(i);
+        super(i,flag);
         torchActive = flag;
         setTickRandomly(true);
     }
@@ -28,60 +27,6 @@ public class BlockInverter extends BlockSCTorch
         {
 			return super.getIcon(i, j);
 		}
-    }
-
-    private boolean checkForBurnout(World world, int i, int j, int k, boolean flag)
-    {
-        if(flag)
-        {
-            torchUpdates.add(new RedstoneUpdateInfo(i, j, k, world.getWorldTime()));
-        }
-        int l = 0;
-        for(int i1 = 0; i1 < torchUpdates.size(); i1++)
-        {
-            RedstoneUpdateInfo redstoneupdateinfo = (RedstoneUpdateInfo)torchUpdates.get(i1);
-            if(redstoneupdateinfo.x == i && redstoneupdateinfo.y == j && redstoneupdateinfo.z == k && ++l >= 8)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    @Override
-    public int tickRate(World world)
-    {
-        return 2;
-    }
-    @Override
-    public void onBlockAdded(World world, int i, int j, int k)
-    {
-        if(world.getBlockMetadata(i, j, k) == 0)
-        {
-            super.onBlockAdded(world, i, j, k);
-        }
-        if(torchActive)
-        {
-            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-        }
-    }
-
-    public void onBlockRemoval(World world, int i, int j, int k)
-    {
-        if(torchActive)
-        {
-            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-            world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-            world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-        }
     }
 
     public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
@@ -132,35 +77,6 @@ public class BlockInverter extends BlockSCTorch
         return l == 2 && world.getIndirectPowerOutput(i + 1, j, k, 5);
     }
     @Override
-    public void updateTick(World world, int i, int j, int k, Random random)
-    {
-        boolean flag = func_30002_h(world, i, j, k);
-        for(; torchUpdates.size() > 0 && world.getWorldTime() - ((RedstoneUpdateInfo)torchUpdates.get(0)).updateTime > 100L; torchUpdates.remove(0)) { }
-        if(torchActive)
-        {
-            if(flag)
-            {
-                world.setBlock(i, j, k, Block.torchRedstoneIdle.blockID, world.getBlockMetadata(i, j, k), 2);
-                if(checkForBurnout(world, i, j, k, true))
-                {
-                    world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-                    for(int l = 0; l < 5; l++)
-                    {
-                        double d = (double)i + random.nextDouble() * 0.59999999999999998D + 0.20000000000000001D;
-                        double d1 = (double)j + random.nextDouble() * 0.59999999999999998D + 0.20000000000000001D;
-                        double d2 = (double)k + random.nextDouble() * 0.59999999999999998D + 0.20000000000000001D;
-                        world.spawnParticle("smoke", d, d1, d2, 0.0D, 0.0D, 0.0D);
-                    }
-
-                }
-            }
-        } else
-        if(!flag && !checkForBurnout(world, i, j, k, false))
-        {
-            world.setBlock(i, j, k, Block.torchRedstoneActive.blockID, world.getBlockMetadata(i, j, k), 2);
-        }
-    }
-    @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
         super.onNeighborBlockChange(world, i, j, k, l);
@@ -176,16 +92,6 @@ public class BlockInverter extends BlockSCTorch
         {
             return false;
         }
-    }
-    @Override
-    public int idDropped(int i, Random random, int j)
-    {
-        return Block.torchRedstoneActive.blockID;
-    }
-    @Override
-    public boolean canProvidePower()
-    {
-        return true;
     }
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -220,8 +126,4 @@ public class BlockInverter extends BlockSCTorch
             world.spawnParticle("reddust", d, d1, d2, -1.0D, 0.7D, 1.0D);
         }
     }
-
-    private boolean torchActive;
-    private static List torchUpdates = new ArrayList();
-
 }

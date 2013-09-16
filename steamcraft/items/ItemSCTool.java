@@ -35,7 +35,7 @@ public class ItemSCTool extends ItemTool
     public boolean onBlockDestroyed(ItemStack itemstack,World world, int i, int j, int k, int l, EntityLivingBase entityliving)
     {
 		if(toolMaterial == mod_Steamcraft.STEAM){
-    	   System.out.println(efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
+    	   //System.out.println(efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 		}
 		itemstack.damageItem(1, entityliving);
         return true;

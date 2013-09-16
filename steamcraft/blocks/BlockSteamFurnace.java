@@ -2,26 +2,19 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import steamcraft.TileEntitySteamFurnace;
 import steamcraft.mod_Steamcraft;
-import steamcraft.inventories.GuiSteamFurnace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSteamFurnace extends BlockFurnace
 {
@@ -40,8 +33,8 @@ public class BlockSteamFurnace extends BlockFurnace
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.blockIcon = par1IconRegister.registerIcon("steamcraft:steamfurnaceside");
-        this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "steamfurnaceactive" : "steamfurnaceidle");
-        this.furnaceIconTop = par1IconRegister.registerIcon("steamfurnacetop");
+        this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "steamfurnaceactive" : "steamfurnaceidle"));
+        this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:steamfurnacetop");
     }
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -143,7 +136,8 @@ public class BlockSteamFurnace extends BlockFurnace
         }
     }
 	
-	public void onBlockRemoval(World world, int i, int j, int k)
+    @Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
         if(!keepFurnaceInventory)
         {
@@ -184,7 +178,7 @@ public class BlockSteamFurnace extends BlockFurnace
 			}
 
         }
-        super.onBlockRemoval(world, i, j, k);
+        super.breakBlock(world, i, j, k, par5, par6);
     }
 
 	@Override

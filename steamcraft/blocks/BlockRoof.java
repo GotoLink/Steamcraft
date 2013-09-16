@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.Icon;
 
 public class BlockRoof extends Block
 {
@@ -13,14 +12,9 @@ public class BlockRoof extends Block
         super(i, Material.rock);
     }
     @Override
-    public Icon getIcon(int i, int j)
-    {
-        return blockIndexInTexture;
-    }
-    @Override
 	public int idDropped(int i, Random random, int j)
     {
-        return Block.stairSingle.blockID;
+        return blockID;
     }
     @Override
 	public int quantityDropped(Random random)
@@ -32,5 +26,4 @@ public class BlockRoof extends Block
     {
         return 6;
     }
-	
 }

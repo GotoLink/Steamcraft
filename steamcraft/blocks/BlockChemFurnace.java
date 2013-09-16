@@ -13,7 +13,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.TileEntityChemFurnace;
 import steamcraft.mod_Steamcraft;
-import steamcraft.inventories.GuiChemFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,10 +32,10 @@ public class BlockChemFurnace extends BlockFurnace
 	public void registerIcons(IconRegister par1IconRegister)
 	{
 	    this.blockIcon = par1IconRegister.registerIcon("steamcraft:chemfurnaceside");
-	    this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "chemfurnaceactive" : "chemfurnaceidle");
-	    this.furnaceIconTop = par1IconRegister.registerIcon("chemfurnacetop");
+	    this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "chemfurnaceactive" : "chemfurnaceidle"));
+	    this.furnaceIconTop = par1IconRegister.registerIcon("furnace_top");
 	}
-
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         if(!isActive)
@@ -126,7 +125,8 @@ public class BlockChemFurnace extends BlockFurnace
         }
     }
 	
-	public void onBlockRemoval(World world, int i, int j, int k)
+    @Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
         if(!keepFurnaceInventory)
         {
@@ -167,7 +167,7 @@ public class BlockChemFurnace extends BlockFurnace
 			}
 
         }
-        super.onBlockRemoval(world, i, j, k);
+        super.breakBlock(world, i, j, k, par5, par6);
     }
 
 	@Override

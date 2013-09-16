@@ -1,13 +1,18 @@
 package steamcraft.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import steamcraft.ClientProxy;
 import steamcraft.mod_Steamcraft;
 
 public class BlockSCTeaPlant extends BlockCrops
 {
-    public BlockSCTeaPlant(int i)
+    private Icon[] icons;
+	public BlockSCTeaPlant(int i)
     {
         super(i);
     }
@@ -19,22 +24,18 @@ public class BlockSCTeaPlant extends BlockCrops
     @Override
     public Icon getIcon(int i, int j)
     {
-        if(j < 0)
-        {
-            j = 7;
-        }
 		if(j < 1){
-		return 88;
+			return icons[0];
 		}else if(j < 7){
-		return mod_Steamcraft.YoungTeaPlant;
+			return icons[1];
 		}else{
-        return blockIndexInTexture;
+			return icons[2];
 		}
     }
     @Override
 	public int getRenderType()
     {
-        return mod_Steamcraft.TeaPlantModelID;
+        return ClientProxy.TeaPlantModelID;
     }
     @Override
     protected int getSeedItem()
@@ -45,5 +46,16 @@ public class BlockSCTeaPlant extends BlockCrops
     protected int getCropItem()
     {
         return mod_Steamcraft.teaLeaves.itemID;
+    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.icons = new Icon[3];
+
+        for (int i = 0; i < this.icons.length; ++i)
+        {
+            this.icons[i] = par1IconRegister.registerIcon(this.getTextureName() + "_stage_" + i);
+        }
     }
 }

@@ -4,6 +4,8 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import steamcraft.mod_Steamcraft;
 
@@ -19,29 +21,25 @@ public class BlockUraniteOre extends Block
     {
         return 30;
     }
-
-   /* public void onBlockClicked(World world, int i, int j, int k, EntityPlayer entityplayer)
-    {
-        func_320_h(world, i, j, k);
-        super.onBlockClicked(world, i, j, k, entityplayer);
-    }
-
-    public void onEntityWalking(World world, int i, int j, int k, Entity entity)
-    {
-        func_320_h(world, i, j, k);
-        super.onEntityWalking(world, i, j, k, entity);
-    }
-
-    public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
-    {
-        func_320_h(world, i, j, k);
-        return super.blockActivated(world, i, j, k, entityplayer);
-    }*/
-
-    private void func_320_h(World world, int i, int j, int k)
+    @Override
+    public void onBlockClicked(World world, int i, int j, int k, EntityPlayer entityplayer)
     {
         func_319_i(world, i, j, k);
+        super.onBlockClicked(world, i, j, k, entityplayer);
     }
+    @Override
+    public void onEntityWalking(World world, int i, int j, int k, Entity entity)
+    {
+        func_319_i(world, i, j, k);
+        super.onEntityWalking(world, i, j, k, entity);
+    }
+    @Override
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer,int l,float a,float b,float c)
+    {
+        func_319_i(world, i, j, k);
+        return super.onBlockActivated(world, i, j, k, entityplayer, l, a, b, c);
+    }
+
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
@@ -59,7 +57,7 @@ public class BlockUraniteOre extends Block
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-            func_319_i(world, i, j, k);
+        func_319_i(world, i, j, k);
     }
 
     private void func_319_i(World world, int i, int j, int k)

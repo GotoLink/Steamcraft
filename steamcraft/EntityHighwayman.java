@@ -26,7 +26,7 @@ public class EntityHighwayman extends EntityMob
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getAttributeMap().func_111150_b(SharedMonsterAttributes.maxHealth);
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth).setAttribute(10);
     }
     @Override
     protected String getHurtSound()
@@ -143,8 +143,8 @@ public class EntityHighwayman extends EntityMob
 		}*/
 		
 		if(!setDrops){
-		System.out.println("Is Percussion:" + percussion);
-		System.out.println("Is Rifle:" + rifled);
+		//System.out.println("Is Percussion:" + percussion);
+		//System.out.println("Is Rifle:" + rifled);
 		int i = rand.nextInt(8);
         for(int j = 0; j < i; j++)
         {
@@ -192,7 +192,7 @@ public class EntityHighwayman extends EntityMob
 		if(heldItemNumber == -1){
 			heldItemNumber = rand.nextInt(10);
 		}
-		System.out.println(heldItemNumber);
+		//System.out.println(heldItemNumber);
 	if(heldItemNumber >= 2 && heldItemNumber < 4){
 		rifled = true;
 		percussion = false;

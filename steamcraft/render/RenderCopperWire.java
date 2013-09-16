@@ -60,7 +60,7 @@ public class RenderCopperWire extends RenderBlocks
         Tessellator tessellator = Tessellator.instance;
         int l = iblockaccess.getBlockMetadata(i, j, k);
         Icon i1 = block.getIcon(1, l);
-        if(overrideBlockTexture >= 0)
+        if(hasOverrideBlockTexture())
         {
             i1 = overrideBlockTexture;
         }
@@ -77,12 +77,10 @@ public class RenderCopperWire extends RenderBlocks
 			f4 = 0.14F;
         }
         tessellator.setColorOpaque_F(f2, f3, f4);
-        int j1 = (i1 & 0xf) << 4;
-        int k1 = i1 & 0xf0;
-        double d = (float)j1 / 256F;
-        double d2 = ((float)j1 + 15.99F) / 256F;
-        double d4 = (float)k1 / 256F;
-        double d6 = ((float)k1 + 15.99F) / 256F;
+        double d = i1.getMinU();
+        double d2 = i1.getMaxU();
+        double d4 = i1.getMinV();
+        double d6 = i1.getMaxV();
         boolean flag = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i - 1, j, k, 1) || !iblockaccess.isBlockNormalCube(i - 1, j, k) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i - 1, j - 1, k, -1);
         boolean flag1 = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i + 1, j, k, 3) || !iblockaccess.isBlockNormalCube(i + 1, j, k) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i + 1, j - 1, k, -1);
         boolean flag2 = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i, j, k - 1, 2) || !iblockaccess.isBlockNormalCube(i, j, k - 1) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i, j - 1, k - 1, -1);
@@ -118,13 +116,6 @@ public class RenderCopperWire extends RenderBlocks
         if((flag2 || flag3) && !flag1 && !flag)
         {
             byte0 = 2;
-        }
-        if(byte0 != 0)
-        {
-            d = (float)(j1 + 16) / 256F;
-            d2 = ((float)(j1 + 16) + 15.99F) / 256F;
-            d4 = (float)k1 / 256F;
-            d6 = ((float)k1 + 15.99F) / 256F;
         }
         if(byte0 == 0)
         {
@@ -199,61 +190,57 @@ public class RenderCopperWire extends RenderBlocks
         }
         if(!iblockaccess.isBlockNormalCube(i, j + 1, k))
         {
-            double d1 = (float)(j1 + 16) / 256F;
-            double d3 = ((float)(j1 + 16) + 15.99F) / 256F;
-            double d5 = (float)k1 / 256F;
-            double d7 = ((float)k1 + 15.99F) / 256F;
             if(iblockaccess.isBlockNormalCube(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == Block.redstoneWire.blockID)
             {
                 tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
-                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d3, d5);
-                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 1, d1, d5);
-                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 0, d1, d7);
-                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d3, d7);
+                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d2, d4);
+                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 1, d, d4);
+                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 0, d, d6);
+                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d2, d6);
                 tessellator.setColorOpaque_F(f, f, f);
-                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d3, d5 + 0.0625D);
-                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 1, d1, d5 + 0.0625D);
-                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 0, d1, d7 + 0.0625D);
-                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d3, d7 + 0.0625D);
+                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d2, d4 + 0.0625D);
+                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 1, d, d4 + 0.0625D);
+                tessellator.addVertexWithUV((double)i + 0.015625D, j + 0, k + 0, d, d6 + 0.0625D);
+                tessellator.addVertexWithUV((double)i + 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d2, d6 + 0.0625D);
             }
             if(iblockaccess.isBlockNormalCube(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == Block.redstoneWire.blockID)
             {
                 tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 1, d1, d7);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d3, d7);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d3, d5);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 0, d1, d5);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 1, d, d6);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d2, d6);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d2, d4);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 0, d, d4);
                 tessellator.setColorOpaque_F(f, f, f);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 1, d1, d7 + 0.0625D);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d3, d7 + 0.0625D);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d3, d5 + 0.0625D);
-                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 0, d1, d5 + 0.0625D);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 1, d, d6 + 0.0625D);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 1, d2, d6 + 0.0625D);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, (float)(j + 1) + 0.021875F, k + 0, d2, d4 + 0.0625D);
+                tessellator.addVertexWithUV((double)(i + 1) - 0.015625D, j + 0, k + 0, d, d4 + 0.0625D);
             }
             if(iblockaccess.isBlockNormalCube(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == Block.redstoneWire.blockID)
             {
                 tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
-                tessellator.addVertexWithUV(i + 1, j + 0, (double)k + 0.015625D, d1, d7);
-                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d3, d7);
-                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d3, d5);
-                tessellator.addVertexWithUV(i + 0, j + 0, (double)k + 0.015625D, d1, d5);
+                tessellator.addVertexWithUV(i + 1, j + 0, (double)k + 0.015625D, d, d6);
+                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d2, d6);
+                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d2, d4);
+                tessellator.addVertexWithUV(i + 0, j + 0, (double)k + 0.015625D, d, d4);
                 tessellator.setColorOpaque_F(f, f, f);
-                tessellator.addVertexWithUV(i + 1, j + 0, (double)k + 0.015625D, d1, d7 + 0.0625D);
-                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d3, d7 + 0.0625D);
-                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d3, d5 + 0.0625D);
-                tessellator.addVertexWithUV(i + 0, j + 0, (double)k + 0.015625D, d1, d5 + 0.0625D);
+                tessellator.addVertexWithUV(i + 1, j + 0, (double)k + 0.015625D, d, d6 + 0.0625D);
+                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d2, d6 + 0.0625D);
+                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)k + 0.015625D, d2, d4 + 0.0625D);
+                tessellator.addVertexWithUV(i + 0, j + 0, (double)k + 0.015625D, d, d4 + 0.0625D);
             }
             if(iblockaccess.isBlockNormalCube(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == Block.redstoneWire.blockID)
             {
                 tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
-                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d3, d5);
-                tessellator.addVertexWithUV(i + 1, j + 0, (double)(k + 1) - 0.015625D, d1, d5);
-                tessellator.addVertexWithUV(i + 0, j + 0, (double)(k + 1) - 0.015625D, d1, d7);
-                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d3, d7);
+                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d2, d4);
+                tessellator.addVertexWithUV(i + 1, j + 0, (double)(k + 1) - 0.015625D, d, d4);
+                tessellator.addVertexWithUV(i + 0, j + 0, (double)(k + 1) - 0.015625D, d, d6);
+                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d2, d6);
                 tessellator.setColorOpaque_F(f, f, f);
-                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d3, d5 + 0.0625D);
-                tessellator.addVertexWithUV(i + 1, j + 0, (double)(k + 1) - 0.015625D, d1, d5 + 0.0625D);
-                tessellator.addVertexWithUV(i + 0, j + 0, (double)(k + 1) - 0.015625D, d1, d7 + 0.0625D);
-                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d3, d7 + 0.0625D);
+                tessellator.addVertexWithUV(i + 1, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d2, d4 + 0.0625D);
+                tessellator.addVertexWithUV(i + 1, j + 0, (double)(k + 1) - 0.015625D, d, d4 + 0.0625D);
+                tessellator.addVertexWithUV(i + 0, j + 0, (double)(k + 1) - 0.015625D, d, d6 + 0.0625D);
+                tessellator.addVertexWithUV(i + 0, (float)(j + 1) + 0.021875F, (double)(k + 1) - 0.015625D, d2, d6 + 0.0625D);
             }
         }
         return true;

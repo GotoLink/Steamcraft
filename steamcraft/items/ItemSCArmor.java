@@ -11,9 +11,9 @@ public class ItemSCArmor extends ItemArmor
         super(i, EnumArmorMaterial.values()[j], k, l);
         damageReduceAmount = damageReduceAmountArray[l];
 		if(k == mod_Steamcraft.EtheriumRenderIndex){
-		setMaxDamage(-1);
+			setMaxDamage(-1);
 		}else{
-        setMaxDamage((int) Math.round(maxDamageArray[l] * 2.5) << j);
+			setMaxDamage((int) Math.round(maxDamageArray[l] * 2.5) << j);
 		}
     }
 

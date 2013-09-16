@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
@@ -62,10 +63,15 @@ public class RenderHighwayman extends RenderBiped
         renderManager.renderEngine.bindTexture(man);
     }
 		
-	protected boolean shouldRenderPass(EntityLiving entityliving, int i, float f)
+	@Override
+	protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
 		renderSpecials((EntityHighwayman)entityliving, i, f);
-        return true;
+        return -1;
     }
-
+	@Override
+	protected ResourceLocation func_110856_a(EntityLiving par1EntityLiving)
+    {
+        return man;
+    }
 }

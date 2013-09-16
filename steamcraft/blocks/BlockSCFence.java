@@ -15,6 +15,11 @@ public class BlockSCFence extends BlockFence
 		blockGate = blockgate;
 		doesJoinBlocks = flag;
     }
+    @Override
+    public boolean canPlaceTorchOnTop(World world, int i, int j, int k)
+    {
+    	return true;
+    }
 	@Override
 	public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {

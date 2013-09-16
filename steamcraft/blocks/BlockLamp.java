@@ -2,12 +2,10 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import steamcraft.mod_Steamcraft;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import steamcraft.mod_Steamcraft;
 
 public class BlockLamp extends Block
 {

@@ -12,6 +12,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockSCStairs extends BlockStairs
 {
@@ -23,6 +24,11 @@ public class BlockSCStairs extends BlockStairs
 		blockDrop = blockdrop;
 		dropQuantity = quantity;
     }
+    @Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
+	{
+		return side!=ForgeDirection.DOWN && side!=ForgeDirection.UP;
+	}
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k)
     {

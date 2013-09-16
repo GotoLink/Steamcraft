@@ -2,22 +2,32 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import steamcraft.mod_Steamcraft;
-
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import steamcraft.mod_Steamcraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockBattery extends Block
 {
-    public BlockBattery(int i)
+    private Icon blockSide;
+	public BlockBattery(int i)
     {
         super(i, mod_Steamcraft.solidcircuit);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         setLightOpacity(0);
     }
 	@Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
+	{
+		return side!=ForgeDirection.DOWN && side!=ForgeDirection.UP;
+	}
+	@Override
+	@SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         if(l == 1)
@@ -32,6 +42,13 @@ public class BlockBattery extends Block
             return blockSide;
         }
 	}
+	@Override
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+		blockIcon = par1IconRegister.registerIcon(getTextureName()+"top");
+        blockSide = par1IconRegister.registerIcon(getTextureName()+"side");
+    }
 	@Override
 	public int tickRate(World world)
     {
@@ -56,8 +73,8 @@ public class BlockBattery extends Block
 	    world.markBlockForUpdate(i, j, k);
 	    world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
-	
-	public void onBlockRemoval(World world, int i, int j, int k)
+	@Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
         world.notifyBlocksOfNeighborChange(i, j, k, blockID);
 		world.notifyBlocksOfNeighborChange(i+1, j, k, blockID);
@@ -66,10 +83,10 @@ public class BlockBattery extends Block
 		world.notifyBlocksOfNeighborChange(i, j, k-1, blockID);
 		world.notifyBlocksOfNeighborChange(i, j+1, k, blockID);
         world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-        super.onBlockRemoval(world, i, j, k);
+        super.breakBlock(world, i, j, k, par6, par6);
     }
 	
-	public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
+	/*public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         return iblockaccess.getBlockMetadata(i, j, k) <= 0;
     }
@@ -77,7 +94,7 @@ public class BlockBattery extends Block
     public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
     {
             return l == 1;
-    }
+    }*/
     @Override
     public boolean canProvidePower()
     {
@@ -128,8 +145,7 @@ public class BlockBattery extends Block
 
 
 
-/*import java.util.List;
-import java.util.Random;
+/*
 
 public class BlockBattery extends Block
 {

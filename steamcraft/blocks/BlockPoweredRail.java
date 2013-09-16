@@ -1,12 +1,11 @@
 package steamcraft.blocks;
 
-import steamcraft.mod_Steamcraft;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRail;
+import net.minecraft.block.BlockRailPowered;
 import net.minecraft.util.Icon;
 
-public class BlockPoweredRail extends BlockRail
+public class BlockPoweredRail extends BlockRailPowered
 {
+	private final boolean isPowered;
     public BlockPoweredRail(int i, boolean flag)
     {
         super(i);
@@ -17,17 +16,9 @@ public class BlockPoweredRail extends BlockRail
     {
         if(isPowered)
         {
-            if(blockID == Block.railPowered.blockID && (j & 8) == 0)
-            {
-                return mod_Steamcraft.PoweredRailOFF;
-            }
-        } else
-        if(j >= 6)
-        {
-            return mod_Steamcraft.PoweredRailOFF;
-        }
-        return mod_Steamcraft.PoweredRailON;
+            return super.getIcon(i,8);
+        } 
+        else
+	        return super.getIcon(i, 0);
 	}
-	
-	private final boolean isPowered;
 }

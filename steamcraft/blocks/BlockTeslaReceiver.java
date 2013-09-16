@@ -3,35 +3,48 @@ package steamcraft.blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import steamcraft.mod_Steamcraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTeslaReceiver extends Block
 {
-    public BlockTeslaReceiver(int i)
+    private Icon sideBlock;
+
+	public BlockTeslaReceiver(int i)
     {
         super(i, mod_Steamcraft.staticcircuit);
 		setTickRandomly(true);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		setLightOpacity(0);
     }
+	@Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
+	{
+		return side!=ForgeDirection.DOWN && side!=ForgeDirection.UP;
+	}
     @Override
+    @SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
-        if(l == 1)
+        if(l == 1 || (l == 0))
         {
-            return blockIndexInTexture;
+            return blockIcon;
         }
-        if(l == 0)
-        {
-            return blockIndexInTexture;
-        }else
-        {
-		return sideIndexInTexture;
-        }
+    	return sideBlock;
 	}
+    @Override
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        super.registerIcons(par1IconRegister);
+        sideBlock = par1IconRegister.registerIcon("steamcraft:receiverside");
+    }
     @Override
 	public int tickRate(World world)
     {
@@ -82,7 +95,8 @@ public class BlockTeslaReceiver extends Block
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 	
-	public void onBlockRemoval(World world, int i, int j, int k)
+    @Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
     {
 	    world.notifyBlocksOfNeighborChange(i, j, k, blockID);
 	    world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
@@ -91,7 +105,7 @@ public class BlockTeslaReceiver extends Block
 	    world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
 	    world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
 	    world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-        super.onBlockRemoval(world, i, j, k);
+        super.breakBlock(world, i, j, k, par5, par6);
     }
 	
 	public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)

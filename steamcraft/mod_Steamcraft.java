@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockOreStorage;
-import net.minecraft.block.BlockQuartz;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLogic;
@@ -17,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -41,13 +39,11 @@ import steamcraft.blocks.BlockNukeFurnace;
 import steamcraft.blocks.BlockPoweredRail;
 import steamcraft.blocks.BlockRoof;
 import steamcraft.blocks.BlockSCCopperWire;
-import steamcraft.blocks.BlockSCFarmland;
 import steamcraft.blocks.BlockSCFence;
 import steamcraft.blocks.BlockSCOre;
 import steamcraft.blocks.BlockSCStairs;
 import steamcraft.blocks.BlockSCTallGrass;
 import steamcraft.blocks.BlockSCTeaPlant;
-import steamcraft.blocks.BlockSCTorch;
 import steamcraft.blocks.BlockSteamFurnace;
 import steamcraft.blocks.BlockTeslaCoil;
 import steamcraft.blocks.BlockTeslaReceiver;
@@ -55,7 +51,6 @@ import steamcraft.blocks.BlockTorchPhosphorus;
 import steamcraft.blocks.BlockUraniteOre;
 import steamcraft.blocks.BlockUranium;
 import steamcraft.blocks.BlockWirelessLamp;
-import steamcraft.items.ItemChisel;
 import steamcraft.items.ItemCoreDrill;
 import steamcraft.items.ItemElectricLamp;
 import steamcraft.items.ItemFirearm;
@@ -113,15 +108,13 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 	public static Block torchPhosphorus;
 	public static Block roofTile;
 	
-	public static Block oreSCDiamond,oreSCCoal;
-	
 	public static Block blockCastIron;
 	public static Block blockVolucite;
 	public static Block blockBrass;
 	public static Block blockUranium;
 	
 	public static Block decorIron,decorGold,decorDiamond,decorCastIron,decorBrass;
-	public static Block decorVolucite,decorLapis,carvedStone,decorQuartz,decorUranium;
+	public static Block decorVolucite,decorLapis,carvedStone,decorUranium;
 	
 	public static Block railingCastIron,gateCastIron;
 	
@@ -129,14 +122,17 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 	
 	public static Block lamp,lampoff;
 	public static Block woodBrass;
-	public static Block leavesLamp;
-	public static Block wirelessLampIdle,wirelessLampActive;
+	public static Block leavesLamp,wirelessLampIdle,wirelessLampActive;
 	
-	public static Block stairCompactStone,stairRoof;
+	public static Block stairRoof;
 	
 	public static Block teaPlant;
 	
-	public static Item quartz,etherium,chemicSalt,bornite,obsidianSlate;
+	public static Block redstoneWire,torchRedstoneIdle,torchRedstoneActive;
+	public static Block redstoneRepeaterIdle,redstoneRepeaterActive,railPowered;
+	public static Block tallGrass;
+	
+	public static Item etherium,chemicSalt,bornite,obsidianSlate;
 	public static Item ingotBrass,ingotCastIron;
 	public static Item lightBulb;
 	public static Item phosphorus,uraniumStone,uranium;
@@ -179,16 +175,24 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 	public static Material staticcircuit = new MaterialLogic(MapColor.airColor).setImmovableMobility();
 	private Logger logger;
 	
+	
+	private Object[][] DrillRecipeItems,SpannerRecipeItems,StoreBlockRecipeItems;
+	private Object[][] DecorBlockRecipeItems,StairRecipeItems;
+	
 	@EventHandler
 	public void load(FMLPreInitializationEvent event)
 	{	
 		logger = event.getModLog();
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-		/*BorniteOre =  "/bornite.png";	
-		RoofTilesTex =  "/slatetiles.png";	
-		CastIronTex = "/castironblock.png";*/
-			
+		redstoneWire = new BlockSCCopperWire(config.getBlock("CopperWire",2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("copperwire").setTextureName("redstone_Dust").disableStats();
+		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter",2494).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle").setTextureName("steamcraft:inverteridle");
+		torchRedstoneActive = new BlockInverter(config.getBlock("InverterON",2495).getInt(),  true).setHardness(0.0F).setLightValue(0.5F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteractive").setTextureName("steamcraft:inverteractive");
+		redstoneRepeaterIdle = new BlockDiode(config.getBlock("Repeater",2496).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:diodeidle").setTextureName("steamcraft:diodeidle").disableStats();
+		redstoneRepeaterActive = new BlockDiode(config.getBlock("RepeaterON",2497).getInt(),  true).setHardness(0.0F).setLightValue(0.625F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:diodeactive").setTextureName("steamcraft:diodeactive").disableStats();
+		railPowered = new BlockPoweredRail(config.getBlock("Rail",2498).getInt(),  true).setHardness(0.7F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:rail").setTextureName("steamcraft:rail");
+		tallGrass = new BlockSCTallGrass(config.getBlock("tallgrass",2499).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("tallgrass").setTextureName("tallgrass");
+		
 		torchElectricIdle = new BlockElectricLamp(config.getBlock("ElectricLamp",2500).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:castironblock").disableStats();
 		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:castironblock").disableStats();
 		torchTeslaIdle = new BlockTeslaCoil(config.getBlock("TeslaCoil",2502).getInt(),  false).setHardness(0.0F).setUnlocalizedName("steamcraft:teslaCoil").setTextureName("steamcraft:teslaidle");
@@ -223,7 +227,6 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		decorBrass = new BlockOreStorage(config.getBlock("EngrBrass",2531).getInt()).setHardness(5F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorBrass").setTextureName("steamcraft:engrbrass");
 		decorLapis = new BlockOreStorage(config.getBlock("EngrLapis",2532).getInt()).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:decorLapis").setTextureName("steamcraft:engrlapis");
 		carvedStone = new Block(config.getBlock("CarvedStone",2533).getInt(), Material.rock).setHardness(2F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:stoneWall").setTextureName("steamcraft:carvedstone");
-		decorQuartz = new BlockQuartz(config.getBlock("EngrQuartz",2534).getInt()).setHardness(10F).setResistance(6F).setLightValue(0.3125F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorQuartz").setTextureName("steamcraft:engrquartz");
 		decorUranium = new BlockUranium(config.getBlock("EngrUranium",2535).getInt()).setHardness(10F).setResistance(6F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorUranium").setTextureName("steamcraft:engruranium");
 		
 		gateCastIron = new BlockFenceGate(config.getBlock("CastIronGate",2536).getInt() ).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:gateCastIron").setTextureName("steamcraft:castironblock");
@@ -238,7 +241,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		
 		stairRoof = new BlockSCStairs(config.getBlock("SlateStairs",2545).getInt(),roofTile,0, Item.flint.itemID, 2).setUnlocalizedName("steamcraft:stairsRoof").setTextureName("steamcraft:slatetiles");
 		
-		teaPlant = new BlockSCTeaPlant(config.getBlock("TeaPlant",2546).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("steamcraft:teaplant").disableStats().setTextureName("steamcraft:teaplantgrown");
+		teaPlant = new BlockSCTeaPlant(config.getBlock("TeaPlant",2546).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("steamcraft:teaplant").disableStats().setTextureName("steamcraft:teaplant");
 		
 		etherium = new Item(config.getItem("Etherium",25000).getInt()).setUnlocalizedName("steamcraft:etherium").setTextureName("steamcraft:etherium");
 		chemicSalt = new Item(config.getItem("Sulphur",25001).getInt()).setUnlocalizedName("steamcraft:chemicSalt").setTextureName("steamcraft:sulphur");
@@ -254,66 +257,65 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		coreDrill = new ItemCoreDrill(config.getItem("CoreDrill",25011).getInt()).setUnlocalizedName("steamcraft:coreDrill").setTextureName("steamcraft:coredrill");
 		drillBase = new Item(config.getItem("DrillBase",25012).getInt()).setUnlocalizedName("steamcraft:drillBase").setTextureName("steamcraft:coredrillbase");
 		
-		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools.obsidianpick");
-		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools.obsidianspade");
-		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools.obsidianaxe");
-		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools.obsidianhoe");
-		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools.obsidiansword");
-		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools.obsidiandrill");
+		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools/obsidianpick");
+		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
+		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
+		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
+		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
+		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
 		
-		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), 3, ObsidianRenderIndex, 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour.obsidianhelmet");
-		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), 3, ObsidianRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour.obsidianplate");
-		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), 3, ObsidianRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour.obsidianlegs");
-		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), 3, ObsidianRenderIndex, 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour.obsidianboots");
+		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), 3, ObsidianRenderIndex, 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour/obsidianhelmet");
+		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), 3, ObsidianRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour/obsidianplate");
+		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), 3, ObsidianRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour/obsidianlegs");
+		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), 3, ObsidianRenderIndex, 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour/obsidianboots");
 		
-		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), 1, BrassRenderIndex, 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour.brassgoggles");
-		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), 1, BrassRenderIndex, 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour.aqualung");
-		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), 1, BrassRenderIndex, 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour.rollerskates");
-		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), 1, BrassRenderIndex, 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour.pneumaticbraces");
+		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), 1, BrassRenderIndex, 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour/brassgoggles");
+		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), 1, BrassRenderIndex, 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour/aqualung");
+		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), 1, BrassRenderIndex, 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour/rollerskates");
+		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), 1, BrassRenderIndex, 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
 		
-		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools.etheriumpick");
-		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools.etheriumspade");
-		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe",25029).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools.etheriumaxe");
-		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe",25030).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools.etheriumhoe");
-		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools.etheriumsword");
-		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill",25032).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools.etheriumdrill");
+		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools/etheriumpick");
+		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
+		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe",25029).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools/etheriumaxe");
+		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe",25030).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
+		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
+		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill",25032).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools/etheriumdrill");
 		
-		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), 0, EtheriumRenderIndex, 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour.etheriumhelmet");
-		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), 0, EtheriumRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour.etheriumplate");
-		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), 0, EtheriumRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour.etheriumlegs");
-		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), 0, EtheriumRenderIndex, 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour.etheriumboots");
+		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), 0, EtheriumRenderIndex, 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour/etheriumhelmet");
+		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), 0, EtheriumRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour/etheriumplate");
+		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), 0, EtheriumRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour/etheriumlegs");
+		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), 0, EtheriumRenderIndex, 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
 		
-		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),STEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools.steampick");
-		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),STEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools.steamspade");
-		axeSteam = new ItemSCAxe(config.getItem("SteamAxe",25040).getInt(),STEAM).setUnlocalizedName("steamcraft:hatchetSteam").setTextureName("steamcraft:tools.steamaxe");
-		hoeSteam = new ItemSCHoe(config.getItem("SteamHoe",25041).getInt(),STEAM).setUnlocalizedName("steamcraft:hoeSteam").setTextureName("steamcraft:tools.steamhoe");
-		swordSteam =new ItemSCSword(config.getItem("SteamSword",25042).getInt(),STEAM).setUnlocalizedName("steamcraft:swordSteam").setTextureName("steamcraft:tools.steamsword");
-		drillSteam = new ItemSCDrill(config.getItem("SteamDrill",25043).getInt(),STEAM).setUnlocalizedName("steamcraft:drillSteam").setTextureName("steamcraft:tools.steamdrill");
-		
-		
-		drillSteel = new ItemSCDrill(config.getItem("IronDrill",25044).getInt(), EnumToolMaterial.IRON).setUnlocalizedName("steamcraft:drillIron").setTextureName("steamcraft:tools.irondrill");
-		drillWood = new ItemSCDrill(config.getItem("WoodenDrill",25045).getInt(), EnumToolMaterial.WOOD).setUnlocalizedName("steamcraft:drillWood").setTextureName("steamcraft:tools.woorddrill");
-		drillStone = new ItemSCDrill(config.getItem("StoneDrill",25046).getInt(), EnumToolMaterial.STONE).setUnlocalizedName("steamcraft:drillStone").setTextureName("steamcraft:tools.stonedrill");
-		drillDiamond = new ItemSCDrill(config.getItem("DiamondDrill",25047).getInt(), EnumToolMaterial.EMERALD).setUnlocalizedName("steamcraft:drillDiamond").setTextureName("steamcraft:tools.diamonddrill");
-		drillGold = new ItemSCDrill(config.getItem("GoldenDrill",25048).getInt(), EnumToolMaterial.GOLD).setUnlocalizedName("steamcraft:drillGold").setTextureName("steamcraft:tools.golddrill");
+		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),STEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools/steampick");
+		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),STEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
+		axeSteam = new ItemSCAxe(config.getItem("SteamAxe",25040).getInt(),STEAM).setUnlocalizedName("steamcraft:hatchetSteam").setTextureName("steamcraft:tools/steamaxe");
+		hoeSteam = new ItemSCHoe(config.getItem("SteamHoe",25041).getInt(),STEAM).setUnlocalizedName("steamcraft:hoeSteam").setTextureName("steamcraft:tools/steamhoe");
+		swordSteam =new ItemSCSword(config.getItem("SteamSword",25042).getInt(),STEAM).setUnlocalizedName("steamcraft:swordSteam").setTextureName("steamcraft:tools/steamsword");
+		drillSteam = new ItemSCDrill(config.getItem("SteamDrill",25043).getInt(),STEAM).setUnlocalizedName("steamcraft:drillSteam").setTextureName("steamcraft:tools/steamdrill");
 		
 		
-		chisel = new ItemChisel(config.getItem("Chisel",25049).getInt(), 64).setUnlocalizedName("steamcraft:chisel").setTextureName("steamcraft:tools.chisel");
-		spanner = new ItemChisel(config.getItem("Spanner",25050).getInt(), 3).setUnlocalizedName("steamcraft:spanner").setTextureName("steamcraft:tools.spanner");				
+		drillSteel = new ItemSCDrill(config.getItem("IronDrill",25044).getInt(), EnumToolMaterial.IRON).setUnlocalizedName("steamcraft:drillIron").setTextureName("steamcraft:tools/irondrill");
+		drillWood = new ItemSCDrill(config.getItem("WoodenDrill",25045).getInt(), EnumToolMaterial.WOOD).setUnlocalizedName("steamcraft:drillWood").setTextureName("steamcraft:tools/wooddrill");
+		drillStone = new ItemSCDrill(config.getItem("StoneDrill",25046).getInt(), EnumToolMaterial.STONE).setUnlocalizedName("steamcraft:drillStone").setTextureName("steamcraft:tools/stonedrill");
+		drillDiamond = new ItemSCDrill(config.getItem("DiamondDrill",25047).getInt(), EnumToolMaterial.EMERALD).setUnlocalizedName("steamcraft:drillDiamond").setTextureName("steamcraft:tools/diamonddrill");
+		drillGold = new ItemSCDrill(config.getItem("GoldenDrill",25048).getInt(), EnumToolMaterial.GOLD).setUnlocalizedName("steamcraft:drillGold").setTextureName("steamcraft:tools/golddrill");
 		
-		musketRound = new Item(config.getItem("MusketCartridge",25051).getInt()).setUnlocalizedName("steamcraft:musketRound").setTextureName("steamcraft:musketcratridge");
+		chisel = new Item(config.getItem("Chisel",25049).getInt()).setFull3D().setMaxDamage(64).setMaxStackSize(1).setUnlocalizedName("steamcraft:chisel").setTextureName("steamcraft:tools/chisel");
+		spanner = new Item(config.getItem("Spanner",25050).getInt()).setFull3D().setMaxDamage(3).setMaxStackSize(1).setUnlocalizedName("steamcraft:spanner").setTextureName("steamcraft:tools/spanner");				
+		
+		musketRound = new Item(config.getItem("MusketCartridge",25051).getInt()).setUnlocalizedName("steamcraft:musketRound").setTextureName("steamcraft:musketcartridge");
 		percussionRound = new Item(config.getItem("PercussionCap",25052).getInt()).setUnlocalizedName("steamcraft:percussionRound").setTextureName("steamcraft:percussioncap");
 		
 		percussionLock = new Item(config.getItem("PercussionLock",25053).getInt()).setUnlocalizedName("steamcraft:percussionLock").setTextureName("steamcraft:percussionlock");
 		smoothBarrel = new Item(config.getItem("SmoothBarrel",25054).getInt()).setUnlocalizedName("steamcraft:smoothBarrel").setTextureName("steamcraft:smoothbarrel");
 		rifledBarrel = new Item(config.getItem("RifledBarrel",25055).getInt()).setUnlocalizedName("steamcraft:rifledBarrel").setTextureName("steamcraft:rifledbarrel");
 		woodenStock = new Item(config.getItem("WoodStock",25056).getInt()).setUnlocalizedName("steamcraft:woodenStock").setTextureName("steamcraft:woodenstock");
-		flintlockMusket = new ItemFirearm(config.getItem("FlintlockMusket",25057).getInt(), 100, musketRound, musketRound, 8, false).setUnlocalizedName("steamcraft:flintlockMusket").setTextureName("steamcraft:tools.flintlockmusket");
-		matchlockMusket = new ItemFirearm(config.getItem("MatchlockMusket",25058).getInt(), 200, musketRound, musketRound, 6, false).setUnlocalizedName("steamcraft:matchlockMusket").setTextureName("steamcraft:tools.matchlockmusket");
-		percussionCapMusket = new ItemFirearm(config.getItem("PercussionMusket",25059).getInt(), 50, percussionRound, musketRound, 10, false).setUnlocalizedName("steamcraft:percussionMusket").setTextureName("steamcraft:tools.percussionmusket");
-		flintlockRifle = new ItemFirearm(config.getItem("FlintlockRifle",25060).getInt(), 120, musketRound, musketRound, 10, true).setUnlocalizedName("steamcraft:flintlockRifle").setTextureName("steamcraft:tools.flintlockrifle");
-		matchlockRifle = new ItemFirearm(config.getItem("MatchlockRifle",25061).getInt(), 240, musketRound, musketRound, 8, true).setUnlocalizedName("steamcraft:matchlockRifle").setTextureName("steamcraft:tools.matchlockrifle");
-		percussionCapRifle = new ItemFirearm(config.getItem("PercussionRifle",25062).getInt(), 60, percussionRound, musketRound, 12, true).setUnlocalizedName("steamcraft:percussionRifle").setTextureName("steamcraft:tools.percussionrifle");
+		flintlockMusket = new ItemFirearm(config.getItem("FlintlockMusket",25057).getInt(), 100, musketRound, musketRound, 8, false).setUnlocalizedName("steamcraft:flintlockMusket").setTextureName("steamcraft:tools/flintlockmusket");
+		matchlockMusket = new ItemFirearm(config.getItem("MatchlockMusket",25058).getInt(), 200, musketRound, musketRound, 6, false).setUnlocalizedName("steamcraft:matchlockMusket").setTextureName("steamcraft:tools/matchlockmusket");
+		percussionCapMusket = new ItemFirearm(config.getItem("PercussionMusket",25059).getInt(), 50, percussionRound, musketRound, 10, false).setUnlocalizedName("steamcraft:percussionMusket").setTextureName("steamcraft:tools/percussionmusket");
+		flintlockRifle = new ItemFirearm(config.getItem("FlintlockRifle",25060).getInt(), 120, musketRound, musketRound, 10, true).setUnlocalizedName("steamcraft:flintlockRifle").setTextureName("steamcraft:tools/flintlockrifle");
+		matchlockRifle = new ItemFirearm(config.getItem("MatchlockRifle",25061).getInt(), 240, musketRound, musketRound, 8, true).setUnlocalizedName("steamcraft:matchlockRifle").setTextureName("steamcraft:tools/matchlockrifle");
+		percussionCapRifle = new ItemFirearm(config.getItem("PercussionRifle",25062).getInt(), 60, percussionRound, musketRound, 12, true).setUnlocalizedName("steamcraft:percussionRifle").setTextureName("steamcraft:tools/percussionrifle");
 		
 		electricLamp = new ItemElectricLamp(config.getItem("ElectricLamp",25063).getInt(), torchElectricIdle).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electriclamp");
 		wirelessLamp = new ItemElectricLamp(config.getItem("WirelessLamp",25064).getInt(), wirelessLampIdle).setUnlocalizedName("steamcraft:wirelessLamp").setTextureName("steamcraft:wirelesslamp");
@@ -338,36 +340,6 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		TickRegistry.registerTickHandler(proxy, Side.SERVER);
 		TickRegistry.registerTickHandler(proxy, Side.CLIENT);
 		
-		Block.blocksList[Block.redstoneWire.blockID] = null;
-		Block redstoneWire = new BlockSCCopperWire(Block.redstoneWire.blockID).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("redstoneDust").disableStats();
-		Block.blocksList[Block.torchRedstoneIdle.blockID] = null;
-		Block torchRedstoneIdle = new BlockInverter(Block.torchRedstoneIdle.blockID,  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("notGate");
-		Block.blocksList[Block.torchRedstoneActive.blockID] = null;
-		Block torchRedstoneActive = new BlockInverter(Block.torchRedstoneActive.blockID,  true).setHardness(0.0F).setLightValue(0.5F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("notGate");
-		Block.blocksList[Block.redstoneRepeaterIdle.blockID] = null;
-		Block redstoneRepeaterIdle = new BlockDiode(Block.redstoneRepeaterIdle.blockID,  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("diode").disableStats();
-		Block.blocksList[Block.redstoneRepeaterActive.blockID] = null;
-		Block redstoneRepeaterActive = new BlockDiode(Block.redstoneRepeaterActive.blockID,  true).setHardness(0.0F).setLightValue(0.625F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("diode").disableStats();
-		Block.blocksList[Block.railPowered.blockID] = null;
-		Block railPowered = new BlockPoweredRail(Block.railPowered.blockID,  true).setHardness(0.7F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("goldenRail");
-		Block.blocksList[Block.oreDiamond.blockID] = null;
-		Block oreDiamond = new BlockSCOre(56).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("oreDiamond");
-		oreSCDiamond = oreDiamond;
-		Block.blocksList[Block.oreCoal.blockID] = null;
-		Block oreCoal = new BlockSCOre(16).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("oreCoal");
-		oreSCCoal = oreCoal;
-		Block.blocksList[Block.tallGrass.blockID] = null;
-		Block tallGrass = new BlockSCTallGrass(31).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("tallgrass");
-		Block.blocksList[Block.tilledField.blockID] = null;
-		Block tilledField = new BlockSCFarmland(60).setHardness(0.6F).setStepSound(Block.soundGravelFootstep).setUnlocalizedName("farmland");
-		
-		Item.itemsList[Block.torchRedstoneIdle.blockID] = new ItemBlock(Block.torchRedstoneIdle.blockID - 256);
-		Item.itemsList[Block.torchRedstoneActive.blockID] = new ItemBlock(Block.torchRedstoneActive.blockID - 256);
-		Item.itemsList[Block.redstoneRepeaterIdle.blockID] = new ItemBlock(Block.redstoneRepeaterIdle.blockID - 256);
-		Item.itemsList[Block.redstoneRepeaterActive.blockID] = new ItemBlock(Block.redstoneRepeaterActive.blockID - 256);
-		Item.itemsList[Block.railPowered.blockID] = new ItemBlock(Block.railPowered.blockID - 256);
-		Item.itemsList[Block.railDetector.blockID] = new ItemBlock(Block.railDetector.blockID - 256);
-		
 		LanguageRegistry.instance().addName(torchElectricIdle, "Electric Lamp");
 		LanguageRegistry.instance().addName(torchElectricActive, "Electric Lamp");
 		LanguageRegistry.instance().addName(electricLamp, "Electric Lamp");			
@@ -378,18 +350,16 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		LanguageRegistry.instance().addName(steamOvenIdle, "Steam Furnace");
 		LanguageRegistry.instance().addName(steamOvenActive, "Steam Furnace");
 		LanguageRegistry.instance().addName(battery, "Battery");
-		LanguageRegistry.instance().addName(Item.redstone, "Copper Wire");
-		LanguageRegistry.instance().addName(Block.torchRedstoneIdle, "Inverter");
-		LanguageRegistry.instance().addName(Block.torchRedstoneActive, "Inverter");
-		LanguageRegistry.instance().addName(Block.redstoneRepeaterIdle, "Diode");
-		LanguageRegistry.instance().addName(Block.redstoneRepeaterActive, "Diode");
-		LanguageRegistry.instance().addName(Item.redstoneRepeater, "Diode");
+		LanguageRegistry.instance().addName(redstoneWire, "Copper Wire");
+		LanguageRegistry.instance().addName(torchRedstoneIdle, "Inverter");
+		LanguageRegistry.instance().addName(torchRedstoneActive, "Inverter");
+		LanguageRegistry.instance().addName(redstoneRepeaterIdle, "Diode");
+		LanguageRegistry.instance().addName(redstoneRepeaterActive, "Diode");
 		LanguageRegistry.instance().addName(brimstone, "Brimstone");
 		LanguageRegistry.instance().addName(borniteOre, "Bornite");
 		LanguageRegistry.instance().addName(orePhosphate, "Phosphate Ore");
 		LanguageRegistry.instance().addName(oreUranite, "Uranite");
 		LanguageRegistry.instance().addName(borniteOre, "Bornite");
-		LanguageRegistry.instance().addName(quartz, "Quartz");
 		LanguageRegistry.instance().addName(oreVolucite, "Volucite");
 		LanguageRegistry.instance().addName(etherium, "Etherium Crystal");
 		LanguageRegistry.instance().addName(chemicSalt, "Sulphur");
@@ -437,7 +407,6 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		LanguageRegistry.instance().addName(decorBrass, "Engraved Brass Block");
 		LanguageRegistry.instance().addName(decorLapis, "Engraved Lapis Lazuli Block");
 		LanguageRegistry.instance().addName(carvedStone, "Carved Stone");
-		LanguageRegistry.instance().addName(decorQuartz, "Engraved Quartz Block");
 		LanguageRegistry.instance().addName(decorUranium, "Engraved Uranium Block");
 
 		LanguageRegistry.instance().addName(lamp, "Lamp Block");
@@ -448,7 +417,6 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		LanguageRegistry.instance().addName(wirelessLampActive, "Wireless Lamp");
 		LanguageRegistry.instance().addName(wirelessLamp, "Wireless Lamp");
 		
-		LanguageRegistry.instance().addName(stairCompactStone, "Stone Stairs");
 		LanguageRegistry.instance().addName(stairRoof, "Angled Slate Tiles");
 		
 		LanguageRegistry.instance().addName(pickaxeObsidian, "Obsidian Pickaxe");
@@ -502,17 +470,17 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		LanguageRegistry.instance().addName(matchlockRifle, "Matchlock Rifle");
 		LanguageRegistry.instance().addName(percussionCapRifle, "Percussion Rifle");
 		
-		LanguageRegistry.instance().addName(musketRound, "Musket Cartidge");
+		LanguageRegistry.instance().addName(musketRound, "Musket Cartridge");
 		LanguageRegistry.instance().addName(percussionRound, "Percussion Cap");
 		
 		GameRegistry.registerBlock(torchElectricIdle,"Electric Lamp");
-		GameRegistry.registerBlock(torchElectricActive,"Electric Lamp");
+		GameRegistry.registerBlock(torchElectricActive,"Electric Lamp Active");
 		GameRegistry.registerBlock(torchTeslaIdle,"Tesla Coil");
-		GameRegistry.registerBlock(torchTeslaActive,"Tesla Coil");
+		GameRegistry.registerBlock(torchTeslaActive,"Tesla Coil Active");
 		GameRegistry.registerBlock(teslaReceiver, "Tesla Receiver");
-		GameRegistry.registerBlock(teslaReceiverActive, "Tesla Receiver");
+		GameRegistry.registerBlock(teslaReceiverActive, "Tesla Receiver Active");
 		GameRegistry.registerBlock(steamOvenIdle, "Steam Furnace");
-		GameRegistry.registerBlock(steamOvenActive, "Steam Furnace");
+		GameRegistry.registerBlock(steamOvenActive, "Steam Furnace Active");
 		GameRegistry.registerBlock(battery,"Battery");
 		GameRegistry.registerBlock(brimstone,"Brimstone");
 		GameRegistry.registerBlock(orePhosphate,"PhosphateOre");
@@ -521,14 +489,14 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		GameRegistry.registerBlock(oreVolucite,"Volucite");
 		GameRegistry.registerBlock(torchPhosphorus,"PhoshoreTorch");
 		GameRegistry.registerBlock(chemOvenIdle,"ChemFurnace");
-		GameRegistry.registerBlock(chemOvenActive,"ChemFurnace");
+		GameRegistry.registerBlock(chemOvenActive,"ChemFurnace Active");
 		GameRegistry.registerBlock(nukeOvenIdle,"NukeFurnace");
-		GameRegistry.registerBlock(nukeOvenActive,"NukeFurnace");
+		GameRegistry.registerBlock(nukeOvenActive,"NukeFurnace Active");
 		GameRegistry.registerBlock(roofTile,"Roof");
 		GameRegistry.registerBlock(blockCastIron,"CastIronBlock");
 		GameRegistry.registerBlock(blockVolucite,"VoluciteBlock");
 		GameRegistry.registerBlock(blockBrass,"BrassBlock");
-		GameRegistry.registerBlock(lamp,"LampBlock");
+		GameRegistry.registerBlock(lamp,"LampBlock Active");
 		GameRegistry.registerBlock(lampoff,"LampBlock");
 		GameRegistry.registerBlock(woodBrass,"BrassWood");
 		GameRegistry.registerBlock(leavesLamp,"BrassLeaves");
@@ -544,10 +512,9 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		GameRegistry.registerBlock(carvedStone,"CravedStone");
 		GameRegistry.registerBlock(stairRoof,"StairRoof");
 		GameRegistry.registerBlock(blockUranium,"Uranium");
-		GameRegistry.registerBlock(decorQuartz,"CravedQuartz");
 		GameRegistry.registerBlock(decorUranium,"CravedUranium");
 		GameRegistry.registerBlock(wirelessLampIdle,"WirelessLamp");
-		GameRegistry.registerBlock(wirelessLampActive,"WirelessLamp");
+		GameRegistry.registerBlock(wirelessLampActive,"WirelessLamp Active");
 		GameRegistry.registerBlock(teaPlant,"TeaPlant");
 
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
@@ -592,7 +559,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
                                 "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), phosphorus
         });
 		GameRegistry.addRecipe(new ItemStack(battery, 1), new Object[]{
-                                "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), quartz, Character.valueOf('I'), Item.redstone
+                                "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'), Item.redstone
         });
 		GameRegistry.addRecipe(new ItemStack(chemOvenIdle, 1), new Object[]{
                                 "###", "#X#", "#I#", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Item.diamond, Character.valueOf('I'), steamOvenIdle
@@ -738,7 +705,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
         });
 		
 		GameRegistry.addRecipe(new ItemStack(Block.music, 1), new Object[] {
-            "###", "#X#", "###", Character.valueOf('#'), Block.planks, Character.valueOf('X'), quartz
+            "###", "#X#", "###", Character.valueOf('#'), Block.planks, Character.valueOf('X'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.railPowered, 6), new Object[] {
             "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotGold, Character.valueOf('R'), Item.redstone, Character.valueOf('#'), Item.stick
@@ -753,13 +720,13 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
             "X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), Item.redstone, Character.valueOf('I'), battery
         });
 		GameRegistry.addRecipe(new ItemStack(Item.redstoneRepeater, 1), new Object[] {
-            "#X#", "IRI", Character.valueOf('#'), Block.torchRedstoneActive, Character.valueOf('X'), Item.redstone, Character.valueOf('I'), Block.stone, Character.valueOf('R'), quartz
+            "#X#", "IRI", Character.valueOf('#'), Block.torchRedstoneActive, Character.valueOf('X'), Item.redstone, Character.valueOf('I'), Block.stone, Character.valueOf('R'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.pocketSundial, 1), new Object[] {
-            " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), quartz
+            " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.compass, 1), new Object[] {
-            " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), quartz
+            " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.stoneButton, 1), new Object[] {
             "#", "#", "X", Character.valueOf('#'), Block.stone, Character.valueOf('X'), battery
@@ -771,19 +738,19 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
             "##", "X ", Character.valueOf('#'), Block.planks, Character.valueOf('X'), battery
         });
 		GameRegistry.addRecipe(new ItemStack(Block.dispenser, 1), new Object[] {
-            "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), quartz
+            "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.gunpowder, 1), new Object[] {
             "#X#", Character.valueOf('#'), chemicSalt, Character.valueOf('X'), Item.coal
         });
 		GameRegistry.addRecipe(new ItemStack(torchTeslaIdle, 1), new Object[] {
-            " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), lightBulb, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), quartz
+            " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), lightBulb, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.glowstone, 4), new Object[] {
            "X#X", "#I#", "X#X", Character.valueOf('#'), phosphorus, Character.valueOf('X'), chemicSalt, Character.valueOf('I'), uraniumStone
         });
 		GameRegistry.addRecipe(new ItemStack(teslaReceiver, 1), new Object[] {
-           "#X#", "ITI", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), quartz
+           "#X#", "ITI", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {
             "TTT", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), bornite, Character.valueOf('T'), 
@@ -917,8 +884,6 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		
 		StairRecipeItems = (new Object[][] {
             new Object[] {
-              new ItemStack(Block.stone), stairCompactStone
-            }, new Object[] {
                new ItemStack(Item.flint), stairRoof
             }
         });
@@ -937,8 +902,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		addAchievements();
 }
 
-	private Object[][] DrillRecipeItems,SpannerRecipeItems,StoreBlockRecipeItems;
-	private Object[][] DecorBlockRecipeItems,StairRecipeItems;
+	
 
  /*public void AddRecipes(CraftingManager craftingmanager)
         {
@@ -1126,7 +1090,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		 if(item.itemID == torchTeslaIdle.blockID){
             player.triggerAchievement(ach_ItsAlive);
          }
-		 if(item.itemID == decorIron.blockID || item.itemID == decorCastIron.blockID || item.itemID == decorBrass.blockID || item.itemID == decorGold.blockID || item.itemID == decorLapis.blockID || item.itemID == decorDiamond.blockID || item.itemID == decorVolucite.blockID || item.itemID == decorQuartz.blockID || item.itemID == decorUranium.blockID || item.itemID == carvedStone.blockID){
+		 if(item.itemID == decorIron.blockID || item.itemID == decorCastIron.blockID || item.itemID == decorBrass.blockID || item.itemID == decorGold.blockID || item.itemID == decorLapis.blockID || item.itemID == decorDiamond.blockID || item.itemID == decorVolucite.blockID || item.itemID == decorUranium.blockID || item.itemID == carvedStone.blockID){
             player.triggerAchievement(ach_MasterCraftsman);
          }
 		 if(item.itemID == aqualung.itemID){
