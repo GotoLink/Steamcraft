@@ -45,11 +45,11 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		if(modelId == CopperModelID)
         {
-            return (new RenderCopperWire()).renderBlockCopperWire(block, x, y, z, world);
+            return new RenderCopperWire().renderBlockCopperWire(block, x, y, z, world);
         }
 		if(modelId == TeaPlantModelID)
         {
-            return (new RenderTeaPlant()).renderBlockTeaPlant(block, x, y, z, world);
+            return new RenderTeaPlant().renderBlockTeaPlant(block, x, y, z, world);
         }
 		return false;
 	}
@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	}
 	@Override
 	public int getRenderId() {
-		return 0;
+		return -1;
 	}
 	@Override
 	public int registerArmor(String string) {

@@ -16,17 +16,6 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
         super(i,flag);
         torchActive = flag;
     }
-	@Override
-    public Icon getIcon(int i, int j)
-    {
-        if(i == 1)
-        {
-            return Block.redstoneWire.getIcon(i, j);
-        } else
-        {
-            return super.getIcon(i, j);
-        }
-    }
 
     @Override
     public int tickRate(World world)

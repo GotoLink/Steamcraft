@@ -2,7 +2,9 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import steamcraft.ClientProxy;
@@ -14,6 +16,18 @@ public class BlockSCCopperWire extends BlockRedstoneWire
     public BlockSCCopperWire(int i)
     {
         super(i);
+    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+    	super.registerIcons(par1IconRegister);
+        this.blockIcon = par1IconRegister.registerIcon("steamcraft:copperwire");
+    }
+    @Override
+    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
+    {
+        return side != -1;
     }
     @Override
     public int getRenderType()

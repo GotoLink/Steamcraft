@@ -24,17 +24,6 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
         setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
     }
 	@Override
-	public Icon getIcon(int i, int j)
-    {
-        if(i == 1)
-        {
-            return Block.redstoneWire.getIcon(i, j);
-        } else
-        {
-            return super.getIcon(i, j);
-        }
-    }
-	@Override
     public int tickRate(World world)
     {
         return 1;

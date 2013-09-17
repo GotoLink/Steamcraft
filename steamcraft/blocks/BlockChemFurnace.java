@@ -33,7 +33,7 @@ public class BlockChemFurnace extends BlockFurnace
 	{
 	    this.blockIcon = par1IconRegister.registerIcon("steamcraft:chemfurnaceside");
 	    this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "chemfurnaceactive" : "chemfurnaceidle"));
-	    this.furnaceIconTop = par1IconRegister.registerIcon("furnace_top");
+	    this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:castironblock");
 	}
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -69,16 +69,15 @@ public class BlockChemFurnace extends BlockFurnace
             world.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
         }
     }
-
-    public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
+    @Override
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
         if(world.isRemote)
         {
             return true;
         }
-        TileEntityChemFurnace tileentitychemfurnace = (TileEntityChemFurnace)world.getBlockTileEntity(i, j, k);
-		if(tileentitychemfurnace != null){
-            entityplayer.openGui(Steamcraft.instance, 1,world, j,k, k);
+		if(world.getBlockTileEntity(i, j, k) instanceof TileEntityChemFurnace){
+            entityplayer.openGui(Steamcraft.instance, 1,world, i, j, k);
 		}
         return true;
     }
@@ -104,74 +103,14 @@ public class BlockChemFurnace extends BlockFurnace
 		}
     }
 
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
-    {
-        int l = MathHelper.floor_double((double)((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-        if(l == 0)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
-        }
-        if(l == 1)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 5, 2);
-        }
-        if(l == 2)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
-        }
-        if(l == 3)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 4, 2);
-        }
-    }
-	
-    @Override
-	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
-    {
-        if(!keepFurnaceInventory)
-        {
-            TileEntityChemFurnace tileentityfurnace = (TileEntityChemFurnace)world.getBlockTileEntity(i, j, k);
-			 if(tileentityfurnace != null)
-        {
-				 label0:
-            for(int l = 0; l < tileentityfurnace.getSizeInventory(); l++)
-            {
-                ItemStack itemstack = tileentityfurnace.getStackInSlot(l);
-                if(itemstack == null)
-                {
-                    continue;
-                }
-                float f = furnaceRand.nextFloat() * 0.8F + 0.1F;
-                float f1 = furnaceRand.nextFloat() * 0.8F + 0.1F;
-                float f2 = furnaceRand.nextFloat() * 0.8F + 0.1F;
-                do
-                {
-                    if(itemstack.stackSize <= 0)
-                    {
-                        continue label0;
-                    }
-                    int i1 = furnaceRand.nextInt(21) + 10;
-                    if(i1 > itemstack.stackSize)
-                    {
-                        i1 = itemstack.stackSize;
-                    }
-                    itemstack.stackSize -= i1;
-                    EntityItem entityitem = new EntityItem(world, (float)i + f, (float)j + f1, (float)k + f2, new ItemStack(itemstack.itemID, i1, itemstack.getItemDamage()));
-                    float f3 = 0.05F;
-                    entityitem.motionX = (float)furnaceRand.nextGaussian() * f3;
-                    entityitem.motionY = (float)furnaceRand.nextGaussian() * f3 + 0.2F;
-                    entityitem.motionZ = (float)furnaceRand.nextGaussian() * f3;
-                    world.spawnEntityInWorld(entityitem);
-                } while(true);
-            }
-			}
-
-        }
-        super.breakBlock(world, i, j, k, par5, par6);
-    }
-
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityChemFurnace();
 	}
+	@Override
+	@SideOnly(Side.CLIENT)
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return Steamcraft.chemOvenIdle.blockID;
+    }
 }

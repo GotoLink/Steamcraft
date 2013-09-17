@@ -37,5 +37,5 @@ public class GuiChemFurnace extends GuiContainer
     }
 
     private TileEntityChemFurnace furnaceInventory;
-    private static final ResourceLocation gui = new ResourceLocation("steamcraft","textures.gui.chemfurnace.png");
+    private static final ResourceLocation gui = new ResourceLocation("steamcraft","textures/gui/chemfurnace.png");
 }

@@ -12,6 +12,7 @@ import net.minecraft.block.BlockOreStorage;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLogic;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,8 +30,41 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
-import steamcraft.blocks.*;
-import steamcraft.items.*;
+import net.minecraftforge.oredict.OreDictionary;
+import steamcraft.blocks.BlockBattery;
+import steamcraft.blocks.BlockBrassLog;
+import steamcraft.blocks.BlockChemFurnace;
+import steamcraft.blocks.BlockDiode;
+import steamcraft.blocks.BlockElectricLamp;
+import steamcraft.blocks.BlockInverter;
+import steamcraft.blocks.BlockLamp;
+import steamcraft.blocks.BlockNukeFurnace;
+import steamcraft.blocks.BlockPoweredRail;
+import steamcraft.blocks.BlockRoof;
+import steamcraft.blocks.BlockSCCopperWire;
+import steamcraft.blocks.BlockSCFence;
+import steamcraft.blocks.BlockSCOre;
+import steamcraft.blocks.BlockSCStairs;
+import steamcraft.blocks.BlockSCTallGrass;
+import steamcraft.blocks.BlockSCTeaPlant;
+import steamcraft.blocks.BlockSteamFurnace;
+import steamcraft.blocks.BlockTeslaCoil;
+import steamcraft.blocks.BlockTeslaReceiver;
+import steamcraft.blocks.BlockTorchPhosphorus;
+import steamcraft.blocks.BlockUraniteOre;
+import steamcraft.blocks.BlockUranium;
+import steamcraft.blocks.BlockWirelessLamp;
+import steamcraft.items.ItemCoreDrill;
+import steamcraft.items.ItemElectricLamp;
+import steamcraft.items.ItemFirearm;
+import steamcraft.items.ItemKettle;
+import steamcraft.items.ItemSCArmor;
+import steamcraft.items.ItemSCAxe;
+import steamcraft.items.ItemSCDrill;
+import steamcraft.items.ItemSCHoe;
+import steamcraft.items.ItemSCPickaxe;
+import steamcraft.items.ItemSCSword;
+import steamcraft.items.ItemTeacup;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.IPickupNotifier;
@@ -65,7 +99,6 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 5, 210, 7F, 4);
 	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, 6, -1, 8F, 3);
 	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 7, 2, 321, 12F, 5);
-	public static String[] armorNames = {"etherium","brass","obsidian"};
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
 	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive;
 	public static Block steamOvenIdle,steamOvenActive,chemOvenIdle,chemOvenActive;
@@ -126,23 +159,27 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static Item teaSeed,teaLeaves,coldKettle,hotKettle;
 	public static Item emptyTeacup,fullTeacup,emptyKettle;
 	
-	public static int[] armorIndexes = new int[3];
-	
 	public static Material solidcircuit = new MaterialLogic(MapColor.airColor);
 	public static Material staticcircuit = new MaterialLogic(MapColor.airColor).setImmovableMobility();
 	private Logger logger;
 	
 	private Object[][] DrillRecipeItems,SpannerRecipeItems,StoreBlockRecipeItems;
 	private Object[][] DecorBlockRecipeItems,StairRecipeItems;
+	
+	public static String[] armorNames = {"etherium","brass","obsidian"};
+	public static int[] armorIndexes = new int[armorNames.length];
 	public static Map armorMap = new HashMap();
+	public static Map<Object,Object[]> data = new HashMap();
+	public static CreativeTabs steamTab;
 	
 	@EventHandler
 	public void load(FMLPreInitializationEvent event)
 	{	
 		logger = event.getModLog();
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		steamTab = new CreativeTabs("Steamcraft");
 		config.load();
-		redstoneWire = new BlockSCCopperWire(config.getBlock("CopperWire",2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("copperwire").setTextureName("redstone_Dust").disableStats();
+		redstoneWire = new BlockSCCopperWire(config.getBlock("CopperWire",2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire").setTextureName("redstone_dust").disableStats();
 		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter",2494).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle").setTextureName("steamcraft:inverteridle");
 		torchRedstoneActive = new BlockInverter(config.getBlock("InverterON",2495).getInt(),  true).setHardness(0.0F).setLightValue(0.5F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteractive").setTextureName("steamcraft:inverteractive");
 		redstoneRepeaterIdle = new BlockDiode(config.getBlock("Repeater",2496).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:diodeidle").setTextureName("steamcraft:diodeidle").disableStats();
@@ -150,8 +187,8 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		railPowered = new BlockPoweredRail(config.getBlock("Rail",2498).getInt(),  true).setHardness(0.7F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:rail").setTextureName("steamcraft:rail");
 		tallGrass = new BlockSCTallGrass(config.getBlock("tallgrass",2499).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("tallgrass").setTextureName("tallgrass");
 		
-		torchElectricIdle = new BlockElectricLamp(config.getBlock("ElectricLamp",2500).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:castironblock").disableStats();
-		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:castironblock").disableStats();
+		torchElectricIdle = new BlockElectricLamp(config.getBlock("ElectricLamp",2500).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electricLamp").disableStats();
+		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electricLamp").disableStats();
 		torchTeslaIdle = new BlockTeslaCoil(config.getBlock("TeslaCoil",2502).getInt(),  false).setHardness(0.0F).setUnlocalizedName("steamcraft:teslaCoil").setTextureName("steamcraft:teslaidle");
 		torchTeslaActive = new BlockTeslaCoil(config.getBlock("TeslaCoilON",2053).getInt(),  true).setHardness(0.0F).setLightValue(0.625F).setUnlocalizedName("steamcraft:teslaCoil").setTextureName("steamcraft:teslaactive");
 		teslaReceiver = new BlockTeslaReceiver(config.getBlock("Receiver",2504).getInt()).setHardness(0.5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:receiver").setTextureName("steamcraft:receiver");
@@ -193,8 +230,8 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		lampoff = new BlockLamp(config.getBlock("LampBlockOFF",2539).getInt() , Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(0.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
 		woodBrass = new BlockBrassLog(config.getBlock("BrassLog",2540).getInt()).setHardness(5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:logBrass").setTextureName("steamcraft:brasslog");
 		leavesLamp = new Block(config.getBlock("BrassLeaves",2541).getInt(), Material.wood).setHardness(2F).setLightOpacity(1).setLightValue(0.9375F).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("steamcraft:leavesLamp").setTextureName("steamcraft:brassleaves");
-		wirelessLampIdle = new BlockWirelessLamp(config.getBlock("WirelessLamp",2542).getInt() , TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:castironblock");
-		wirelessLampActive = new BlockWirelessLamp(config.getBlock("WirelessLampON",2543).getInt() , TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:castironblock");
+		wirelessLampIdle = new BlockWirelessLamp(config.getBlock("WirelessLamp",2542).getInt() , TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:wirelesslamp");
+		wirelessLampActive = new BlockWirelessLamp(config.getBlock("WirelessLampON",2543).getInt() , TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:wirelesslamp");
 		
 		stairRoof = new BlockSCStairs(config.getBlock("SlateStairs",2545).getInt(),roofTile,0, Item.flint.itemID, 2).setUnlocalizedName("steamcraft:stairsRoof").setTextureName("steamcraft:slatetiles");
 		
@@ -289,6 +326,125 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		emptyTeacup = new ItemTeacup(config.getItem("TeacupEmpty",25069).getInt(), 0).setUnlocalizedName("steamcraft:teacupEmpty").setTextureName("steamcraft:teacupempty");
 		fullTeacup = new ItemTeacup(config.getItem("TeacupFull",25070).getInt(), 4).setUnlocalizedName("steamcraft:teacup").setTextureName("steamcraft:teacupfull");
 		emptyKettle = new ItemKettle(config.getItem("KettleEmpty",25071).getInt(), 300).setUnlocalizedName("steamcraft:kettleempty").setTextureName("steamcraft:kettle");
+		
+		data.put(torchElectricIdle, new Object[]{"Electric Torch"});
+		data.put(torchElectricActive, new Object[]{"Electric Torch Active"});
+		data.put(electricLamp, new Object[]{"Electric Lamp"});
+		data.put(torchTeslaIdle, new Object[]{"Tesla Coil"});
+		data.put(torchTeslaActive, new Object[]{"Tesla Coil Active"});
+		data.put(teslaReceiver, new Object[]{"Tesla Receiver"});
+		data.put(teslaReceiverActive, new Object[]{"Tesla Receiver Active"});
+		data.put(steamOvenIdle, new Object[]{"Steam Furnace"});
+		data.put(steamOvenActive, new Object[]{"Steam Furnace Active"});
+		data.put(battery, new Object[]{"Battery"});
+		data.put(redstoneWire, new Object[]{"Copper Wire"});
+		data.put(torchRedstoneIdle, new Object[]{"Inverter"});
+		data.put(torchRedstoneActive, new Object[]{"Inverter Active"});
+		data.put(redstoneRepeaterIdle, new Object[]{"Diode"});
+		data.put(redstoneRepeaterActive, new Object[]{"Diode Active"});
+		data.put(brimstone, new Object[]{"Brimstone"});
+		data.put(borniteOre, new Object[]{"Bornite"});
+		data.put(orePhosphate, new Object[]{"Phosphate Ore"});
+		data.put(oreUranite, new Object[]{"Uranite"});
+		data.put(oreVolucite, new Object[]{"Volucite"});
+		data.put(etherium, new Object[]{"Etherium Crystal"});
+		data.put(bornite, new Object[]{"Purified Copper"});
+		data.put(obsidianSlate, new Object[]{"Obsidian Slate"});
+		data.put(ingotBrass, new Object[]{"Brass Ingot"});
+		data.put(ingotCastIron, new Object[]{"Cast Iron Ingot"});
+		data.put(lightBulb, new Object[]{"Light Bulb"});
+		data.put(phosphorus, new Object[]{"Phosphorus"});
+		data.put(torchPhosphorus, new Object[]{"Phosphorus Torch"});
+		data.put(uraniumStone, new Object[]{"Uranium"});
+		data.put(uranium, new Object[]{"Uranium Pellet"});
+		data.put(chemOvenIdle, new Object[]{"Chemical Furnace"});
+		data.put(chemOvenActive, new Object[]{"Chemical Furnace Active"});
+		data.put(nukeOvenIdle, new Object[]{"Nuclear Reactor"});
+		data.put(nukeOvenActive, new Object[]{"Nuclear Reactor Active"});
+		data.put(reactorCore, new Object[]{"Reactor Core"});
+		data.put(coreDrill, new Object[]{"Core Drill"});
+		data.put(drillBase, new Object[]{"Drill Base"});
+		data.put(chisel, new Object[]{"Chisel"});
+		data.put(spanner, new Object[]{"Spanner"});
+		data.put(roofTile, new Object[]{"Slate Tiles"});
+		data.put(railingCastIron, new Object[]{"Cast Iron Railing"});
+		data.put(gateCastIron, new Object[]{"Cast Iron Gate"});
+		data.put(teaPlant, new Object[]{"Tea Plant"});
+		data.put(teaSeed, new Object[]{"Tea Seeds"});
+		data.put(teaLeaves, new Object[]{"Tea Leaves"});
+		data.put(coldKettle, new Object[]{"Kettle of Cold Tea"});
+		data.put(hotKettle, new Object[]{"Kettle of Tea"});
+		data.put(emptyTeacup, new Object[]{"Teacup"});
+		data.put(fullTeacup, new Object[]{"Cup of Tea"});
+		data.put(emptyKettle, new Object[]{"Empty Kettle"});
+		data.put(blockCastIron, new Object[]{"Block of Cast Iron"});
+		data.put(blockVolucite, new Object[]{"Block of Volucite"});
+		data.put(blockBrass, new Object[]{"Block of Brass"});
+		data.put(blockUranium, new Object[]{"Block of Uranium"});
+		data.put(decorIron, new Object[]{"Engraved Iron Block"});
+		data.put(decorGold, new Object[]{"Engraved Gold Block"});
+		data.put(decorDiamond, new Object[]{"Engraved Diamond Block"});
+		data.put(decorCastIron, new Object[]{"Engraved Cast Iron Block"});
+		data.put(decorVolucite, new Object[]{"Engraved Volucite Block"});
+		data.put(decorBrass, new Object[]{"Engraved Brass Block"});
+		data.put(decorLapis, new Object[]{"Engraved Lapis Lazuli Block"});
+		data.put(carvedStone, new Object[]{"Carved Stone"});
+		data.put(decorUranium, new Object[]{"Engraved Uranium Block"});
+		data.put(lamp, new Object[]{"Lamp Block Active"});
+		data.put(lampoff, new Object[]{"Lamp Block"});
+		data.put(woodBrass, new Object[]{"Brass Log"});
+		data.put(leavesLamp, new Object[]{"Luminous Brass Leaves"});
+		data.put(wirelessLampIdle, new Object[]{"Wireless Lamp Idle"});
+		data.put(wirelessLampActive, new Object[]{"Wireless Lamp Active"});
+		data.put(wirelessLamp, new Object[]{"Wireless Lamp"});
+		data.put(stairRoof, new Object[]{"Angled Slate Tiles"});
+		data.put(pickaxeObsidian, new Object[]{"Obsidian Pickaxe"});
+		data.put(shovelObsidian, new Object[]{"Obsidian Shovel"});
+		data.put(axeObsidian, new Object[]{"Obsidian Axe"});
+		data.put(hoeObsidian, new Object[]{"Obsidian Hoe"});
+		data.put(swordObsidian, new Object[]{"Obsidian Sword"});
+		data.put(drillObsidian, new Object[]{"Obsidian Drill"});
+		data.put(pickaxeEtherium, new Object[]{"Etherium Pickaxe"});
+		data.put(shovelEtherium, new Object[]{"Etherium Shovel"});
+		data.put(axeEtherium, new Object[]{"Etherium Axe"});
+		data.put(hoeEtherium, new Object[]{"Etherium Hoe"});
+		data.put(swordEtherium, new Object[]{"Etherium Sword"});
+		data.put(drillEtherium, new Object[]{"Etherium Drill"});
+		data.put(pickaxeSteam, new Object[]{"Steam Pickaxe"});
+		data.put(shovelSteam, new Object[]{"Steam Shove"});
+		data.put(axeSteam, new Object[]{"Steam Chainsaw"});
+		data.put(hoeSteam, new Object[]{"Steam Hoe"});
+		data.put(swordSteam, new Object[]{"Steam Sword"});
+		data.put(drillSteam, new Object[]{"Steam Drill"});
+		data.put(helmetObsidian, new Object[]{"Obsidian Helmet"});
+		data.put(plateObsidian, new Object[]{"Obsidian Chest Plate"});
+		data.put(legsObsidian, new Object[]{"Obsidian Leggings"});
+		data.put(bootsObsidian, new Object[]{"Obsidian Boots"});
+		data.put(brassGoggles, new Object[]{"Brass Goggles"});
+		data.put(aqualung, new Object[]{"Aqualung"});
+		data.put(rollerSkates, new Object[]{"Roller Skates"});
+		data.put(legBraces, new Object[]{"Pneumatic Braces"});
+		data.put(helmetEtherium, new Object[]{"Etherium Helmet"});
+		data.put(plateEtherium, new Object[]{"Etherium Chest Plat"});
+		data.put(legsEtherium, new Object[]{"Etherium Leggings"});
+		data.put(bootsEtherium, new Object[]{"Etherium Boots"});
+		data.put(drillSteel, new Object[]{"Iron Drill"});
+		data.put(drillWood, new Object[]{"Wooden Drill"});
+		data.put(drillStone, new Object[]{"Stone Drill"});
+		data.put(drillDiamond, new Object[]{"Diamond Drill"});
+		data.put(drillGold, new Object[]{"Golden Drill"});
+		data.put(percussionLock, new Object[]{"Percussion Lock"});
+		data.put(woodenStock, new Object[]{"Wooden Stock"});
+		data.put(smoothBarrel, new Object[]{"Smoothbore Barrel"});
+		data.put(rifledBarrel, new Object[]{"Rifled Barrel"});
+		data.put(flintlockMusket, new Object[]{"Flintlock Musket"});
+		data.put(matchlockMusket, new Object[]{"Matchlock Musket"});
+		data.put(percussionCapMusket, new Object[]{"Percussion Musket"});
+		data.put(flintlockRifle, new Object[]{"Flintlock Rifle"});
+		data.put(matchlockRifle, new Object[]{"Matchlock Rifle"});
+		data.put(percussionCapRifle, new Object[]{"Percussion Rifle"});
+		data.put(musketRound, new Object[]{"Musket Cartridge"});
+		data.put(percussionRound, new Object[]{"Percussion Cap"});
 	}
 	@EventHandler
 	public void registering(FMLInitializationEvent event)
@@ -302,182 +458,16 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		TickRegistry.registerTickHandler(proxy, Side.SERVER);
 		TickRegistry.registerTickHandler(proxy, Side.CLIENT);
 		
-		LanguageRegistry.instance().addName(torchElectricIdle, "Electric Lamp");
-		LanguageRegistry.instance().addName(torchElectricActive, "Electric Lamp Active");
-		LanguageRegistry.instance().addName(electricLamp, "Electric Lamp");			
-		LanguageRegistry.instance().addName(torchTeslaIdle, "Tesla Coil");
-		LanguageRegistry.instance().addName(torchTeslaActive, "Tesla Coil Active");
-		LanguageRegistry.instance().addName(teslaReceiver, "Tesla Receiver");
-		LanguageRegistry.instance().addName(teslaReceiverActive, "Tesla Receiver Active");
-		LanguageRegistry.instance().addName(steamOvenIdle, "Steam Furnace");
-		LanguageRegistry.instance().addName(steamOvenActive, "Steam Furnace Active");
-		LanguageRegistry.instance().addName(battery, "Battery");
-		LanguageRegistry.instance().addName(redstoneWire, "Copper Wire");
-		LanguageRegistry.instance().addName(torchRedstoneIdle, "Inverter");
-		LanguageRegistry.instance().addName(torchRedstoneActive, "Inverter Active");
-		LanguageRegistry.instance().addName(redstoneRepeaterIdle, "Diode");
-		LanguageRegistry.instance().addName(redstoneRepeaterActive, "Diode Active");
-		LanguageRegistry.instance().addName(brimstone, "Brimstone");
-		LanguageRegistry.instance().addName(borniteOre, "Bornite");
-		LanguageRegistry.instance().addName(orePhosphate, "Phosphate Ore");
-		LanguageRegistry.instance().addName(oreUranite, "Uranite");
-		LanguageRegistry.instance().addName(borniteOre, "Bornite");
-		LanguageRegistry.instance().addName(oreVolucite, "Volucite");
-		LanguageRegistry.instance().addName(etherium, "Etherium Crystal");
-		LanguageRegistry.instance().addName(chemicSalt, "Sulphur");
-		LanguageRegistry.instance().addName(bornite, "Purified Copper");
-		LanguageRegistry.instance().addName(obsidianSlate, "Obsidian Slate");
-		LanguageRegistry.instance().addName(ingotBrass, "Brass Ingot");
-		LanguageRegistry.instance().addName(ingotCastIron, "Cast Iron Ingot");
-		LanguageRegistry.instance().addName(lightBulb, "Light Bulb");
-		LanguageRegistry.instance().addName(phosphorus, "Phosphorus");
-		LanguageRegistry.instance().addName(torchPhosphorus, "Phosphorus Torch");
-		LanguageRegistry.instance().addName(uraniumStone, "Uranium");
-		LanguageRegistry.instance().addName(uranium, "Uranium Pellet");
-		LanguageRegistry.instance().addName(chemOvenIdle, "Chemical Furnace");
-		LanguageRegistry.instance().addName(chemOvenActive, "Chemical Furnace Active");
-		LanguageRegistry.instance().addName(nukeOvenIdle, "Nuclear Reactor");
-		LanguageRegistry.instance().addName(nukeOvenActive, "Nuclear Reactor Active");
-		LanguageRegistry.instance().addName(reactorCore, "Reactor Core");
-		LanguageRegistry.instance().addName(coreDrill, "Core Drill");
-		LanguageRegistry.instance().addName(drillBase, "Drill Base");
-		LanguageRegistry.instance().addName(chisel, "Chisel");
-		LanguageRegistry.instance().addName(spanner, "Spanner");
-		LanguageRegistry.instance().addName(roofTile, "Slate Tiles");
-		LanguageRegistry.instance().addName(railingCastIron, "Cast Iron Railing");
-		LanguageRegistry.instance().addName(gateCastIron, "Cast Iron Gate");
-		
-		LanguageRegistry.instance().addName(teaPlant, "Tea Plant");
-		LanguageRegistry.instance().addName(teaSeed, "Tea Seeds");
-		LanguageRegistry.instance().addName(teaLeaves, "Tea Leaves");
-		LanguageRegistry.instance().addName(coldKettle, "Kettle of Cold Tea");
-		LanguageRegistry.instance().addName(hotKettle, "Kettle of Tea");
-		LanguageRegistry.instance().addName(emptyTeacup, "Teacup");
-		LanguageRegistry.instance().addName(fullTeacup, "Cup of Tea");
-		LanguageRegistry.instance().addName(emptyKettle, "Empty Kettle");
-		
-		LanguageRegistry.instance().addName(blockCastIron, "Block of Cast Iron");
-		LanguageRegistry.instance().addName(blockVolucite, "Block of Volucite");
-		LanguageRegistry.instance().addName(blockBrass, "Block of Brass");
-		LanguageRegistry.instance().addName(blockUranium, "Block of Uranium");
-		
-		LanguageRegistry.instance().addName(decorIron, "Engraved Iron Block");
-		LanguageRegistry.instance().addName(decorGold, "Engraved Gold Block");
-		LanguageRegistry.instance().addName(decorDiamond, "Engraved Diamond Block");
-		LanguageRegistry.instance().addName(decorCastIron, "Engraved Cast Iron Block");
-		LanguageRegistry.instance().addName(decorVolucite, "Engraved Volucite Block");
-		LanguageRegistry.instance().addName(decorBrass, "Engraved Brass Block");
-		LanguageRegistry.instance().addName(decorLapis, "Engraved Lapis Lazuli Block");
-		LanguageRegistry.instance().addName(carvedStone, "Carved Stone");
-		LanguageRegistry.instance().addName(decorUranium, "Engraved Uranium Block");
-
-		LanguageRegistry.instance().addName(lamp, "Lamp Block");
-		LanguageRegistry.instance().addName(lampoff, "Lamp Block");
-		LanguageRegistry.instance().addName(woodBrass, "Brass Log");
-		LanguageRegistry.instance().addName(leavesLamp, "Luminous Brass Leaves");
-		LanguageRegistry.instance().addName(wirelessLampIdle, "Wireless Lamp");
-		LanguageRegistry.instance().addName(wirelessLampActive, "Wireless Lamp");
-		LanguageRegistry.instance().addName(wirelessLamp, "Wireless Lamp");
-		
-		LanguageRegistry.instance().addName(stairRoof, "Angled Slate Tiles");
-		
-		LanguageRegistry.instance().addName(pickaxeObsidian, "Obsidian Pickaxe");
-		LanguageRegistry.instance().addName(shovelObsidian, "Obsidian Shovel");
-		LanguageRegistry.instance().addName(axeObsidian, "Obsidian Axe");
-		LanguageRegistry.instance().addName(hoeObsidian, "Obsidian Hoe");
-		LanguageRegistry.instance().addName(swordObsidian, "Obsidian Sword");
-		LanguageRegistry.instance().addName(drillObsidian, "Obsidian Drill");
-		LanguageRegistry.instance().addName(pickaxeEtherium, "Etherium Pickaxe");
-		LanguageRegistry.instance().addName(shovelEtherium, "Etherium Shovel");
-		LanguageRegistry.instance().addName(axeEtherium, "Etherium Axe");
-		LanguageRegistry.instance().addName(hoeEtherium, "Etherium Hoe");
-		LanguageRegistry.instance().addName(swordEtherium, "Etherium Sword");
-		LanguageRegistry.instance().addName(drillEtherium, "Etherium Drill");
-		LanguageRegistry.instance().addName(pickaxeSteam, "Steam Pickaxe");
-		LanguageRegistry.instance().addName(shovelSteam, "Steam Shovel");
-		LanguageRegistry.instance().addName(axeSteam, "Steam Chainsaw");
-		LanguageRegistry.instance().addName(hoeSteam, "Steam Hoe");
-		LanguageRegistry.instance().addName(swordSteam, "Steam Sword");
-		LanguageRegistry.instance().addName(drillSteam, "Steam Drill");
-		
-		LanguageRegistry.instance().addName(helmetObsidian, "Obsidian Helmet");
-		LanguageRegistry.instance().addName(plateObsidian, "Obsidian Chest Plate");
-		LanguageRegistry.instance().addName(legsObsidian, "Obsidian Leggings");
-		LanguageRegistry.instance().addName(bootsObsidian, "Obsidian Boots");
-		
-		LanguageRegistry.instance().addName(brassGoggles, "Brass Goggles");
-		LanguageRegistry.instance().addName(aqualung, "Aqualung");
-		LanguageRegistry.instance().addName(rollerSkates, "Roller Skates");
-		LanguageRegistry.instance().addName(legBraces, "Pneumatic Braces");
-		
-		LanguageRegistry.instance().addName(helmetEtherium, "Etherium Helmet");
-		LanguageRegistry.instance().addName(plateEtherium, "Etherium Chest Plate");
-		LanguageRegistry.instance().addName(legsEtherium, "Etherium Leggings");
-		LanguageRegistry.instance().addName(bootsEtherium, "Etherium Boots");
-		
-		LanguageRegistry.instance().addName(drillSteel, "Iron Drill");
-		LanguageRegistry.instance().addName(drillWood, "Wooden Drill");
-		LanguageRegistry.instance().addName(drillStone, "Stone Drill");
-		LanguageRegistry.instance().addName(drillDiamond, "Diamond Drill");
-		LanguageRegistry.instance().addName(drillGold, "Golden Drill");
-		
-		LanguageRegistry.instance().addName(percussionLock, "Percussion Lock");
-		LanguageRegistry.instance().addName(woodenStock, "Wooden Stock");
-		LanguageRegistry.instance().addName(smoothBarrel, "Smoothbore Barrel");
-		LanguageRegistry.instance().addName(rifledBarrel, "Rifled Barrel");
-		LanguageRegistry.instance().addName(flintlockMusket, "Flintlock Musket");
-		LanguageRegistry.instance().addName(matchlockMusket, "Matchlock Musket");
-		LanguageRegistry.instance().addName(percussionCapMusket, "Percussion Musket");
-		LanguageRegistry.instance().addName(flintlockRifle, "Flintlock Rifle");
-		LanguageRegistry.instance().addName(matchlockRifle, "Matchlock Rifle");
-		LanguageRegistry.instance().addName(percussionCapRifle, "Percussion Rifle");
-		
-		LanguageRegistry.instance().addName(musketRound, "Musket Cartridge");
-		LanguageRegistry.instance().addName(percussionRound, "Percussion Cap");
-		
-		GameRegistry.registerBlock(torchElectricIdle,"Electric Lamp");
-		GameRegistry.registerBlock(torchElectricActive,"Electric Lamp Active");
-		GameRegistry.registerBlock(torchTeslaIdle,"Tesla Coil");
-		GameRegistry.registerBlock(torchTeslaActive,"Tesla Coil Active");
-		GameRegistry.registerBlock(teslaReceiver, "Tesla Receiver");
-		GameRegistry.registerBlock(teslaReceiverActive, "Tesla Receiver Active");
-		GameRegistry.registerBlock(steamOvenIdle, "Steam Furnace");
-		GameRegistry.registerBlock(steamOvenActive, "Steam Furnace Active");
-		GameRegistry.registerBlock(battery,"Battery");
-		GameRegistry.registerBlock(brimstone,"Brimstone");
-		GameRegistry.registerBlock(orePhosphate,"PhosphateOre");
-		GameRegistry.registerBlock(oreUranite,"Uranite");
-		GameRegistry.registerBlock(borniteOre,"Copper");
-		GameRegistry.registerBlock(oreVolucite,"Volucite");
-		GameRegistry.registerBlock(torchPhosphorus,"PhoshoreTorch");
-		GameRegistry.registerBlock(chemOvenIdle,"ChemFurnace");
-		GameRegistry.registerBlock(chemOvenActive,"ChemFurnace Active");
-		GameRegistry.registerBlock(nukeOvenIdle,"NukeFurnace");
-		GameRegistry.registerBlock(nukeOvenActive,"NukeFurnace Active");
-		GameRegistry.registerBlock(roofTile,"Roof");
-		GameRegistry.registerBlock(blockCastIron,"CastIronBlock");
-		GameRegistry.registerBlock(blockVolucite,"VoluciteBlock");
-		GameRegistry.registerBlock(blockBrass,"BrassBlock");
-		GameRegistry.registerBlock(lamp,"LampBlock Active");
-		GameRegistry.registerBlock(lampoff,"LampBlock");
-		GameRegistry.registerBlock(woodBrass,"BrassWood");
-		GameRegistry.registerBlock(leavesLamp,"BrassLeaves");
-		GameRegistry.registerBlock(railingCastIron,"IronCastRail");
-		GameRegistry.registerBlock(gateCastIron,"IronCastGate");
-		GameRegistry.registerBlock(decorIron,"CravedIron");
-		GameRegistry.registerBlock(decorGold,"CravedGold");
-		GameRegistry.registerBlock(decorDiamond,"CravedDiamond");
-		GameRegistry.registerBlock(decorCastIron,"CravedCastIron");
-		GameRegistry.registerBlock(decorVolucite,"CravedVolucite");
-		GameRegistry.registerBlock(decorBrass,"CravedBrass");
-		GameRegistry.registerBlock(decorLapis,"CravedLapis");
-		GameRegistry.registerBlock(carvedStone,"CravedStone");
-		GameRegistry.registerBlock(stairRoof,"StairRoof");
-		GameRegistry.registerBlock(blockUranium,"Uranium");
-		GameRegistry.registerBlock(decorUranium,"CravedUranium");
-		GameRegistry.registerBlock(wirelessLampIdle,"WirelessLamp");
-		GameRegistry.registerBlock(wirelessLampActive,"WirelessLamp Active");
-		GameRegistry.registerBlock(teaPlant,"TeaPlant");
+		for(Object obj:data.keySet())
+		{
+			LanguageRegistry.addName(obj,(String) data.get(obj)[0]);
+			if(obj instanceof Block)
+			{
+				if(!((String)data.get(obj)[0]).toLowerCase().contains("active"))
+					((Block) obj).setCreativeTab(steamTab);
+				GameRegistry.registerBlock((Block) obj,(String) data.get(obj)[0]);
+			}
+		}
 
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
 		EntityRegistry.registerModEntity(EntityHighwayman.class, "Highwayman", 2, this, 120, 1, true);
@@ -563,9 +553,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addShapelessRecipe(new ItemStack(ingotBrass, 1), new Object[]{
                                  Item.ingotIron, bornite
         });
-		GameRegistry.addShapelessRecipe(new ItemStack(uranium, 2), new Object[]{
-                                 uraniumStone
-        });
+		GameRegistry.addShapelessRecipe(new ItemStack(uranium, 2), uraniumStone);
 		
 		GameRegistry.addRecipe(new ItemStack(pickaxeEtherium, 1), new Object[]{
                                  "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
@@ -667,7 +655,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
         });
 		
 		GameRegistry.addRecipe(new ItemStack(Block.music, 1), new Object[] {
-            "###", "#X#", "###", Character.valueOf('#'), Block.planks, Character.valueOf('X'), Item.netherQuartz
+            "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Character.valueOf('X'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.railPowered, 6), new Object[] {
             "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotGold, Character.valueOf('R'), Item.redstone, Character.valueOf('#'), Item.stick
@@ -697,7 +685,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
             "##", "X ", Character.valueOf('#'), Block.stone, Character.valueOf('X'), battery
         });
 		GameRegistry.addRecipe(new ItemStack(Block.pressurePlatePlanks, 1), new Object[] {
-            "##", "X ", Character.valueOf('#'), Block.planks, Character.valueOf('X'), battery
+            "##", "X ", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Character.valueOf('X'), battery
         });
 		GameRegistry.addRecipe(new ItemStack(Block.dispenser, 1), new Object[] {
             "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), Item.netherQuartz
@@ -716,14 +704,14 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
         });
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {
             "TTT", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), bornite, Character.valueOf('T'), 
-            Block.planks
+            new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         });
 		
 		GameRegistry.addRecipe(new ItemStack(percussionLock, 1), new Object[] {
             "X ", "##", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), ingotBrass
         });
 		GameRegistry.addRecipe(new ItemStack(woodenStock, 1), new Object[] {
-            "#  ", " # ", "  #", Character.valueOf('#'), Block.planks
+            "#  ", " # ", "  #", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         });
 		GameRegistry.addRecipe(new ItemStack(smoothBarrel, 1), new Object[] {
             "#  ", " # ", "  #", Character.valueOf('#'), Item.ingotIron
@@ -774,7 +762,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		DrillRecipeItems = (new Object[][] {
 			new Object[] {
-                Block.planks, Block.cobblestone, Item.ingotIron, Item.diamond, Item.ingotGold, obsidianSlate, etherium
+                new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Block.cobblestone, Item.ingotIron, Item.diamond, Item.ingotGold, obsidianSlate, etherium
 			}, new Object[] {
                 drillWood, drillStone, drillSteel, drillDiamond, drillGold, drillObsidian, drillEtherium
             }

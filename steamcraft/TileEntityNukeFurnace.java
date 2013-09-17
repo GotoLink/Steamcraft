@@ -7,7 +7,7 @@ import steamcraft.blocks.BlockNukeFurnace;
 
 public class TileEntityNukeFurnace extends TileEntityFurnace
 {
-	public int furnaceHeat;
+	private int furnaceHeat;
     public TileEntityNukeFurnace()
     {
     	setGuiDisplayName("Nuclear Reactor");
@@ -88,7 +88,7 @@ public class TileEntityNukeFurnace extends TileEntityFurnace
                 {
                     furnaceCookTime = 0;
 					if(furnaceHeat <= 2560){
-						furnaceHeat += 40;
+						addHeat(40);
 					}
 					if(furnaceHeat > 2520 && furnaceHeat < 2560){
 						furnaceHeat = 2560;
@@ -100,7 +100,7 @@ public class TileEntityNukeFurnace extends TileEntityFurnace
             {
                 furnaceCookTime = 0;
 				if(furnaceHeat > 0){
-					furnaceHeat--;
+					addHeat(-1);
 				}
             }
             if(flag != (furnaceBurnTime > 0))

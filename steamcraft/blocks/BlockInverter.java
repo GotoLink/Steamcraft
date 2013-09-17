@@ -17,17 +17,6 @@ public class BlockInverter extends BlockRedstoneTorch
         torchActive = flag;
         setTickRandomly(true);
     }
-	@Override
-    public Icon getIcon(int i, int j)
-    {
-        if(i == 1)
-        {
-            return Block.redstoneWire.getIcon(i, j);
-        } else
-        {
-			return super.getIcon(i, j);
-		}
-    }
 
     public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
