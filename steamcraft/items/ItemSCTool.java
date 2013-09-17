@@ -6,7 +6,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class ItemSCTool extends ItemTool
 {
@@ -23,7 +23,7 @@ public class ItemSCTool extends ItemTool
         {
             if(blocksEffectiveAgainst[i] == block)
             {
-				if(toolMaterial == mod_Steamcraft.STEAM){
+				if(toolMaterial == Steamcraft.STEAM){
 					return (efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 				}
 				return efficiencyOnProperMaterial;
@@ -34,7 +34,7 @@ public class ItemSCTool extends ItemTool
 	@Override
     public boolean onBlockDestroyed(ItemStack itemstack,World world, int i, int j, int k, int l, EntityLivingBase entityliving)
     {
-		if(toolMaterial == mod_Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.STEAM){
     	   //System.out.println(efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 		}
 		itemstack.damageItem(1, entityliving);
@@ -43,7 +43,7 @@ public class ItemSCTool extends ItemTool
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
 	{
-		if(toolMaterial == mod_Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.STEAM){
 			damageVsEntity-= (int)Math.round(stack.getItemDamage()*10/320);
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);

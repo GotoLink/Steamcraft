@@ -8,7 +8,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -18,7 +18,7 @@ public class BlockTeslaReceiver extends Block
 
 	public BlockTeslaReceiver(int i)
     {
-        super(i, mod_Steamcraft.staticcircuit);
+        super(i, Steamcraft.staticcircuit);
 		setTickRandomly(true);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		setLightOpacity(0);
@@ -72,9 +72,9 @@ public class BlockTeslaReceiver extends Block
 	    world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
 	    world.markBlockForUpdate(i, j, k);
 		if(world.getBlockMetadata(i, j, k) == 2){
-			world.setBlock(i, j, k, mod_Steamcraft.teslaReceiverActive.blockID, 2, 2);
+			world.setBlock(i, j, k, Steamcraft.teslaReceiverActive.blockID, 2, 2);
 		}else{
-			world.setBlock(i, j, k, mod_Steamcraft.teslaReceiver.blockID, 1, 2);
+			world.setBlock(i, j, k, Steamcraft.teslaReceiver.blockID, 1, 2);
 		}
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
@@ -84,7 +84,7 @@ public class BlockTeslaReceiver extends Block
 		for(int a = -9; a <= 9; a ++){
 			for(int b = -9; b <= 9; b ++){
 				for(int c = -9; c <= 9; c ++){
-					if(world.getBlockId(i+a, j+b, k+c) == mod_Steamcraft.torchTeslaIdle.blockID || world.getBlockId(i+a, j+b, k+c) == mod_Steamcraft.torchTeslaActive.blockID){
+					if(world.getBlockId(i+a, j+b, k+c) == Steamcraft.torchTeslaIdle.blockID || world.getBlockId(i+a, j+b, k+c) == Steamcraft.torchTeslaActive.blockID){
 						world.notifyBlocksOfNeighborChange(i+a, j+b, k+c, blockID);
 						world.scheduleBlockUpdate(i+a, j+b, k+c, blockID, tickRate(world));
 					}
@@ -155,7 +155,7 @@ public class BlockTeslaReceiver extends Block
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.teslaReceiver.blockID;
+        return Steamcraft.teslaReceiver.blockID;
     }
     @Override
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)

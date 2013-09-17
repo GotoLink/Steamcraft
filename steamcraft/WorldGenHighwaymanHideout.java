@@ -179,7 +179,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
         }
         if(i == 6)
         {
-            return new ItemStack(mod_Steamcraft.musketRound, random.nextInt(8) + 1);
+            return new ItemStack(Steamcraft.musketRound, random.nextInt(8) + 1);
         }
         if(i == 7 && random.nextInt(100) == 0)
         {
@@ -199,31 +199,31 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
         }
 		if(i == 11)
         {
-            return new ItemStack(mod_Steamcraft.percussionRound, random.nextInt(8) + 1);
+            return new ItemStack(Steamcraft.percussionRound, random.nextInt(8) + 1);
         }
 		if(i == 12 && random.nextInt(3) == 0)
         {
-            return new ItemStack(mod_Steamcraft.matchlockMusket);
+            return new ItemStack(Steamcraft.matchlockMusket);
         }
 		if(i == 13 && random.nextInt(3) == 0)
         {
-            return new ItemStack(mod_Steamcraft.matchlockRifle);
+            return new ItemStack(Steamcraft.matchlockRifle);
         }
 		if(i == 14 && random.nextInt(4) == 0)
         {
-            return new ItemStack(mod_Steamcraft.flintlockMusket);
+            return new ItemStack(Steamcraft.flintlockMusket);
         }
 		if(i == 15 && random.nextInt(4) == 0)
         {
-            return new ItemStack(mod_Steamcraft.flintlockRifle);
+            return new ItemStack(Steamcraft.flintlockRifle);
         }
 		if(i == 16 && random.nextInt(8) == 0)
         {
-            return new ItemStack(mod_Steamcraft.percussionCapMusket);
+            return new ItemStack(Steamcraft.percussionCapMusket);
         }
 		if(i == 17 && random.nextInt(8) == 0)
         {
-            return new ItemStack(mod_Steamcraft.percussionCapRifle);
+            return new ItemStack(Steamcraft.percussionCapRifle);
         }
 		if(i == 18 && random.nextInt(16) == 0)
         {

@@ -122,7 +122,7 @@ public class TileEntityNukeFurnace extends TileEntityFurnace
     public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
     {
     	if(par1==1)
-    		return par2ItemStack.itemID==mod_Steamcraft.uranium.itemID;
+    		return par2ItemStack.itemID==Steamcraft.uranium.itemID;
     	else
     		return super.isItemValidForSlot(par1, par2ItemStack);
     }

@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockTeslaCoil extends BlockRedstoneTorch
 {
@@ -85,7 +85,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 		int t2 = (k + f1 * nn);
 		int t3 = (j + f2 * nn);
 
-           if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+           if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
             world.setBlockMetadataWithNotify(t1, t3, t2, 1, 2);
 
             world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
@@ -96,7 +96,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
             world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
-			if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+			if((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
 			world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
@@ -173,7 +173,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 		int t2 = (k + f1 * nn);
 		int t3 = (j + f2 * nn);
 
-       if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+       if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
     	   world.setBlockMetadataWithNotify(t1, t3, t2, nnum, 2);
 	        world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
 	        world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
@@ -183,7 +183,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 	        world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
 	        world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
        }
-	   	if((world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == mod_Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+	   	if((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
 			world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
             world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
@@ -199,12 +199,12 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
         {
             if(flag)
             {
-                world.setBlock(i, j, k, mod_Steamcraft.torchTeslaActive.blockID, world.getBlockMetadata(i, j, k), 2);
+                world.setBlock(i, j, k, Steamcraft.torchTeslaActive.blockID, world.getBlockMetadata(i, j, k), 2);
             }
         } 
         else if(!flag && !checkForBurnout(world, i, j, k, false))
         {
-            world.setBlock(i, j, k, mod_Steamcraft.torchTeslaIdle.blockID, world.getBlockMetadata(i, j, k), 2);
+            world.setBlock(i, j, k, Steamcraft.torchTeslaIdle.blockID, world.getBlockMetadata(i, j, k), 2);
         }
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
     }
@@ -217,7 +217,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.torchTeslaIdle.blockID;
+        return Steamcraft.torchTeslaIdle.blockID;
     }
     @Override
     public boolean canProvidePower()

@@ -120,9 +120,9 @@ public class TileEntityChemFurnace extends TileEntityFurnace
     {
     	fuels.put(Item.sugar.itemID,20);
     	fuels.put(Item.gunpowder.itemID, 100);
-    	fuels.put(mod_Steamcraft.bornite.itemID, 200);
-    	fuels.put(mod_Steamcraft.chemicSalt.itemID,1000);	
-    	fuels.put(mod_Steamcraft.phosphorus.itemID, 1600);
+    	fuels.put(Steamcraft.bornite.itemID, 200);
+    	fuels.put(Steamcraft.chemicSalt.itemID,1000);	
+    	fuels.put(Steamcraft.phosphorus.itemID, 1600);
     	fuels.put(Item.glowstone.itemID, 3200);
     }
 }

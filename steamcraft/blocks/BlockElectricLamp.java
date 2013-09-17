@@ -3,7 +3,7 @@ package steamcraft.blocks;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockElectricLamp extends BlockWirelessLamp
 {
@@ -52,18 +52,18 @@ public class BlockElectricLamp extends BlockWirelessLamp
         {
             if(flag)
             {
-                world.setBlock(i, j, k, mod_Steamcraft.torchElectricActive.blockID, world.getBlockMetadata(i, j, k), 2);
+                world.setBlock(i, j, k, Steamcraft.torchElectricActive.blockID, world.getBlockMetadata(i, j, k), 2);
             }
         } 
         else if(!flag)
 		{
-			world.setBlock(i, j, k, mod_Steamcraft.torchElectricIdle.blockID, world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, Steamcraft.torchElectricIdle.blockID, world.getBlockMetadata(i, j, k), 2);
 		}
     }
 	
 	@Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.electricLamp.itemID;
+        return Steamcraft.electricLamp.itemID;
     }
 }

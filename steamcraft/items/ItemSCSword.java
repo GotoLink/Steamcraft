@@ -1,6 +1,6 @@
 package steamcraft.items;
 
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumToolMaterial;
@@ -17,7 +17,7 @@ public class ItemSCSword extends ItemSword
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
     {
-		if(toolMaterial == mod_Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.STEAM){
 			weaponDamage-= (int)Math.round(stack.getItemDamage()*10/320);
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);

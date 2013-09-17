@@ -5,7 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class ItemSCPickaxe extends ItemPickaxe
 {
@@ -19,47 +19,47 @@ public class ItemSCPickaxe extends ItemPickaxe
 	 @Override
 	 public boolean canHarvestBlock(Block block)
 	 {
-       if(block == mod_Steamcraft.oreQuartz || block == mod_Steamcraft.oreQuartzActive ||  block == Block.blockNetherQuartz){
+       if(block == Steamcraft.oreQuartz || block == Steamcraft.oreQuartzActive ||  block == Block.blockNetherQuartz){
             return toolMaterial.getHarvestLevel() >= 2;
         }
-		if(block == mod_Steamcraft.oreVolucite || block == mod_Steamcraft.blockVolucite || block == mod_Steamcraft.decorVolucite){
+		if(block == Steamcraft.oreVolucite || block == Steamcraft.blockVolucite || block == Steamcraft.decorVolucite){
             return toolMaterial.getHarvestLevel() == 5 || toolMaterial.getHarvestLevel() == 6;
         }
-		if(block == mod_Steamcraft.lamp || block == mod_Steamcraft.leavesLamp){
+		if(block == Steamcraft.lamp || block == Steamcraft.leavesLamp){
             return true;
         }
-		if(block == mod_Steamcraft.oreUranite || block == mod_Steamcraft.blockUranium || block == mod_Steamcraft.decorUranium){
+		if(block == Steamcraft.oreUranite || block == Steamcraft.blockUranium || block == Steamcraft.decorUranium){
             return toolMaterial.getHarvestLevel() >= 2;
         }
         if(block == Block.obsidian)
         {
             return toolMaterial.getHarvestLevel() >= 3;
         }
-        if(block == Block.blockDiamond	|| block == mod_Steamcraft.decorDiamond)
+        if(block == Block.blockDiamond	|| block == Steamcraft.decorDiamond)
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
-        if(block == Block.blockGold || block == Block.oreGold || block == mod_Steamcraft.decorDiamond)
+        if(block == Block.blockGold || block == Block.oreGold || block == Steamcraft.decorDiamond)
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
-        if(block == Block.blockIron || block == Block.oreIron || block == mod_Steamcraft.blockCastIron || block == mod_Steamcraft.decorIron || block == mod_Steamcraft.decorCastIron)
+        if(block == Block.blockIron || block == Block.oreIron || block == Steamcraft.blockCastIron || block == Steamcraft.decorIron || block == Steamcraft.decorCastIron)
         {
             return toolMaterial.getHarvestLevel() >= 1;
         }
-        if(block == Block.blockLapis || block == Block.oreLapis || block == mod_Steamcraft.decorLapis)
+        if(block == Block.blockLapis || block == Block.oreLapis || block == Steamcraft.decorLapis)
         {
             return toolMaterial.getHarvestLevel() >= 1;
         }
-        if(block == mod_Steamcraft.borniteOre || block == mod_Steamcraft.blockBrass || block == mod_Steamcraft.woodBrass || block == mod_Steamcraft.decorBrass)
+        if(block == Steamcraft.borniteOre || block == Steamcraft.blockBrass || block == Steamcraft.woodBrass || block == Steamcraft.decorBrass)
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
-		if(block == mod_Steamcraft.brimstone)
+		if(block == Steamcraft.brimstone)
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
-		if(block == mod_Steamcraft.orePhosphate)
+		if(block == Steamcraft.orePhosphate)
         {
             return toolMaterial.getHarvestLevel() >= 2;
         }
@@ -85,11 +85,11 @@ public class ItemSCPickaxe extends ItemPickaxe
     {
         xblocksEffectiveAgainst = (new Block[] {
             Block.cobblestone, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold,
-            Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstoneGlowing, Block.oreRedstone, mod_Steamcraft.brimstone,
-			mod_Steamcraft.borniteOre, mod_Steamcraft.orePhosphate, mod_Steamcraft.oreUranite, mod_Steamcraft.oreQuartz, mod_Steamcraft.oreQuartzActive, mod_Steamcraft.oreVolucite,
-			mod_Steamcraft.roofTile, mod_Steamcraft.blockCastIron, mod_Steamcraft.blockVolucite, mod_Steamcraft.blockBrass, mod_Steamcraft.lamp, mod_Steamcraft.woodBrass, mod_Steamcraft.leavesLamp,
-			mod_Steamcraft.railingCastIron, mod_Steamcraft.decorIron, mod_Steamcraft.decorGold, mod_Steamcraft.decorBrass, mod_Steamcraft.decorDiamond, mod_Steamcraft.decorCastIron,
-			mod_Steamcraft.decorVolucite, mod_Steamcraft.decorLapis, mod_Steamcraft.carvedStone, Block.blockNetherQuartz, mod_Steamcraft.blockUranium, mod_Steamcraft.decorUranium,
+            Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstoneGlowing, Block.oreRedstone, Steamcraft.brimstone,
+			Steamcraft.borniteOre, Steamcraft.orePhosphate, Steamcraft.oreUranite, Steamcraft.oreQuartz, Steamcraft.oreQuartzActive, Steamcraft.oreVolucite,
+			Steamcraft.roofTile, Steamcraft.blockCastIron, Steamcraft.blockVolucite, Steamcraft.blockBrass, Steamcraft.lamp, Steamcraft.woodBrass, Steamcraft.leavesLamp,
+			Steamcraft.railingCastIron, Steamcraft.decorIron, Steamcraft.decorGold, Steamcraft.decorBrass, Steamcraft.decorDiamond, Steamcraft.decorCastIron,
+			Steamcraft.decorVolucite, Steamcraft.decorLapis, Steamcraft.carvedStone, Block.blockNetherQuartz, Steamcraft.blockUranium, Steamcraft.decorUranium,
 			Block.obsidian, Block.stoneBrick
         });
     }
@@ -100,7 +100,7 @@ public class ItemSCPickaxe extends ItemPickaxe
         {
             if(xblocksEffectiveAgainst[i] == block)
             {
-			if(toolMaterial == mod_Steamcraft.STEAM){
+			if(toolMaterial == Steamcraft.STEAM){
 				return (xefficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 				}
                 return xefficiencyOnProperMaterial;

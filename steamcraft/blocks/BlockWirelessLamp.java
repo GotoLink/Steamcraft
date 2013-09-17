@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockWirelessLamp extends BlockRedstoneTorch
 {
@@ -81,23 +81,23 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
 		j1 = world.getBlockMetadata(i, j-l, k);
 		k1 = world.getBlockMetadata(i, j, k+l);
 		k2 = world.getBlockMetadata(i, j, k-l);
-        if(j1 == 5 && world.getBlockId(i,j-l,k) == mod_Steamcraft.torchTeslaActive.blockID)
+        if(j1 == 5 && world.getBlockId(i,j-l,k) == Steamcraft.torchTeslaActive.blockID)
         {
             return true;
         }
-        if(k2 == 3 && world.getBlockId(i,j,k-l) == mod_Steamcraft.torchTeslaActive.blockID)
+        if(k2 == 3 && world.getBlockId(i,j,k-l) == Steamcraft.torchTeslaActive.blockID)
         {
             return true;
         }
-        if(k1 == 4 && world.getBlockId(i,j,k+l) == mod_Steamcraft.torchTeslaActive.blockID)
+        if(k1 == 4 && world.getBlockId(i,j,k+l) == Steamcraft.torchTeslaActive.blockID)
         {
             return true;
         }
-        if(i2 == 1 && world.getBlockId(i-l,j,k) == mod_Steamcraft.torchTeslaActive.blockID)
+        if(i2 == 1 && world.getBlockId(i-l,j,k) == Steamcraft.torchTeslaActive.blockID)
         {
             return true;
         }
-        if(i1 == 2 && world.getBlockId(i+l,j,k) == mod_Steamcraft.torchTeslaActive.blockID)
+        if(i1 == 2 && world.getBlockId(i+l,j,k) == Steamcraft.torchTeslaActive.blockID)
 		{
 			return true;
 		}
@@ -117,12 +117,12 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
         {
             if(flag)
             {
-                world.setBlock(i, j, k, mod_Steamcraft.wirelessLampActive.blockID, world.getBlockMetadata(i, j, k), 2);
+                world.setBlock(i, j, k, Steamcraft.wirelessLampActive.blockID, world.getBlockMetadata(i, j, k), 2);
             }
         } else
 			if(!flag)
 			{
-				world.setBlock(i, j, k, mod_Steamcraft.wirelessLampIdle.blockID, world.getBlockMetadata(i, j, k), 2);
+				world.setBlock(i, j, k, Steamcraft.wirelessLampIdle.blockID, world.getBlockMetadata(i, j, k), 2);
 			}
     }
     @Override
@@ -134,7 +134,7 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
 	@Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.wirelessLamp.itemID;
+        return Steamcraft.wirelessLamp.itemID;
     }
 	@Override
     public boolean canProvidePower()

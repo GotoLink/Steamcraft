@@ -1,5 +1,7 @@
 package steamcraft;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -19,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.world.World;
@@ -28,41 +29,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
-import steamcraft.blocks.BlockBattery;
-import steamcraft.blocks.BlockBrassLog;
-import steamcraft.blocks.BlockChemFurnace;
-import steamcraft.blocks.BlockDiode;
-import steamcraft.blocks.BlockElectricLamp;
-import steamcraft.blocks.BlockInverter;
-import steamcraft.blocks.BlockLamp;
-import steamcraft.blocks.BlockNukeFurnace;
-import steamcraft.blocks.BlockPoweredRail;
-import steamcraft.blocks.BlockRoof;
-import steamcraft.blocks.BlockSCCopperWire;
-import steamcraft.blocks.BlockSCFence;
-import steamcraft.blocks.BlockSCOre;
-import steamcraft.blocks.BlockSCStairs;
-import steamcraft.blocks.BlockSCTallGrass;
-import steamcraft.blocks.BlockSCTeaPlant;
-import steamcraft.blocks.BlockSteamFurnace;
-import steamcraft.blocks.BlockTeslaCoil;
-import steamcraft.blocks.BlockTeslaReceiver;
-import steamcraft.blocks.BlockTorchPhosphorus;
-import steamcraft.blocks.BlockUraniteOre;
-import steamcraft.blocks.BlockUranium;
-import steamcraft.blocks.BlockWirelessLamp;
-import steamcraft.items.ItemCoreDrill;
-import steamcraft.items.ItemElectricLamp;
-import steamcraft.items.ItemFirearm;
-import steamcraft.items.ItemKettle;
-import steamcraft.items.ItemSCArmor;
-import steamcraft.items.ItemSCAxe;
-import steamcraft.items.ItemSCDrill;
-import steamcraft.items.ItemSCHoe;
-import steamcraft.items.ItemSCPickaxe;
-import steamcraft.items.ItemSCSword;
-import steamcraft.items.ItemTeacup;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import steamcraft.blocks.*;
+import steamcraft.items.*;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.IPickupNotifier;
@@ -82,10 +50,10 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 @Mod(modid="steamcraft",name="SteamCraft",version="alpha")
 @NetworkMod(clientSideRequired=true)
-public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenerator, IFuelHandler
+public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenerator, IFuelHandler
 {
 	@Instance(value="steamcraft")
-	public static mod_Steamcraft instance;
+	public static Steamcraft instance;
 	@SidedProxy(clientSide="steamcraft.ClientProxy",serverSide="steamcraft.CommonProxy")
 	public static CommonProxy proxy;
 	
@@ -97,40 +65,31 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 5, 210, 7F, 4);
 	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, 6, -1, 8F, 3);
 	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 7, 2, 321, 12F, 5);
-	
+	public static String[] armorNames = {"etherium","brass","obsidian"};
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
-	public static Block teslaReceiver,teslaReceiverActive;
-	public static Block steamOvenIdle,steamOvenActive;
-	public static Block chemOvenIdle,chemOvenActive;
-	public static Block nukeOvenIdle,nukeOvenActive;
-	public static Block battery,brimstone;
+	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive;
+	public static Block steamOvenIdle,steamOvenActive,chemOvenIdle,chemOvenActive;
+	public static Block nukeOvenIdle,nukeOvenActive,battery;
 	public static Block borniteOre,orePhosphate,oreUranite,oreQuartz,oreQuartzActive,oreVolucite;
-	public static Block torchPhosphorus;
-	public static Block roofTile;
+	public static Block brimstone;
 	
-	public static Block blockCastIron;
-	public static Block blockVolucite;
-	public static Block blockBrass;
-	public static Block blockUranium;
+	public static Block blockCastIron,blockVolucite,blockBrass,blockUranium;
 	
 	public static Block decorIron,decorGold,decorDiamond,decorCastIron,decorBrass;
 	public static Block decorVolucite,decorLapis,carvedStone,decorUranium;
 	
 	public static Block railingCastIron,gateCastIron;
 	
-	public static Block stairSCSingle,stairSCDouble;
-	
 	public static Block lamp,lampoff;
 	public static Block woodBrass;
 	public static Block leavesLamp,wirelessLampIdle,wirelessLampActive;
 	
-	public static Block stairRoof;
+	public static Block stairRoof,roofTile;
 	
-	public static Block teaPlant;
+	public static Block teaPlant,tallGrass;
 	
 	public static Block redstoneWire,torchRedstoneIdle,torchRedstoneActive;
 	public static Block redstoneRepeaterIdle,redstoneRepeaterActive,railPowered;
-	public static Block tallGrass;
 	
 	public static Item etherium,chemicSalt,bornite,obsidianSlate;
 	public static Item ingotBrass,ingotCastIron;
@@ -167,17 +126,15 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 	public static Item teaSeed,teaLeaves,coldKettle,hotKettle;
 	public static Item emptyTeacup,fullTeacup,emptyKettle;
 	
-	public static int EtheriumRenderIndex = RenderingRegistry.addNewArmourRendererPrefix("etherium");
-	public static int BrassRenderIndex = RenderingRegistry.addNewArmourRendererPrefix("brass");
-	public static int ObsidianRenderIndex = RenderingRegistry.addNewArmourRendererPrefix("obsidian");
+	public static int[] armorIndexes = new int[3];
 	
 	public static Material solidcircuit = new MaterialLogic(MapColor.airColor);
 	public static Material staticcircuit = new MaterialLogic(MapColor.airColor).setImmovableMobility();
 	private Logger logger;
 	
-	
 	private Object[][] DrillRecipeItems,SpannerRecipeItems,StoreBlockRecipeItems;
 	private Object[][] DecorBlockRecipeItems,StairRecipeItems;
+	public static Map armorMap = new HashMap();
 	
 	@EventHandler
 	public void load(FMLPreInitializationEvent event)
@@ -230,7 +187,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		decorUranium = new BlockUranium(config.getBlock("EngrUranium",2535).getInt()).setHardness(10F).setResistance(6F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorUranium").setTextureName("steamcraft:engruranium");
 		
 		gateCastIron = new BlockFenceGate(config.getBlock("CastIronGate",2536).getInt() ).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:gateCastIron").setTextureName("steamcraft:castironblock");
-		railingCastIron = new BlockSCFence(config.getBlock("CastIronRailing",2537).getInt(),  Material.iron, mod_Steamcraft.gateCastIron, true).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:railingCastIron").setTextureName("steamcraft:castironblock");
+		railingCastIron = new BlockSCFence(config.getBlock("CastIronRailing",2537).getInt(),  Material.iron, Steamcraft.gateCastIron, true).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:railingCastIron").setTextureName("steamcraft:castironblock");
 		
 		lamp = new BlockLamp(config.getBlock("LampBlock",2538).getInt(),  Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(1.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
 		lampoff = new BlockLamp(config.getBlock("LampBlockOFF",2539).getInt() , Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(0.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
@@ -264,15 +221,20 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
 		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
 		
-		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), 3, ObsidianRenderIndex, 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour/obsidianhelmet");
-		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), 3, ObsidianRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour/obsidianplate");
-		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), 3, ObsidianRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour/obsidianlegs");
-		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), 3, ObsidianRenderIndex, 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour/obsidianboots");
+		for(int i =0; i<armorNames.length; i++)
+		{
+			armorIndexes[i] = proxy.registerArmor(armorNames[i]);
+			armorMap.put(armorIndexes[i],armorNames[i]);
+		}
+		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), 3, armorIndexes[2], 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour/obsidianhelmet");
+		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), 3, armorIndexes[2], 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour/obsidianplate");
+		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), 3, armorIndexes[2], 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour/obsidianlegs");
+		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), 3, armorIndexes[2], 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour/obsidianboots");
 		
-		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), 1, BrassRenderIndex, 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour/brassgoggles");
-		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), 1, BrassRenderIndex, 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour/aqualung");
-		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), 1, BrassRenderIndex, 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour/rollerskates");
-		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), 1, BrassRenderIndex, 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
+		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), 1, armorIndexes[1], 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour/brassgoggles");
+		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), 1, armorIndexes[1], 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour/aqualung");
+		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), 1, armorIndexes[1], 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour/rollerskates");
+		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), 1, armorIndexes[1], 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
 		
 		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools/etheriumpick");
 		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
@@ -281,10 +243,10 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
 		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill",25032).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools/etheriumdrill");
 		
-		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), 0, EtheriumRenderIndex, 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour/etheriumhelmet");
-		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), 0, EtheriumRenderIndex, 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour/etheriumplate");
-		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), 0, EtheriumRenderIndex, 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour/etheriumlegs");
-		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), 0, EtheriumRenderIndex, 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
+		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), 0, armorIndexes[0], 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour/etheriumhelmet");
+		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), 0, armorIndexes[0], 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour/etheriumplate");
+		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), 0, armorIndexes[0], 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour/etheriumlegs");
+		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), 0, armorIndexes[0], 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
 		
 		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),STEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools/steampick");
 		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),STEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
@@ -341,20 +303,20 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		TickRegistry.registerTickHandler(proxy, Side.CLIENT);
 		
 		LanguageRegistry.instance().addName(torchElectricIdle, "Electric Lamp");
-		LanguageRegistry.instance().addName(torchElectricActive, "Electric Lamp");
+		LanguageRegistry.instance().addName(torchElectricActive, "Electric Lamp Active");
 		LanguageRegistry.instance().addName(electricLamp, "Electric Lamp");			
 		LanguageRegistry.instance().addName(torchTeslaIdle, "Tesla Coil");
-		LanguageRegistry.instance().addName(torchTeslaActive, "Tesla Coil");
+		LanguageRegistry.instance().addName(torchTeslaActive, "Tesla Coil Active");
 		LanguageRegistry.instance().addName(teslaReceiver, "Tesla Receiver");
-		LanguageRegistry.instance().addName(teslaReceiverActive, "Tesla Receiver");
+		LanguageRegistry.instance().addName(teslaReceiverActive, "Tesla Receiver Active");
 		LanguageRegistry.instance().addName(steamOvenIdle, "Steam Furnace");
-		LanguageRegistry.instance().addName(steamOvenActive, "Steam Furnace");
+		LanguageRegistry.instance().addName(steamOvenActive, "Steam Furnace Active");
 		LanguageRegistry.instance().addName(battery, "Battery");
 		LanguageRegistry.instance().addName(redstoneWire, "Copper Wire");
 		LanguageRegistry.instance().addName(torchRedstoneIdle, "Inverter");
-		LanguageRegistry.instance().addName(torchRedstoneActive, "Inverter");
+		LanguageRegistry.instance().addName(torchRedstoneActive, "Inverter Active");
 		LanguageRegistry.instance().addName(redstoneRepeaterIdle, "Diode");
-		LanguageRegistry.instance().addName(redstoneRepeaterActive, "Diode");
+		LanguageRegistry.instance().addName(redstoneRepeaterActive, "Diode Active");
 		LanguageRegistry.instance().addName(brimstone, "Brimstone");
 		LanguageRegistry.instance().addName(borniteOre, "Bornite");
 		LanguageRegistry.instance().addName(orePhosphate, "Phosphate Ore");
@@ -373,9 +335,9 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		LanguageRegistry.instance().addName(uraniumStone, "Uranium");
 		LanguageRegistry.instance().addName(uranium, "Uranium Pellet");
 		LanguageRegistry.instance().addName(chemOvenIdle, "Chemical Furnace");
-		LanguageRegistry.instance().addName(chemOvenActive, "Chemical Furnace");
+		LanguageRegistry.instance().addName(chemOvenActive, "Chemical Furnace Active");
 		LanguageRegistry.instance().addName(nukeOvenIdle, "Nuclear Reactor");
-		LanguageRegistry.instance().addName(nukeOvenActive, "Nuclear Reactor");
+		LanguageRegistry.instance().addName(nukeOvenActive, "Nuclear Reactor Active");
 		LanguageRegistry.instance().addName(reactorCore, "Reactor Core");
 		LanguageRegistry.instance().addName(coreDrill, "Core Drill");
 		LanguageRegistry.instance().addName(drillBase, "Drill Base");
@@ -800,7 +762,7 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		});
 		
 		
-		GameRegistry.addRecipe(new ItemStack(emptyKettle, 1, new ItemStack(emptyKettle, 1).getMaxDamage()-1), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(emptyKettle, 1, emptyKettle.getMaxDamage()-1), new Object[]{
                                   "#  ", "###", " ##", Character.valueOf('#'), ingotCastIron
         });
 		GameRegistry.addRecipe(new ItemStack(emptyTeacup, 1), new Object[]{
@@ -898,8 +860,8 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
 		ItemSCDrill.addSteamcraftBlocks();
 		
 		//EntityHighwayman.setHeldItem(flintlockMusket, flintlockRifle, matchlockMusket, matchlockRifle, percussionCapMusket, percussionCapRifle);
-		
-		addAchievements();
+		if(event.getSide()==Side.CLIENT)
+			addAchievements();
 }
 
 	
@@ -962,30 +924,35 @@ public class mod_Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGe
         }
 
     }
-
+	private static void addAchievement(String ach, String desc)
+	{
+        LanguageRegistry.instance().addStringLocalization("achievement." + ach, ach);
+        LanguageRegistry.instance().addStringLocalization("achievement." + ach + ".desc", desc);
+	}
+	
 	public static void addAchievements(){
 		ach_BlackMagic = (new Achievement(AchievementList.achievementList.size(),"Black Magic",6,4, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_BlackMagic, "Black Magic", "Construct an obsidian pickaxe");
+		addAchievement("Black Magic", "Construct an obsidian pickaxe");
 		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",8,4, etherium, ach_BlackMagic)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_CarryingYou, "Carrying You", "Mine some volucite");
-		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",4,5, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_SpiralNemesis, "Spiral Nemesis", "Construct a drill");
-		ach_Fallout = (new Achievement(AchievementList.achievementList.size(),"Fallout",-1,6, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_Fallout, "Fallout", "Smelt something with a nuclear reactor");
-		ach_WhoTheHellDoYouThinkIAm = (new Achievement(AchievementList.achievementList.size(),"Who The Hell Do You Think I Am?",2,-7, coreDrill, ach_SpiralNemesis)).setSpecial().registerAchievement();
-		ModLoader.addAchievementDesc(ach_WhoTheHellDoYouThinkIAm, "Heaven Piercing", "WHO THE HELL DO YOU THINK I AM?");
-		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"ItsAlive",-2,4, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_ItsAlive, "It's Alive!", "Construct a tesla coil");
-		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"MasterCraftsman",1,7, decorCastIron, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_MasterCraftsman, "Master Craftsman", "Engrave a block");
-		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"RuinedEverything",-3,6, uraniumStone, ach_Fallout)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_RuinedEverything, "Ruined Everything", "Melt down a nuclear reactor");
-		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"JethroTull",1,2, aqualung, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_JethroTull, "Jethro Tull", "Construct an aqualung");
-		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"LockStockAndBarrel",-3,3, flintlockMusket, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_LockStockAndBarrel, "Lock, Stock and Barrel", "Construct a musket or rifle");
-		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"TimeForACuppa",0,5, fullTeacup, AchievementList.acquireIron)).registerAchievement();
-		ModLoader.addAchievementDesc(ach_TimeForACuppa, "Time For A Cuppa!", "Pour yourself a cup of tea");
+		addAchievement("Carrying You", "Mine some volucite");
+		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",5,1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
+		addAchievement("Spiral Nemesis", "Construct a drill");
+		ach_Fallout = (new Achievement(AchievementList.achievementList.size(),"Fallout",0,6, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Fallout", "Smelt something with a nuclear reactor");
+		ach_WhoTheHellDoYouThinkIAm = (new Achievement(AchievementList.achievementList.size(),"Heaven Piercing",6,1, coreDrill, ach_SpiralNemesis)).setSpecial().registerAchievement();
+		addAchievement("Heaven Piercing", "WHO THE HELL DO YOU THINK I AM?");
+		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",0,4, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("It's Alive!", "Construct a tesla coil");
+		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,7, decorCastIron, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Master Craftsman", "Engrave a block");
+		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,7, uraniumStone, ach_Fallout)).registerAchievement();
+		addAchievement("Ruined Everything", "Melt down a nuclear reactor");
+		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",1,2, aqualung, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Jethro Tull", "Construct an aqualung");
+		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",0,3, flintlockMusket, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Lock, Stock and Barrel", "Construct a musket or rifle");
+		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",2,5, fullTeacup, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Time For A Cuppa!", "Pour yourself a cup of tea");
 	}
 	
 	@Override

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockOre;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockSCOre extends BlockOre
 {
@@ -15,16 +15,16 @@ public class BlockSCOre extends BlockOre
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k)
     {
-		if(blockID == mod_Steamcraft.oreVolucite.blockID){
+		if(blockID == Steamcraft.oreVolucite.blockID){
 			//System.out.println("Volucite Generated At: " + i + ", " + j + ", " + k);
 		}
 	}
 	@Override
     public int idDropped(int i, Random random, int j)
     {
-		if(blockID == mod_Steamcraft.oreVolucite.blockID)
+		if(blockID == Steamcraft.oreVolucite.blockID)
         {
-			return mod_Steamcraft.etherium.itemID;
+			return Steamcraft.etherium.itemID;
 		}		
 		else
         {

@@ -6,7 +6,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class ItemSCHoe extends ItemHoe
 {
@@ -33,7 +33,7 @@ public class ItemSCHoe extends ItemHoe
             } else
             {
                 world.setBlock(i, j, k, block.blockID);
-				if(theToolMaterial == mod_Steamcraft.STEAM){
+				if(theToolMaterial == Steamcraft.STEAM){
 				itemstack.damageItem(1 +  (int)Math.round(itemstack.getItemDamage()*5/320), entityplayer);
 				return true;
 				}

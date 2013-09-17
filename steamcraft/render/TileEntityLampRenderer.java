@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import steamcraft.TileEntityLamp;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class TileEntityLampRenderer extends TileEntitySpecialRenderer
 {
@@ -50,23 +50,23 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer
 			GL11.glRotatef(f2, 0.0F, 0.0F, 1.0F);
 			}
             GL11.glTranslatef(0.0F, -0.3125F, -0.4375F);
-		if(block == mod_Steamcraft.torchElectricActive || block == mod_Steamcraft.torchElectricIdle){
+		if(block == Steamcraft.torchElectricActive || block == Steamcraft.torchElectricIdle){
 		 lampModelUp.BracketWide.showModel = false;
 		 lampModelUp.CrossbarLeft.showModel = false;
 		 lampModelUp.CrossbarRight.showModel = false;
 		 lampModelSide.CrossbarLeft.showModel = false;
 		 lampModelSide.CrossbarRight.showModel = false;
-		}else if(block == mod_Steamcraft.wirelessLampActive || block == mod_Steamcraft.wirelessLampIdle){
+		}else if(block == Steamcraft.wirelessLampActive || block == Steamcraft.wirelessLampIdle){
 		 lampModelUp.BracketWide.showModel = true;
 		 lampModelUp.CrossbarLeft.showModel = true;
 		 lampModelUp.CrossbarRight.showModel = true;
 		 lampModelSide.CrossbarLeft.showModel = true;
 		 lampModelSide.CrossbarRight.showModel = true;
 		}
-		if(block == mod_Steamcraft.torchElectricActive || block == mod_Steamcraft.wirelessLampActive)
+		if(block == Steamcraft.torchElectricActive || block == Steamcraft.wirelessLampActive)
         {
         bindTexture(lampOn);
-		}else if(block == mod_Steamcraft.torchElectricIdle || block == mod_Steamcraft.wirelessLampIdle)
+		}else if(block == Steamcraft.torchElectricIdle || block == Steamcraft.wirelessLampIdle)
         {
 		bindTexture(lampOff);
 		}

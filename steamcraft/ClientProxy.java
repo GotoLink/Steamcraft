@@ -65,8 +65,28 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public int getRenderId() {
 		return 0;
 	}
+	@Override
+	public int registerArmor(String string) {
+		return RenderingRegistry.addNewArmourRendererPrefix(string);
+	}
+	@Override
+	public void onRenderTick() {
+		if(minecraft.thePlayer!=null && minecraft.theWorld!=null)
+		{
+			ItemStack helmetSlot = minecraft.thePlayer.inventory.armorItemInSlot(3);
+			//Check to see if the currently worn item in slot 3(head slot) is a leather helmet
+			if(helmetSlot != null && minecraft.gameSettings.thirdPersonView==0 && helmetSlot.itemID == Steamcraft.brassGoggles.itemID && minecraft.currentScreen == null)
+	        {//if the player is wearing a helmet, perform the following actions
+			   	ScaledResolution scaledresolution = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
+			   	renderOverlay(scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight());
+	        }
+			if(minecraft.thePlayer.getEntityData().getShort("Aqualung") > 0 && minecraft.thePlayer.isInsideOfMaterial(Material.water) && minecraft.thePlayer.isEntityAlive()){
+				renderThings(minecraft.thePlayer);
+			}
+		}
+	}
 	
-	public void drawTexturedModalRect(int i, int j, int k, int l, int i1, int j1)
+	public static void drawTexturedModalRect(int i, int j, int k, int l, int i1, int j1)
     {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
@@ -79,9 +99,9 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
         tessellator.draw();
     }
 
-	private void renderOverlay(int i, int j, Minecraft mc)
+	private void renderOverlay(int i, int j)
     {
-		mc.entityRenderer.setupOverlayRendering();
+		minecraft.entityRenderer.setupOverlayRendering();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		GL11.glClearDepth(1.0);
 		GL11.glDisable(2929 /*GL_DEPTH_TEST*/);
@@ -89,7 +109,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
         GL11.glDepthMask(false);
         GL11.glBlendFunc(770, 771);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(goggles);
+        minecraft.renderEngine.bindTexture(goggles);
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(0.0D, j, -90D, 0.0D, 1.0D);
@@ -103,11 +123,11 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(3042 /*GL_BLEND*/);
 		
-		if(!mc.gameSettings.hideGUI || mc.currentScreen != null)
+		if(!minecraft.gameSettings.hideGUI || minecraft.currentScreen != null)
         {
-			int k = (Mouse.getX() * i) / mc.displayWidth;
-	        int i1 = j - (Mouse.getY() * j) / mc.displayHeight - 1;
-			mc.ingameGUI.renderGameOverlay(0.0F, mc.currentScreen != null, k, i1);
+			int k = (Mouse.getX() * i) / minecraft.displayWidth;
+	        int i1 = j - (Mouse.getY() * j) / minecraft.displayHeight - 1;
+	        minecraft.ingameGUI.renderGameOverlay(0.0F, minecraft.currentScreen != null, k, i1);
 		}
 	 }
 	public void renderThings(EntityPlayer entityPlayer)
@@ -137,23 +157,15 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
             }
 		}
 	}
-	public void drawCenteredString(FontRenderer fontrenderer, String s, int i, int j, int k)
+	public static void drawCenteredString(FontRenderer fontrenderer, String s, int i, int j, int k)
     {
         fontrenderer.drawStringWithShadow(s, i - fontrenderer.getStringWidth(s) / 2, j, k);
     }
 	
-	public void drawString(FontRenderer fontrenderer, String s, int i, int j, int k)
+	public static void drawString(FontRenderer fontrenderer, String s, int i, int j, int k)
     {
         fontrenderer.drawStringWithShadow(s, i, j, k);
     }
 	
-	public void renderOverlay(ItemStack helmetSlot) {
-		if(minecraft.gameSettings.thirdPersonView==0 && helmetSlot.itemID == mod_Steamcraft.brassGoggles.itemID && minecraft.currentScreen == null)
-        {
-		   	ScaledResolution scaledresolution = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
-		   	renderOverlay(scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), minecraft);
-		   	//if the player is wearing a helmet, perform the following actions
-        }
-	}
-	public final static ResourceLocation goggles = new ResourceLocation("streamcraft","%blur%/misc/goggles.png");
+	public final static ResourceLocation goggles = new ResourceLocation("steamcraft","misc/goggles.png");//blur ?
 }

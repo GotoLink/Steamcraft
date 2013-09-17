@@ -8,7 +8,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -17,7 +17,7 @@ public class BlockBattery extends Block
     private Icon blockSide;
 	public BlockBattery(int i)
     {
-        super(i, mod_Steamcraft.solidcircuit);
+        super(i, Steamcraft.solidcircuit);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         setLightOpacity(0);
     }
@@ -120,7 +120,7 @@ public class BlockBattery extends Block
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.battery.blockID;
+        return Steamcraft.battery.blockID;
     }
     @Override
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)

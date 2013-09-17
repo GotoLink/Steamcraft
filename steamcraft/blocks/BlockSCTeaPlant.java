@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.ClientProxy;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockSCTeaPlant extends BlockCrops
 {
@@ -40,12 +40,12 @@ public class BlockSCTeaPlant extends BlockCrops
     @Override
     protected int getSeedItem()
     {
-        return mod_Steamcraft.teaSeed.itemID;
+        return Steamcraft.teaSeed.itemID;
     }
     @Override
     protected int getCropItem()
     {
-        return mod_Steamcraft.teaLeaves.itemID;
+        return Steamcraft.teaLeaves.itemID;
     }
     @Override
     @SideOnly(Side.CLIENT)

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.item.Item;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockSCTallGrass extends BlockTallGrass
 {
@@ -20,7 +20,7 @@ public class BlockSCTallGrass extends BlockTallGrass
             return Item.seeds.itemID;
         } else if(random.nextInt(8) == 1)
         {
-            return mod_Steamcraft.teaSeed.itemID;
+            return Steamcraft.teaSeed.itemID;
         }
         {
             return -1;

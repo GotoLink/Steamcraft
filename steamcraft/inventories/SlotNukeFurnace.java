@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class SlotNukeFurnace extends SlotFurnace
 {
@@ -20,7 +20,7 @@ public class SlotNukeFurnace extends SlotFurnace
     @Override
     protected void onCrafting(ItemStack par1ItemStack)
     {
-		thePlayer.triggerAchievement(mod_Steamcraft.ach_Fallout);
+		thePlayer.triggerAchievement(Steamcraft.ach_Fallout);
         super.onCrafting(par1ItemStack);
     }
 }

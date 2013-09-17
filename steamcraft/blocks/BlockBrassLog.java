@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,7 +21,7 @@ public class BlockBrassLog extends Block
 	@Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.woodBrass.blockID;
+        return Steamcraft.woodBrass.blockID;
     }
 	@Override
     public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)

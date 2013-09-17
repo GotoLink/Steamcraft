@@ -2,18 +2,14 @@ package steamcraft;
 
 import java.util.EnumSet;
 
-import org.lwjgl.opengl.GL11;
-
-import steamcraft.items.ItemFirearm;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import steamcraft.items.ItemFirearm;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -60,7 +56,14 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		onPlayerTick((EntityPlayer)tickData[0]);
+		if(type.contains(TickType.PLAYER))
+			onPlayerTick((EntityPlayer)tickData[0]);
+		else if(type.contains(TickType.RENDER))
+			onRenderTick();
+	}
+
+	public void onRenderTick() {
+		
 	}
 
 	private void onPlayerTick(EntityPlayer entityPlayer) {
@@ -69,10 +72,10 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
         //Chest = 2
         //Helmet = 3
 		ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-        ItemStack helmetSlot = entityPlayer.inventory.armorInventory[3];
-		ItemStack chestSlot = entityPlayer.inventory.armorInventory[2];
-		ItemStack legSlot = entityPlayer.inventory.armorInventory[1];
-		ItemStack bootSlot = entityPlayer.inventory.armorInventory[0];
+        ItemStack helmetSlot = entityPlayer.inventory.armorItemInSlot(3);
+		ItemStack chestSlot = entityPlayer.inventory.armorItemInSlot(2);
+		ItemStack legSlot = entityPlayer.inventory.armorItemInSlot(1);
+		ItemStack bootSlot = entityPlayer.inventory.armorItemInSlot(0);
 		
 		if(heldItem != null){
 			if(heldItem.getItem() instanceof ItemFirearm && heldItem.getItemDamage() > 0){
@@ -93,39 +96,32 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 				}
 			}
 		}
-        //Check to see if the currently worn item in slot 3(head slot) is a leather helmet
-		if(helmetSlot != null){
-			renderOverlay(helmetSlot);
-		}
 		
-		if(chestSlot == null)
+		if(chestSlot == null || chestSlot.itemID != Steamcraft.aqualung.itemID)
         {
 			entityPlayer.getEntityData().setShort("Aqualung",(short) 0);
         }
+		else
+		{
+			if(!entityPlayer.isInsideOfMaterial(Material.water)){
+				entityPlayer.getEntityData().setShort("Aqualung",(short) 600);
+			}
+			else if(entityPlayer.getAir() == 0){
+				chestSlot.damageItem(1, entityPlayer);
+			}
+		}
 		if(entityPlayer.getEntityData().getShort("Aqualung") > 0 && entityPlayer.isInsideOfMaterial(Material.water) && entityPlayer.isEntityAlive()){
 			entityPlayer.getEntityData().setShort("Aqualung",(short) entityPlayer.decreaseAirSupply(entityPlayer.getEntityData().getShort("Aqualung")));
 			entityPlayer.setAir(300);
-			renderThings(entityPlayer);
 		}
 		//GL11.glDisable(3042 /*GL_BLEND*/);
-		
-		if(chestSlot != null){
-			if(chestSlot.itemID == mod_Steamcraft.aqualung.itemID)
-			{
-				if(!entityPlayer.isInsideOfMaterial(Material.water)){
-					entityPlayer.getEntityData().setShort("Aqualung",(short) 600);
-				}
-				else if(entityPlayer.getAir() == 0){
-					chestSlot.damageItem(1, entityPlayer);
-				}
-			}else{
-				entityPlayer.getEntityData().setShort("Aqualung",(short) 0);
-			}
+			
+		if(bootSlot == null || bootSlot.itemID != Steamcraft.rollerSkates.itemID){
+			entityPlayer.stepHeight = 0.5F;
 		}
-				
-		if(bootSlot != null){
-			if(!entityPlayer.isInsideOfMaterial(Material.water) && !entityPlayer.isInWater() && entityPlayer.onGround && bootSlot.itemID == mod_Steamcraft.rollerSkates.itemID)
-                   {
+		else{
+			if(!entityPlayer.isInsideOfMaterial(Material.water) && !entityPlayer.isInWater() && entityPlayer.onGround)
+				{
 				 //  if(!setBaseSpeed){
 		//minecraft.thePlayer.motionX *= 1.200000824D;
 		//minecraft.thePlayer.motionZ *= 1.200000824D;
@@ -139,34 +135,17 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 			entityPlayer.stepHeight = 0.0F;
      //   }else{
 	//	setBaseSpeed = false;
-                   }
+               }
 		}
-		if(bootSlot == null || bootSlot.itemID != mod_Steamcraft.rollerSkates.itemID){
-			entityPlayer.stepHeight = 0.5F;
-		}
-		if(legSlot != null){
-			if(legSlot.itemID == mod_Steamcraft.legBraces.itemID){
+		
+		if(legSlot != null && legSlot.itemID == Steamcraft.legBraces.itemID){
 		//if(minecraft.thePlayer.fallDistance <= 10F){
 		//minecraft.thePlayer.fallDistance = 0.0F;
 		//}else{
-				boolean setFall = false;
-				if(entityPlayer.fallDistance > 0.0F && !setFall){
-					entityPlayer.fallDistance -= 0.5F;
-					setFall = true;
-				}else if(entityPlayer.fallDistance <= 0.0F){
-					setFall = false;
-				}
-		//}
+			if(entityPlayer.fallDistance > 0.0F){
+				entityPlayer.fallDistance -= 0.5F;
 			}
 		}
-	}
-	
-	public void renderThings(EntityPlayer entityPlayer) {
-		
-	}
-
-	public void renderOverlay(ItemStack helmetSlot) {
-		
 	}
 
 	public int getStackPosition(InventoryPlayer inventory, Item item)
@@ -189,7 +168,7 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.PLAYER);
+		return EnumSet.of(TickType.PLAYER,TickType.RENDER);
 	}
 
 	@Override
@@ -197,4 +176,7 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 		return null;
 	}
 
+	public int registerArmor(String string) {
+		return 0;
+	}
 }

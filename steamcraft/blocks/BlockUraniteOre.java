@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockUraniteOre extends Block
 {
@@ -47,7 +47,7 @@ public class BlockUraniteOre extends Block
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.oreUranite.blockID;
+        return Steamcraft.oreUranite.blockID;
     }
     @Override
     public int quantityDropped(Random random)

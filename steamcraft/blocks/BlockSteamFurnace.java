@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.TileEntitySteamFurnace;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,7 +26,7 @@ public class BlockSteamFurnace extends BlockFurnace
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.steamOvenIdle.blockID;
+        return Steamcraft.steamOvenIdle.blockID;
     }
 
     @SideOnly(Side.CLIENT)
@@ -89,7 +89,7 @@ public class BlockSteamFurnace extends BlockFurnace
         TileEntitySteamFurnace tileentitysteamfurnace = (TileEntitySteamFurnace)world.getBlockTileEntity(i, j, k);
 		if(tileentitysteamfurnace != null)
         {
-            entityplayer.openGui(mod_Steamcraft.instance, 0,world, j,k, k);
+            entityplayer.openGui(Steamcraft.instance, 0,world, j,k, k);
         }
 		return true;
     }
@@ -101,10 +101,10 @@ public class BlockSteamFurnace extends BlockFurnace
 		keepFurnaceInventory = true;
         if(flag)
         {
-            world.setBlock(i, j, k, mod_Steamcraft.steamOvenActive.blockID);
+            world.setBlock(i, j, k, Steamcraft.steamOvenActive.blockID);
         } else
         {
-            world.setBlock(i, j, k, mod_Steamcraft.steamOvenIdle.blockID);
+            world.setBlock(i, j, k, Steamcraft.steamOvenIdle.blockID);
         }
         keepFurnaceInventory = false;
         world.setBlockMetadataWithNotify(i, j, k, l, 2);

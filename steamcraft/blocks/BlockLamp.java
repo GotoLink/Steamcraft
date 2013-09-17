@@ -5,7 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 
 public class BlockLamp extends Block
 {
@@ -49,9 +49,9 @@ public class BlockLamp extends Block
     {
 		isPowered = isPowered(world, i, j, k);
 		if(isPowered){
-			world.setBlock(i, j, k, mod_Steamcraft.lampoff.blockID, world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, Steamcraft.lampoff.blockID, world.getBlockMetadata(i, j, k), 2);
 		}else{
-			world.setBlock(i, j, k, mod_Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k), 2);
 		}
 	}
     @Override
@@ -63,7 +63,7 @@ public class BlockLamp extends Block
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.lamp.blockID;
+        return Steamcraft.lamp.blockID;
     }
 	
 	private static boolean isPowered(World world, int i, int j, int k)

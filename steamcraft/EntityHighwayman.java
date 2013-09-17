@@ -104,7 +104,7 @@ public class EntityHighwayman extends EntityMob
     @Override
     protected int getDropItemId()
     {
-		return percussion?mod_Steamcraft.percussionRound.itemID:mod_Steamcraft.musketRound.itemID;
+		return percussion?Steamcraft.percussionRound.itemID:Steamcraft.musketRound.itemID;
     }
     @Override
 	protected void dropFewItems(boolean flag,int fortune)
@@ -148,13 +148,13 @@ public class EntityHighwayman extends EntityMob
 		int i = rand.nextInt(8);
         for(int j = 0; j < i; j++)
         {
-		dropItem(mod_Steamcraft.musketRound.itemID, 1);
+		dropItem(Steamcraft.musketRound.itemID, 1);
         }
 		if(percussion){
 		i = rand.nextInt(6);
         for(int j = 0; j < i; j++)
         {
-		dropItem(mod_Steamcraft.percussionRound.itemID, 1);
+		dropItem(Steamcraft.percussionRound.itemID, 1);
 		}
 		}
 		
@@ -231,9 +231,9 @@ public class EntityHighwayman extends EntityMob
     private ItemStack defaultHeldItem = setHeldItem();
 	/*public int heldItemRand = -1;
 	public static int heldItemNumber = -1;*/
-	public static ItemStack heldItems[] = new ItemStack[]{ new ItemStack(mod_Steamcraft.flintlockMusket, 1), new ItemStack(mod_Steamcraft.flintlockRifle, 1), 
-	new ItemStack(mod_Steamcraft.matchlockMusket, 1), new ItemStack(mod_Steamcraft.matchlockRifle, 1), 
-	new ItemStack(mod_Steamcraft.percussionCapMusket, 1), new ItemStack(mod_Steamcraft.percussionCapRifle, 1)};
+	public static ItemStack heldItems[] = new ItemStack[]{ new ItemStack(Steamcraft.flintlockMusket, 1), new ItemStack(Steamcraft.flintlockRifle, 1), 
+	new ItemStack(Steamcraft.matchlockMusket, 1), new ItemStack(Steamcraft.matchlockRifle, 1), 
+	new ItemStack(Steamcraft.percussionCapMusket, 1), new ItemStack(Steamcraft.percussionCapRifle, 1)};
 
 	/*public static void setHeldItem(Item item, Item item2, Item item3, Item item4, Item item5, Item item6){
 		if(heldItemNumber >= 2 && heldItemNumber < 4){

@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.TileEntityNukeFurnace;
-import steamcraft.mod_Steamcraft;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,7 +33,7 @@ public class BlockNukeFurnace extends BlockFurnace
 	@Override
     public int idDropped(int i, Random random, int j)
     {
-        return mod_Steamcraft.nukeOvenIdle.blockID;
+        return Steamcraft.nukeOvenIdle.blockID;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class BlockNukeFurnace extends BlockFurnace
         TileEntityNukeFurnace tileentitynukefurnace = (TileEntityNukeFurnace)world.getBlockTileEntity(i, j, k);
 		if(tileentitynukefurnace != null)
         {
-            entityplayer.openGui(mod_Steamcraft.instance, 2,world, j,k, k);
+            entityplayer.openGui(Steamcraft.instance, 2,world, j,k, k);
 		}
         return true;
     }
@@ -102,11 +102,11 @@ public class BlockNukeFurnace extends BlockFurnace
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.ghast.fireball", 1.0F, 0.8F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F);
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.zombiepig.zpigdeath", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.6F);
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "fire.ignite", 1.5F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlock(i, j, k, mod_Steamcraft.nukeOvenActive.blockID);
+            world.setBlock(i, j, k, Steamcraft.nukeOvenActive.blockID);
         } else
         {
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "ambient.cave.cave", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlock(i, j, k, mod_Steamcraft.nukeOvenIdle.blockID);
+            world.setBlock(i, j, k, Steamcraft.nukeOvenIdle.blockID);
         }
 		keepFurnaceInventory = false;
         world.setBlockMetadataWithNotify(i, j, k, l, 3);
@@ -139,7 +139,7 @@ public class BlockNukeFurnace extends BlockFurnace
     }
 	public static void meltdown(World world, int i, int j, int k){
 		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
-		ModLoader.getMinecraftInstance().thePlayer.triggerAchievement(mod_Steamcraft.ach_RuinedEverything);
+		ModLoader.getMinecraftInstance().thePlayer.triggerAchievement(Steamcraft.ach_RuinedEverything);
 		world.createExplosion(null, i, j, k, 25F,false);
 	    double d = (double)((float)i + 0.5F) + (double)(0.5F) * 2.0000000000000001D;
 	    double d1 = (double)((float)j + 0.7F) + (double)(0.5F) * 2.0000000000000001D;
