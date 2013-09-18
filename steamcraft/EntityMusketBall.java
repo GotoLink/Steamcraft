@@ -35,17 +35,7 @@ public class EntityMusketBall extends Entity
 
     public EntityMusketBall(World world, double d, double d1, double d2)
     {
-        super(world);
-        xTile = -1;
-        yTile = -1;
-        zTile = -1;
-        inTile = 0;
-		damagePower = 4;
-        inData = 0;
-        doesArrowBelongToPlayer = false;
-        arrowShake = 0;
-        ticksInAir = 0;
-        setSize(0.5F, 0.5F);
+        this(world);
         setPosition(d, d1, d2);
         yOffset = 0.0F;
     }

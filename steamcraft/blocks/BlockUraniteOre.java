@@ -2,6 +2,9 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -55,6 +58,7 @@ public class BlockUraniteOre extends Block
         return 1;
     }
     @Override
+    @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
         func_319_i(world, i, j, k);
@@ -98,8 +102,5 @@ public class BlockUraniteOre extends Block
                 world.spawnParticle("reddust", d1, d2, d3, -1.0D, 1.0D, -1.0D);
             }
         }
-
     }
-
-    private boolean glowing;
 }

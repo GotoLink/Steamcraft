@@ -11,7 +11,8 @@ import steamcraft.Steamcraft;
 
 public class BlockSCTeaPlant extends BlockCrops
 {
-    private Icon[] icons;
+    public static int modelID;
+	private Icon[] icons;
 	public BlockSCTeaPlant(int i)
     {
         super(i);
@@ -35,7 +36,7 @@ public class BlockSCTeaPlant extends BlockCrops
     @Override
 	public int getRenderType()
     {
-        return ClientProxy.TeaPlantModelID;
+        return modelID;
     }
     @Override
     protected int getSeedItem()

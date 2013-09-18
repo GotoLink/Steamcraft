@@ -13,7 +13,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenHighwaymanHideout extends WorldGenerator
 {
-
     public WorldGenHighwaymanHideout()
     {
     }
@@ -237,7 +236,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
 
     private String pickMobSpawner(Random random)
     {
-            return "Highwayman";
+        return "Highwayman";
     }
 	private int randomBlockType = 0;
 }

@@ -13,8 +13,6 @@ public class ItemSCTool extends ItemTool
     protected ItemSCTool(int i, int j, EnumToolMaterial enumtoolmaterial, Block ablock[])
     {
         super(i, j, enumtoolmaterial, ablock);
-        blocksEffectiveAgainst = ablock;
-        efficiencyOnProperMaterial = enumtoolmaterial.getEfficiencyOnProperMaterial();
     }
     @Override
     public float getStrVsBlock(ItemStack itemstack, Block block)
@@ -32,15 +30,6 @@ public class ItemSCTool extends ItemTool
         return 1.0F;
     }
 	@Override
-    public boolean onBlockDestroyed(ItemStack itemstack,World world, int i, int j, int k, int l, EntityLivingBase entityliving)
-    {
-		if(toolMaterial == Steamcraft.STEAM){
-    	   //System.out.println(efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
-		}
-		itemstack.damageItem(1, entityliving);
-        return true;
-    }
-	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
 	{
 		if(toolMaterial == Steamcraft.STEAM){
@@ -48,6 +37,4 @@ public class ItemSCTool extends ItemTool
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);
 	}
-
-    private Block blocksEffectiveAgainst[];
 }

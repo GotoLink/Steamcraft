@@ -16,10 +16,10 @@ public class ItemCoreDrill extends Item
     @Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10)
     {
-		world.createExplosion(null, i, j, k, 2F, false);
-        double d = (double)((float)i + 0.5F) + (double)(0.5F) * 2.0000000000000001D;
-        double d1 = (double)((float)j + 0.7F) + (double)(0.5F) * 2.0000000000000001D;
-        double d2 = (double)((float)k + 0.5F) + (double)(0.5F) * 2.0000000000000001D;
+		world.createExplosion(null, i, j, k, 2F, true);
+        double d = (double)((float)i + 0.5F) + (double)(0.5F) * 2D;
+        double d1 = (double)((float)j + 0.7F) + (double)(0.5F) * 2D;
+        double d2 = (double)((float)k + 0.5F) + (double)(0.5F) * 2D;
 		world.spawnParticle("smoke", d, d1, d2, 0.0D, 10.0D, 0.0D);
 		itemstack.damageItem(1, entityplayer);
 		return true;
