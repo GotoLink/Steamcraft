@@ -7,7 +7,7 @@ import steamcraft.blocks.BlockNukeFurnace;
 
 public class TileEntityNukeFurnace extends TileEntityFurnace
 {
-	private int furnaceHeat;
+	public int furnaceHeat;
     public TileEntityNukeFurnace()
     {
     	setGuiDisplayName("Nuclear Reactor");

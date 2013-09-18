@@ -20,8 +20,7 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer
 		lampModelSide = new ModelLampSide();
     }
 
-    public void renderTileEntityLampAt(TileEntityLamp tileentitylamp, double d, double d1, double d2, 
-            float f)
+    public void renderTileEntityLampAt(TileEntityLamp tileentitylamp, double d, double d1, double d2, float f)
     {
         Block block = tileentitylamp.getBlockType();
         GL11.glPushMatrix();
@@ -90,8 +89,7 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer
         GL11.glPopMatrix();
     }
 
-    public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, 
-            float f)
+    public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f)
     {
         renderTileEntityLampAt((TileEntityLamp)tileentity, d, d1, d2, f);
     }

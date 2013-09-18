@@ -48,25 +48,24 @@ public class ContainerChemFurnace extends Container
             if(cookTime != furnace.furnaceCookTime)
             {
                 icrafting.sendProgressBarUpdate(this, 0, furnace.furnaceCookTime);
+                cookTime = furnace.furnaceCookTime;
             }
             if(burnTime != furnace.furnaceBurnTime)
             {
                 icrafting.sendProgressBarUpdate(this, 1, furnace.furnaceBurnTime);
+                burnTime = furnace.furnaceBurnTime;
             }
             if(itemBurnTimea != furnace.currentItemBurnTimea)
             {
                 icrafting.sendProgressBarUpdate(this, 2, furnace.currentItemBurnTimea);
+                itemBurnTimea = furnace.currentItemBurnTimea;
             } 
 			if(itemBurnTimeb != furnace.currentItemBurnTimeb)
             {
                 icrafting.sendProgressBarUpdate(this, 3, furnace.currentItemBurnTimeb);
+        		itemBurnTimeb = furnace.currentItemBurnTimeb;
             }
         }
-
-        cookTime = furnace.furnaceCookTime;
-        burnTime = furnace.furnaceBurnTime;
-        itemBurnTimea = furnace.currentItemBurnTimea;
-		itemBurnTimeb = furnace.currentItemBurnTimeb;
     }
 
     @SideOnly(Side.CLIENT)

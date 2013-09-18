@@ -45,20 +45,24 @@ public class ContainerNukeFurnace extends Container
             if(cookTime != furnace.furnaceCookTime)
             {
                 icrafting.sendProgressBarUpdate(this, 0, furnace.furnaceCookTime);
+                cookTime = furnace.furnaceCookTime;
             }
             if(burnTime != furnace.furnaceBurnTime)
             {
                 icrafting.sendProgressBarUpdate(this, 1, furnace.furnaceBurnTime);
+                burnTime = furnace.furnaceBurnTime;
             }
             if(itemBurnTime != furnace.currentItemBurnTime)
             {
                 icrafting.sendProgressBarUpdate(this, 2, furnace.currentItemBurnTime);
+                itemBurnTime = furnace.currentItemBurnTime;
+            }
+            if(heat != furnace.getHeat())
+            {
+                icrafting.sendProgressBarUpdate(this, 3, furnace.getHeat());
+                heat = furnace.getHeat();
             }
         }
-
-        cookTime = furnace.furnaceCookTime;
-        burnTime = furnace.furnaceBurnTime;
-        itemBurnTime = furnace.currentItemBurnTime;
     }
     @Override
     @SideOnly(Side.CLIENT)
@@ -76,6 +80,10 @@ public class ContainerNukeFurnace extends Container
         {
             furnace.currentItemBurnTime = j;
         }
+        if(i == 3)
+		{
+			furnace.furnaceHeat = j;
+		}
     }
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer)
@@ -128,4 +136,5 @@ public class ContainerNukeFurnace extends Container
     private int cookTime;
     private int burnTime;
     private int itemBurnTime;
+    private int heat;
 }

@@ -1,12 +1,13 @@
 package steamcraft.blocks;
 
+import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import steamcraft.Steamcraft;
 
@@ -40,7 +41,7 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
         return -1;
     }
 	@Override
-	public boolean hasTileEntity()
+	public boolean hasTileEntity(int meta)
 	{
 		return true;
 	}
@@ -56,65 +57,49 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
             throw new RuntimeException(exception);
         }
     }
-
-    private boolean isPowering(World world, int i, int j, int k)
-    {
-		int i1;
-		int i2;
-		int j1;
-		int k1;
-		int k2;
-		for(int l = 0; l < 9; l ++){
-        i1 = world.getBlockMetadata(i+l, j, k);
-		i2 = world.getBlockMetadata(i-l, j, k);
-		j1 = world.getBlockMetadata(i, j-l, k);
-		k1 = world.getBlockMetadata(i, j, k+l);
-		k2 = world.getBlockMetadata(i, j, k-l);
-        if(j1 == 5 && world.getBlockId(i,j-l,k) == Steamcraft.torchTeslaActive.blockID)
-        {
-            return true;
-        }
-        if(k2 == 3 && world.getBlockId(i,j,k-l) == Steamcraft.torchTeslaActive.blockID)
-        {
-            return true;
-        }
-        if(k1 == 4 && world.getBlockId(i,j,k+l) == Steamcraft.torchTeslaActive.blockID)
-        {
-            return true;
-        }
-        if(i2 == 1 && world.getBlockId(i-l,j,k) == Steamcraft.torchTeslaActive.blockID)
-        {
-            return true;
-        }
-        if(i1 == 2 && world.getBlockId(i+l,j,k) == Steamcraft.torchTeslaActive.blockID)
-		{
-			return true;
-		}
-		}
-		return false;
-    }
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-		super.updateTick(world, i, j, k, random);
-        if(world.getBlockMetadata(i, j, k) == 0)
+    	boolean flag = this.isIndirectlyPowered(world, i, j, k);
+        List list = (List)redstoneUpdateInfoCache.get(world);
+
+        while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
         {
-            onBlockAdded(world, i, j, k);
+            list.remove(0);
         }
-        boolean flag = isPowering(world, i, j, k);
         if(!torchActive)
         {
             if(flag)
             {
-                world.setBlock(i, j, k, Steamcraft.wirelessLampActive.blockID, world.getBlockMetadata(i, j, k), 2);
+                world.setBlock(i, j, k, getActiveBlock(), world.getBlockMetadata(i, j, k), 2);
+                if (this.checkForBurnout(world, i, j, k, true))
+                {
+                    world.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+
+                    for (int l = 0; l < 5; ++l)
+                    {
+                        double d0 = (double)i + random.nextDouble() * 0.6D + 0.2D;
+                        double d1 = (double)j + random.nextDouble() * 0.6D + 0.2D;
+                        double d2 = (double)k + random.nextDouble() * 0.6D + 0.2D;
+                        world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                    }
+                }
             }
-        } else
-			if(!flag)
-			{
-				world.setBlock(i, j, k, Steamcraft.wirelessLampIdle.blockID, world.getBlockMetadata(i, j, k), 2);
-			}
+        } 
+        else if(!flag)
+		{
+			world.setBlock(i, j, k, getIdleBlock(), world.getBlockMetadata(i, j, k), 2);
+		}
     }
-    @Override
+    protected int getIdleBlock() 
+    {
+		return Steamcraft.wirelessLampIdle.blockID;
+	}
+	protected int getActiveBlock() 
+	{
+		return Steamcraft.wirelessLampActive.blockID;
+	}
+	@Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
 		super.onNeighborBlockChange(world, i, j, k, l);
@@ -129,6 +114,15 @@ public class BlockWirelessLamp extends BlockRedstoneTorch
     public boolean canProvidePower()
     {
         return false;
+    }
+	@Override
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l)
+    {
+		if(!torchActive)
+        {
+            return 0;
+        }
+		return 15;
     }
 	@Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)

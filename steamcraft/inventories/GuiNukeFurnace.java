@@ -35,7 +35,7 @@ public class GuiNukeFurnace extends GuiContainer
         int i1 = furnaceInventory.getCookProgressScaled(24);
         drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 14, i1 + 1, 16);
 		int i2 = furnaceInventory.getHeatScaled(54);
-        drawTexturedModalRect(j + 37, guiTop + 16 + 54 - i2, 176, 31 + 54 - i2, 8, i2);
+        drawTexturedModalRect(guiLeft + 37, guiTop + 16 + 54 - i2, 176, 31 + 54 - i2, 8, i2);
     }
 
     private TileEntityNukeFurnace furnaceInventory;

@@ -15,8 +15,8 @@ public class RenderTeaPlant extends RenderBlocks
 
     public boolean renderBlockTeaPlant(Block block, int i, int j, int k, IBlockAccess blockaccess)
     {
-       Tessellator tessellator = Tessellator.instance;
-       tessellator.setBrightness(block.getMixedBrightnessForBlock(blockaccess, i, j, k));
+    	Tessellator tessellator = Tessellator.instance;
+    	tessellator.setBrightness(block.getMixedBrightnessForBlock(blockaccess, i, j, k));
         float f = 1.0F;
         int l = block.colorMultiplier(blockaccess, i, j, k);
         float f1 = (float)(l >> 16 & 0xff) / 255F;

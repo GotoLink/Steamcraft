@@ -49,25 +49,24 @@ public class ContainerSteamFurnace extends Container
             if(cookTime != furnace.furnaceCookTime)
             {
                 icrafting.sendProgressBarUpdate(this, 0, furnace.furnaceCookTime);
+                cookTime = furnace.furnaceCookTime;
             }
             if(burnTime != furnace.furnaceBurnTime)
             {
                 icrafting.sendProgressBarUpdate(this, 1, furnace.furnaceBurnTime);
+                burnTime = furnace.furnaceBurnTime;
             }
             if(itemBurnTime != furnace.currentItemBurnTime)
             {
                 icrafting.sendProgressBarUpdate(this, 2, furnace.currentItemBurnTime);
+                itemBurnTime = furnace.currentItemBurnTime;
             }
-			if(waterLevel != furnace.waterLevel)
+			if(waterLevel != furnace.getWater())
             {
-                icrafting.sendProgressBarUpdate(this, 3, furnace.waterLevel);
+                icrafting.sendProgressBarUpdate(this, 3, furnace.getWater());
+        		waterLevel = furnace.getWater();
             }
         }
-
-        cookTime = furnace.furnaceCookTime;
-        burnTime = furnace.furnaceBurnTime;
-        itemBurnTime = furnace.currentItemBurnTime;
-		waterLevel = furnace.waterLevel;
     }
     @Override
     @SideOnly(Side.CLIENT)

@@ -17,6 +17,8 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import steamcraft.blocks.BlockSCCopperWire;
+import steamcraft.blocks.BlockSCTeaPlant;
 import steamcraft.render.RenderCopperWire;
 import steamcraft.render.RenderHighwayman;
 import steamcraft.render.RenderMusketBall;
@@ -28,26 +30,24 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler{
 
-	public static int CopperModelID;
-	public static int TeaPlantModelID;
 	public static Minecraft minecraft = Minecraft.getMinecraft();
 	public void registerRenderers()
 	{
-		CopperModelID=RenderingRegistry.getNextAvailableRenderId();
-        RenderingRegistry.registerBlockHandler(CopperModelID,this);
-        TeaPlantModelID=RenderingRegistry.getNextAvailableRenderId();
-        RenderingRegistry.registerBlockHandler(TeaPlantModelID,this);
+		BlockSCCopperWire.modelID=RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(BlockSCCopperWire.modelID,this);
+        BlockSCTeaPlant.modelID=RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(BlockSCTeaPlant.modelID,this);
         RenderingRegistry.registerEntityRenderingHandler(EntityMusketBall.class, new RenderMusketBall());
         RenderingRegistry.registerEntityRenderingHandler(EntityHighwayman.class, new RenderHighwayman(new ModelBiped(), new ModelBiped(0.5F), 0.5F));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLamp.class, new TileEntityLampRenderer());
     }
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		if(modelId == CopperModelID)
+		if(modelId == BlockSCCopperWire.modelID)
         {
             return new RenderCopperWire().renderBlockCopperWire(block, x, y, z, world);
         }
-		if(modelId == TeaPlantModelID)
+		if(modelId == BlockSCTeaPlant.modelID)
         {
             return new RenderTeaPlant().renderBlockTeaPlant(block, x, y, z, world);
         }
