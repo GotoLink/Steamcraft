@@ -107,21 +107,12 @@ public class BlockTeslaReceiver extends Block
 	    world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
         super.breakBlock(world, i, j, k, par5, par6);
     }
-	
-	public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
+    @Override
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l)
     {
-        return iblockaccess.getBlockMetadata(i, j, k) == 2;
-    }
-
-    public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
-    {
-         if(l == 0)
-        {
-            return isPoweringTo(world, i, j, k, l);
-        } else
-        {
-            return false;
-        }
+		if(par1IBlockAccess.getBlockMetadata(i, j, k) == 2 && l == 0)
+			return 15;
+        return 0;
     }
     @Override
     public boolean canProvidePower()
@@ -176,107 +167,4 @@ public class BlockTeslaReceiver extends Block
         return (true);
         }
     }
-	
-	public int sideIndexInTexture;
 }
-
-
-
-/*
-public class BlockBattery extends Block
-{
-    protected BlockBattery(int i, int j)
-    {
-        super(i, j, Material.rock);
-        triggerMobType =  EnumMobType.everything;
-        setTickOnLoad(true);
-    }
-
-    public int tickRate()
-    {
-        return 1;
-    }
-
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    public boolean renderAsNormalBlock()
-    {
-        return true;
-    }
-
-    public void onBlockAdded(World world, int i, int j, int k)
-    {
-    }
-
-    public void onNeighborBlockChange(World world, int i, int j, int k, int l)
-    {
-        boolean flag = false;
-        if(!world.isBlockOpaqueCube(i, j - 1, k))
-        {
-            flag = true;
-        }
-        if(flag)
-        {
-            dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-            world.setBlockWithNotify(i, j, k, 0);
-        }
-    }
-
-    public void updateTick(World world, int i, int j, int k, Random random)
-    {
-            setStateIfMobInteractsWithPlate(world, i, j, k);
-            return;
-    }
-
-    public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)
-    {
-	setStateIfMobInteractsWithPlate(world, i, j, k);
-    return;
-    }
-
-    private void setStateIfMobInteractsWithPlate(World world, int i, int j, int k)
-    {
-            world.setBlockMetadataWithNotify(i, j, k, 1);
-            world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-            world.markBlocksDirty(i, j, k, i, j, k);
-            world.scheduleBlockUpdate(i, j, k, blockID, tickRate());
-    }
-
-    public void onBlockRemoval(World world, int i, int j, int k)
-    {
-        int l = world.getBlockMetadata(i, j, k);
-        if(l > 0)
-        {
-            world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-        }
-        super.onBlockRemoval(world, i, j, k);
-    }
-
-    public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
-    {
-        return iblockaccess.getBlockMetadata(i, j, k) > 0;
-    }
-
-    public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
-    {
-        if(world.getBlockMetadata(i, j, k) == 0)
-        {
-            return false;
-        } else
-        {
-            return l == 1;
-        }
-    }
-
-    public boolean canProvidePower()
-    {
-        return true;
-    }
-	
-    private EnumMobType triggerMobType;
-}*/

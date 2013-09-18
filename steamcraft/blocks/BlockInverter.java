@@ -1,12 +1,16 @@
 package steamcraft.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import steamcraft.Steamcraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockInverter extends BlockRedstoneTorch
 {
@@ -15,72 +19,34 @@ public class BlockInverter extends BlockRedstoneTorch
     {
         super(i,flag);
         torchActive = flag;
-        setTickRandomly(true);
     }
-
-    public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l)
+	@Override
+	@SideOnly(Side.CLIENT)
+    public Icon getIcon(int par1, int par2)
     {
-        if(!torchActive)
-        {
-            return false;
-        }
-        int i1 = iblockaccess.getBlockMetadata(i, j, k);
-        if(i1 == 5 && l == 1)
-        {
-            return false;
-        }
-        if(i1 == 3 && l == 3)
-        {
-            return false;
-        }
-        if(i1 == 4 && l == 2)
-        {
-            return false;
-        }
-        if(i1 == 1 && l == 5)
-        {
-            return false;
-        }
-        return i1 != 2 || l != 4;
+        return par1 == 0 ? (this.torchActive ? BlockDiode.iconInverterActive : BlockDiode.iconInverterIdle) : (par1 == 1 ? this.blockIcon : Block.stoneDoubleSlab.getBlockTextureFromSide(1));
     }
-
-    private boolean func_30002_h(World world, int i, int j, int k)
+	@Override
+	public int idDropped(int par1, Random par2Random, int par3)
     {
-        int l = world.getBlockMetadata(i, j, k);
-        if(l == 5 && world.getIndirectPowerOutput(i, j - 1, k, 0))
-        {
-            return true;
-        }
-        if(l == 3 && world.getIndirectPowerOutput(i, j, k - 1, 2))
-        {
-            return true;
-        }
-        if(l == 4 && world.getIndirectPowerOutput(i, j, k + 1, 3))
-        {
-            return true;
-        }
-        if(l == 1 && world.getIndirectPowerOutput(i - 1, j, k, 4))
-        {
-            return true;
-        }
-        return l == 2 && world.getIndirectPowerOutput(i + 1, j, k, 5);
+        return Steamcraft.torchRedstoneActive.blockID;
+    }
+	@Override
+	@SideOnly(Side.CLIENT)
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return Steamcraft.torchRedstoneActive.blockID;
+    }
+	@Override
+    public boolean isAssociatedBlockID(int par1)
+    {
+        return par1 == Steamcraft.torchRedstoneIdle.blockID || par1 == Steamcraft.torchRedstoneActive.blockID;
     }
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
         super.onNeighborBlockChange(world, i, j, k, l);
         world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
-    }
-
-    public boolean isIndirectlyPoweringTo(World world, int i, int j, int k, int l)
-    {
-        if(l == 0)
-        {
-            return isPoweringTo(world, i, j, k, l);
-        } else
-        {
-            return false;
-        }
     }
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -113,6 +79,42 @@ public class BlockInverter extends BlockRedstoneTorch
         } else
         {
             world.spawnParticle("reddust", d, d1, d2, -1.0D, 0.7D, 1.0D);
+        }
+    }
+    @Override
+    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    {
+        boolean flag = this.isIndirectlyPowered(par1World, par2, par3, par4);
+        List list = (List)redstoneUpdateInfoCache.get(par1World);
+
+        while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
+        {
+            list.remove(0);
+        }
+
+        if (this.torchActive)
+        {
+            if (flag)
+            {
+                par1World.setBlock(par2, par3, par4, Steamcraft.torchRedstoneIdle.blockID, par1World.getBlockMetadata(par2, par3, par4), 3);
+
+                if (this.checkForBurnout(par1World, par2, par3, par4, true))
+                {
+                    par1World.playSoundEffect((double)((float)par2 + 0.5F), (double)((float)par3 + 0.5F), (double)((float)par4 + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+
+                    for (int l = 0; l < 5; ++l)
+                    {
+                        double d0 = (double)par2 + par5Random.nextDouble() * 0.6D + 0.2D;
+                        double d1 = (double)par3 + par5Random.nextDouble() * 0.6D + 0.2D;
+                        double d2 = (double)par4 + par5Random.nextDouble() * 0.6D + 0.2D;
+                        par1World.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                    }
+                }
+            }
+        }
+        else if (!flag && !this.checkForBurnout(par1World, par2, par3, par4, false))
+        {
+            par1World.setBlock(par2, par3, par4, Steamcraft.torchRedstoneActive.blockID, par1World.getBlockMetadata(par2, par3, par4), 3);
         }
     }
 }

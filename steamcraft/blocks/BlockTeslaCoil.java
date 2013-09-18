@@ -1,9 +1,11 @@
 package steamcraft.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.Steamcraft;
@@ -109,7 +111,13 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-    	super.updateTick(world, i, j, k, random);
+    	boolean flag = this.isIndirectlyPowered(world, i, j, k);
+        List list = (List)redstoneUpdateInfoCache.get(world);
+
+        while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
+        {
+            list.remove(0);
+        }
         byte nnum = 1;
 
         if(torchActive)
@@ -183,7 +191,6 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 			}
 		}
 	
-        boolean flag =  this.isIndirectlyPowered(world, i, j, k);
         if(!torchActive)
         {
             if(flag)
