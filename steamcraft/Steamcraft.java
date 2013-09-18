@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockOreStorage;
 import net.minecraft.block.material.MapColor;
@@ -30,41 +31,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import steamcraft.blocks.BlockBattery;
-import steamcraft.blocks.BlockBrassLog;
-import steamcraft.blocks.BlockChemFurnace;
-import steamcraft.blocks.BlockDiode;
-import steamcraft.blocks.BlockElectricLamp;
-import steamcraft.blocks.BlockInverter;
-import steamcraft.blocks.BlockLamp;
-import steamcraft.blocks.BlockNukeFurnace;
-import steamcraft.blocks.BlockPoweredRail;
-import steamcraft.blocks.BlockRoof;
-import steamcraft.blocks.BlockSCCopperWire;
-import steamcraft.blocks.BlockSCFence;
-import steamcraft.blocks.BlockSCOre;
-import steamcraft.blocks.BlockSCStairs;
-import steamcraft.blocks.BlockSCTallGrass;
-import steamcraft.blocks.BlockSCTeaPlant;
-import steamcraft.blocks.BlockSteamFurnace;
-import steamcraft.blocks.BlockTeslaCoil;
-import steamcraft.blocks.BlockTeslaReceiver;
-import steamcraft.blocks.BlockTorchPhosphorus;
-import steamcraft.blocks.BlockUraniteOre;
-import steamcraft.blocks.BlockUranium;
-import steamcraft.blocks.BlockWirelessLamp;
-import steamcraft.items.ItemCoreDrill;
-import steamcraft.items.ItemElectricLamp;
-import steamcraft.items.ItemFirearm;
-import steamcraft.items.ItemKettle;
-import steamcraft.items.ItemSCArmor;
-import steamcraft.items.ItemSCAxe;
-import steamcraft.items.ItemSCDrill;
-import steamcraft.items.ItemSCHoe;
-import steamcraft.items.ItemSCPickaxe;
-import steamcraft.items.ItemSCSword;
-import steamcraft.items.ItemTeacup;
+import steamcraft.blocks.*;
+import steamcraft.items.*;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.IPickupNotifier;
@@ -82,6 +52,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+
 @Mod(modid="steamcraft",name="SteamCraft",version="alpha")
 @NetworkMod(clientSideRequired=true)
 public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenerator, IFuelHandler
@@ -106,10 +77,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static Block borniteOre,orePhosphate,oreUranite,oreQuartz,oreQuartzActive,oreVolucite;
 	public static Block brimstone;
 	
-	public static Block blockCastIron,blockVolucite,blockBrass,blockUranium;
-	
-	public static Block decorIron,decorGold,decorDiamond,decorCastIron,decorBrass;
-	public static Block decorVolucite,decorLapis,carvedStone,decorUranium;
+	public static Block decorBlock;
 	
 	public static Block railingCastIron,gateCastIron;
 	
@@ -119,7 +87,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	
 	public static Block stairRoof,roofTile;
 	
-	public static Block teaPlant,tallGrass;
+	public static Block teaPlant;
 	
 	public static Block redstoneWire,torchRedstoneIdle,torchRedstoneActive;
 	public static Block redstoneRepeaterIdle,redstoneRepeaterActive,railPowered;
@@ -163,10 +131,15 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static Material staticcircuit = new MaterialLogic(MapColor.airColor).setImmovableMobility();
 	private Logger logger;
 	
-	private Object[][] DrillRecipeItems,SpannerRecipeItems,StoreBlockRecipeItems;
-	private Object[][] DecorBlockRecipeItems,StairRecipeItems;
+	private Object[][] DrillRecipeItems,SpannerRecipeItems,
+						StoreBlockRecipeItems,DecorBlockRecipeItems;
+	private static final String[] decorBlockNames = {
+		"Block of Cast Iron","Block of Volucite","Block of Brass","Block of Uranium",
+		"Engraved Iron Block","Engraved Gold Block","Engraved Diamond Block",
+		"Engraved Cast Iron Block","Engraved Volucite Block","Engraved Brass Block",
+		"Engraved Lapis Lazuli Block","Carved Stone","Engraved Uranium Block"};
 	
-	public static String[] armorNames = {"etherium","brass","obsidian"};
+	public static final String[] armorNames = {"etherium","brass","obsidian"};
 	public static int[] armorIndexes = new int[armorNames.length];
 	public static Map armorMap = new HashMap();
 	public static Map<Object,Object[]> data = new HashMap();
@@ -185,20 +158,19 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		redstoneRepeaterIdle = new BlockDiode(config.getBlock("Repeater",2496).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:diodeidle").setTextureName("steamcraft:diodeidle").disableStats();
 		redstoneRepeaterActive = new BlockDiode(config.getBlock("RepeaterON",2497).getInt(),  true).setHardness(0.0F).setLightValue(0.625F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:diodeactive").setTextureName("steamcraft:diodeactive").disableStats();
 		railPowered = new BlockPoweredRail(config.getBlock("Rail",2498).getInt(),  true).setHardness(0.7F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:rail").setTextureName("steamcraft:rail");
-		tallGrass = new BlockSCTallGrass(config.getBlock("tallgrass",2499).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("tallgrass").setTextureName("tallgrass");
 		
 		torchElectricIdle = new BlockElectricLamp(config.getBlock("ElectricLamp",2500).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electricLamp").disableStats();
-		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electricLamp").disableStats();
+		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:electricLampOn").setTextureName("steamcraft:electricLamp").disableStats();
 		torchTeslaIdle = new BlockTeslaCoil(config.getBlock("TeslaCoil",2502).getInt(),  false).setHardness(0.0F).setUnlocalizedName("steamcraft:teslaCoil").setTextureName("steamcraft:teslaidle");
-		torchTeslaActive = new BlockTeslaCoil(config.getBlock("TeslaCoilON",2053).getInt(),  true).setHardness(0.0F).setLightValue(0.625F).setUnlocalizedName("steamcraft:teslaCoil").setTextureName("steamcraft:teslaactive");
+		torchTeslaActive = new BlockTeslaCoil(config.getBlock("TeslaCoilON",2053).getInt(),  true).setHardness(0.0F).setLightValue(0.625F).setUnlocalizedName("steamcraft:teslaCoilOn").setTextureName("steamcraft:teslaactive");
 		teslaReceiver = new BlockTeslaReceiver(config.getBlock("Receiver",2504).getInt()).setHardness(0.5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:receiver").setTextureName("steamcraft:receiver");
-		teslaReceiverActive = new BlockTeslaReceiver(config.getBlock("ReceiverON",2506).getInt()).setHardness(0.5F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:receiver").setTextureName("steamcraft:receiveractive");
+		teslaReceiverActive = new BlockTeslaReceiver(config.getBlock("ReceiverON",2506).getInt()).setHardness(0.5F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:receiverOn").setTextureName("steamcraft:receiveractive");
 		steamOvenIdle = new BlockSteamFurnace(config.getBlock("SteamFurnace",2507).getInt(),false).setHardness(4F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:steamFurnace").setTextureName("steamcraft:steamfurnaceidle");
-		steamOvenActive = new BlockSteamFurnace(config.getBlock("SteamFurnaceON",2508).getInt(), true).setHardness(4F).setStepSound(Block.soundMetalFootstep).setLightValue(0.875F).setUnlocalizedName("steamcraft:steamFurnace").setTextureName("steamcraft:steamfurnaceactive");
+		steamOvenActive = new BlockSteamFurnace(config.getBlock("SteamFurnaceON",2508).getInt(), true).setHardness(4F).setStepSound(Block.soundMetalFootstep).setLightValue(0.875F).setUnlocalizedName("steamcraft:steamFurnaceOn").setTextureName("steamcraft:steamfurnaceactive");
 		chemOvenIdle = new BlockChemFurnace(config.getBlock("ChemicalFurnace",2509).getInt(), false).setHardness(4.5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:chemFurnace").setTextureName("steamcraft:chemfurnaceidle");
-		chemOvenActive = new BlockChemFurnace(config.getBlock("ChemicalFurnaceON",2510).getInt(), true).setHardness(4.5F).setStepSound(Block.soundMetalFootstep).setLightValue(0.875F).setUnlocalizedName("steamcraft:chemFurnace").setTextureName("steamcraft:chemfurnaceactive");
+		chemOvenActive = new BlockChemFurnace(config.getBlock("ChemicalFurnaceON",2510).getInt(), true).setHardness(4.5F).setStepSound(Block.soundMetalFootstep).setLightValue(0.875F).setUnlocalizedName("steamcraft:chemFurnaceOn").setTextureName("steamcraft:chemfurnaceactive");
 		nukeOvenIdle = new BlockNukeFurnace(config.getBlock("NuclearFurnace",2511).getInt(),  false).setHardness(5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:nukeFurnace").setTextureName("steamcraft:nukefurnaceidle");
-		nukeOvenActive = new BlockNukeFurnace(config.getBlock("NuclearFurnaceON",2512).getInt(),  true).setHardness(5F).setStepSound(Block.soundMetalFootstep).setLightValue(0.9375F).setUnlocalizedName("steamcraft:nukeFurnace").setTextureName("steamcraft:nukefurnaceactive");
+		nukeOvenActive = new BlockNukeFurnace(config.getBlock("NuclearFurnaceON",2512).getInt(),  true).setHardness(5F).setStepSound(Block.soundMetalFootstep).setLightValue(0.9375F).setUnlocalizedName("steamcraft:nukeFurnaceOn").setTextureName("steamcraft:nukefurnaceactive");
 		battery = new BlockBattery(config.getBlock("Battery",2513).getInt()).setHardness(0.5F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:battery").setTextureName("steamcraft:battery");
 		brimstone = new BlockOre(config.getBlock("BrimstoneOre",2514).getInt()).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:brimstone").setTextureName("steamcraft:brimstone");
 		orePhosphate = new BlockOre(config.getBlock("PhosphateOre",2515).getInt()).setHardness(2.5F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setLightValue(0.75F).setUnlocalizedName("steamcraft:orePhosphate").setTextureName("steamcraft:phosphate");
@@ -208,35 +180,22 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		torchPhosphorus = new BlockTorchPhosphorus(config.getBlock("PhosphorusTorch",2519).getInt()).setHardness(0.0F).setLightValue(1.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:torchPhosphorus").setTextureName("steamcraft:torchphosphorus");
 		roofTile = new BlockRoof(config.getBlock("SlateTiles",2520).getInt()).setHardness(2F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:roofTile").setTextureName("steamcraft:slatetiles");
 		
-		blockCastIron = new BlockOreStorage(config.getBlock("CastIronBlock",2521).getInt()).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:blockCastIron").setTextureName("steamcraft:castironblock");
-		blockVolucite = new BlockOreStorage(config.getBlock("VoluciteBlock",2522).getInt()).setHardness(50F).setResistance(6000000F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:blockVolucite").setTextureName("steamcraft:voluciteblock");
-		blockBrass = new BlockOreStorage(config.getBlock("BrassBlock",2523).getInt()).setHardness(5F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:blockBrass").setTextureName("steamcraft:brassblock");
-		blockUranium = new BlockUranium(config.getBlock("UraniumBlock",2525).getInt()).setHardness(10F).setResistance(6F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:blockUranium").setTextureName("steamcraft:uraniumblock");
+		decorBlock = new BlockDecor(config.getBlock("CarvedBlock", 2521).getInt());
 		
-		decorIron = new BlockOreStorage(config.getBlock("EngrIron",2526).getInt()).setHardness(5F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorIron").setTextureName("steamcraft:engriron");
-		decorGold = new BlockOreStorage(config.getBlock("EngrGold",2527).getInt()).setHardness(3F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorGold").setTextureName("steamcraft:engrgold");
-		decorDiamond = new BlockOreStorage(config.getBlock("EngrDiamond",2528).getInt()).setHardness(5F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorDiamond").setTextureName("steamcraft:engrdiamond");
-		decorCastIron = new BlockOreStorage(config.getBlock("EngrCastIron",2529).getInt()).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorCastIron").setTextureName("steamcraft:engrcastiron");
-		decorVolucite = new BlockOreStorage(config.getBlock("EngrVolucite",2530).getInt()).setHardness(50F).setResistance(6000000F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorVolucite").setTextureName("steamcraft:engrvolucite");
-		decorBrass = new BlockOreStorage(config.getBlock("EngrBrass",2531).getInt()).setHardness(5F).setResistance(10F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorBrass").setTextureName("steamcraft:engrbrass");
-		decorLapis = new BlockOreStorage(config.getBlock("EngrLapis",2532).getInt()).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:decorLapis").setTextureName("steamcraft:engrlapis");
-		carvedStone = new Block(config.getBlock("CarvedStone",2533).getInt(), Material.rock).setHardness(2F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:stoneWall").setTextureName("steamcraft:carvedstone");
-		decorUranium = new BlockUranium(config.getBlock("EngrUranium",2535).getInt()).setHardness(10F).setResistance(6F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:decorUranium").setTextureName("steamcraft:engruranium");
-		
-		gateCastIron = new BlockFenceGate(config.getBlock("CastIronGate",2536).getInt() ).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:gateCastIron").setTextureName("steamcraft:castironblock");
+		gateCastIron = new BlockSCFenceGate(config.getBlock("CastIronGate",2536).getInt() ).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:gateCastIron").setTextureName("steamcraft:castironblock");
 		railingCastIron = new BlockSCFence(config.getBlock("CastIronRailing",2537).getInt(),  Material.iron, Steamcraft.gateCastIron, true).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:railingCastIron").setTextureName("steamcraft:castironblock");
 		
-		lamp = new BlockLamp(config.getBlock("LampBlock",2538).getInt(),  Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(1.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
+		lamp = new BlockLamp(config.getBlock("LampBlock",2538).getInt(),  Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(1.0F).setUnlocalizedName("steamcraft:lampOn").setTextureName("steamcraft:lampblock");
 		lampoff = new BlockLamp(config.getBlock("LampBlockOFF",2539).getInt() , Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(0.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
 		woodBrass = new BlockBrassLog(config.getBlock("BrassLog",2540).getInt()).setHardness(5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:logBrass").setTextureName("steamcraft:brasslog");
 		leavesLamp = new Block(config.getBlock("BrassLeaves",2541).getInt(), Material.wood).setHardness(2F).setLightOpacity(1).setLightValue(0.9375F).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("steamcraft:leavesLamp").setTextureName("steamcraft:brassleaves");
 		wirelessLampIdle = new BlockWirelessLamp(config.getBlock("WirelessLamp",2542).getInt() , TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:wirelesslamp");
-		wirelessLampActive = new BlockWirelessLamp(config.getBlock("WirelessLampON",2543).getInt() , TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:wirelesslamp");
+		wirelessLampActive = new BlockWirelessLamp(config.getBlock("WirelessLampON",2543).getInt() , TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F).setUnlocalizedName("steamcraft:wirelessLampOn").disableStats().setTextureName("steamcraft:wirelesslamp");
 		
 		stairRoof = new BlockSCStairs(config.getBlock("SlateStairs",2545).getInt(),roofTile,0, Item.flint.itemID, 2).setUnlocalizedName("steamcraft:stairsRoof").setTextureName("steamcraft:slatetiles");
 		
 		teaPlant = new BlockSCTeaPlant(config.getBlock("TeaPlant",2546).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("steamcraft:teaplant").disableStats().setTextureName("steamcraft:teaplant");
-		
+				
 		etherium = new Item(config.getItem("Etherium",25000).getInt()).setUnlocalizedName("steamcraft:etherium").setTextureName("steamcraft:etherium");
 		chemicSalt = new Item(config.getItem("Sulphur",25001).getInt()).setUnlocalizedName("steamcraft:chemicSalt").setTextureName("steamcraft:sulphur");
 		bornite = new Item(config.getItem("Copper",25002).getInt()).setUnlocalizedName("steamcraft:bornite").setTextureName("steamcraft:copper");
@@ -256,6 +215,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
 		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
 		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
+		
 		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
 		
 		for(int i =0; i<armorNames.length; i++)
@@ -377,19 +337,6 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		data.put(emptyTeacup, new Object[]{"Teacup"});
 		data.put(fullTeacup, new Object[]{"Cup of Tea"});
 		data.put(emptyKettle, new Object[]{"Empty Kettle"});
-		data.put(blockCastIron, new Object[]{"Block of Cast Iron"});
-		data.put(blockVolucite, new Object[]{"Block of Volucite"});
-		data.put(blockBrass, new Object[]{"Block of Brass"});
-		data.put(blockUranium, new Object[]{"Block of Uranium"});
-		data.put(decorIron, new Object[]{"Engraved Iron Block"});
-		data.put(decorGold, new Object[]{"Engraved Gold Block"});
-		data.put(decorDiamond, new Object[]{"Engraved Diamond Block"});
-		data.put(decorCastIron, new Object[]{"Engraved Cast Iron Block"});
-		data.put(decorVolucite, new Object[]{"Engraved Volucite Block"});
-		data.put(decorBrass, new Object[]{"Engraved Brass Block"});
-		data.put(decorLapis, new Object[]{"Engraved Lapis Lazuli Block"});
-		data.put(carvedStone, new Object[]{"Carved Stone"});
-		data.put(decorUranium, new Object[]{"Engraved Uranium Block"});
 		data.put(lamp, new Object[]{"Lamp Block Active"});
 		data.put(lampoff, new Object[]{"Lamp Block"});
 		data.put(woodBrass, new Object[]{"Brass Log"});
@@ -463,12 +410,46 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 			LanguageRegistry.addName(obj,(String) data.get(obj)[0]);
 			if(obj instanceof Block)
 			{
-				if(!((String)data.get(obj)[0]).toLowerCase().contains("active"))
+				if(!((String)data.get(obj)[0]).toLowerCase().contains("active")||obj instanceof BlockInverter)
 					((Block) obj).setCreativeTab(steamTab);
 				GameRegistry.registerBlock((Block) obj,(String) data.get(obj)[0]);
 			}
 		}
-
+		MinecraftForge.setToolClass(drillWood, "drill", 0);
+		MinecraftForge.setToolClass(drillStone, "drill", 1);
+		MinecraftForge.setToolClass(drillSteel, "drill", 2);
+		MinecraftForge.setToolClass(drillDiamond, "drill", 3);
+		MinecraftForge.setToolClass(drillObsidian, "drill", 5);
+		MinecraftForge.setToolClass(drillEtherium, "drill", 6);
+		MinecraftForge.setToolClass(drillSteam, "drill", 7);
+		MinecraftForge.setToolClass(drillGold, "drill", 0);
+		MinecraftForge.setToolClass(pickaxeObsidian, "pickaxe", 5);
+		MinecraftForge.setToolClass(pickaxeEtherium, "pickaxe", 6);
+		MinecraftForge.setToolClass(pickaxeSteam, "pickaxe", 7);
+		MinecraftForge.setToolClass(axeObsidian, "axe", 5);
+		MinecraftForge.setToolClass(axeEtherium, "axe", 6);
+		MinecraftForge.setToolClass(axeSteam, "axe", 7);
+		MinecraftForge.setToolClass(shovelObsidian, "shovel", 5);
+		MinecraftForge.setToolClass(shovelEtherium, "shovel", 6);
+		MinecraftForge.setToolClass(shovelSteam, "shovel", 7);
+		String[] toolsets={"pickaxe","drill"};
+		GameRegistry.registerBlock(decorBlock,ItemBlockDecor.class,"steamcraft:decor");
+		for (int ix = 0; ix < BlockDecor.names.length; ix++) {
+			ItemStack stack = new ItemStack(decorBlock, 1, ix);
+			LanguageRegistry.addName(stack, decorBlockNames [stack.getItemDamage()]);
+			for(String tool:toolsets)
+				MinecraftForge.setBlockHarvestLevel(decorBlock, ix, tool, 2);
+		}
+		for(String tool:toolsets){
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 0, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 4, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 7, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 10, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 1, tool, 5);
+			MinecraftForge.setBlockHarvestLevel(decorBlock, 8, tool, 5);
+		}
+		MinecraftForge.addGrassSeed(new ItemStack(teaSeed), 5);
+		
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
 		EntityRegistry.registerModEntity(EntityHighwayman.class, "Highwayman", 2, this, 120, 1, true);
 		
@@ -534,10 +515,10 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addRecipe(new ItemStack(lamp), new Object[] {
             "#X#", "XIX", "#X#", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.glowstone
         });
-	/*	ModLoader.AddRecipe(new ItemStack(woodBrass, 4), new Object[] {
+	/*	GameRegistry.addRecipe(new ItemStack(woodBrass, 4), new Object[] {
             "###", "#I#", "###", Character.valueOf('#'), ingotBrass, Character.valueOf('I'), Block.wood
         });
-		ModLoader.AddRecipe(new ItemStack(leavesLamp, 4), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(leavesLamp, 4), new Object[] {
             "#X#", "XIX", "#X#", Character.valueOf('#'), ingotBrass, Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.lightStoneDust
         });*/
 		GameRegistry.addRecipe(new ItemStack(wirelessLamp, 1), new Object[] {
@@ -800,85 +781,59 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		StoreBlockRecipeItems = (new Object[][] {
             new Object[] {
-                blockCastIron, new ItemStack(ingotCastIron, 9)
+                new ItemStack(decorBlock,1,0), new ItemStack(ingotCastIron, 9)
             }, new Object[] {
-                blockVolucite, new ItemStack(etherium, 9)
+        		new ItemStack(decorBlock,1,1), new ItemStack(etherium, 9)
             }, new Object[] {
-                blockBrass, new ItemStack(ingotBrass, 9)
+        		new ItemStack(decorBlock,1,2), new ItemStack(ingotBrass, 9)
             }, new Object[] {
-                blockUranium, new ItemStack(uraniumStone, 9)
+        		new ItemStack(decorBlock,1,3), new ItemStack(uraniumStone, 9)
             }
         });
 		
 		DecorBlockRecipeItems = (new Object[][] {
+             new Object[] {
+            		 new ItemStack(decorBlock,1,4), new ItemStack(Block.blockIron)
+            },
             new Object[] {
-               decorGold, new ItemStack(Block.blockGold)
+            		 new ItemStack(decorBlock,1,5), new ItemStack(Block.blockGold)
+             }, new Object[] {
+            		 new ItemStack(decorBlock,1,6), new ItemStack(Block.blockDiamond)
             }, new Object[] {
-               decorIron, new ItemStack(Block.blockIron)
+            		 new ItemStack(decorBlock,1,7), new ItemStack(decorBlock,1,0)
             }, new Object[] {
-                decorDiamond, new ItemStack(Block.blockDiamond)
+            		 new ItemStack(decorBlock,1,8), new ItemStack(decorBlock,1,1)
             }, new Object[] {
-                decorCastIron, new ItemStack(blockCastIron)
+            		 new ItemStack(decorBlock,1,9), new ItemStack(decorBlock,1,2)
             }, new Object[] {
-                decorVolucite, new ItemStack(blockVolucite)
+            		 new ItemStack(decorBlock,1,10), new ItemStack(Block.blockLapis)
             }, new Object[] {
-                decorBrass, new ItemStack(blockBrass)
+            		 new ItemStack(decorBlock,1,11), new ItemStack(Block.stone)
             }, new Object[] {
-                decorLapis, new ItemStack(Block.blockLapis)
-            }, new Object[] {
-               carvedStone, new ItemStack(Block.stone)
-            }, new Object[] {
-                decorUranium, new ItemStack(blockUranium)
+            		 new ItemStack(decorBlock,1,12), new ItemStack(decorBlock,1,3)
             }
         });
 		
-		StairRecipeItems = (new Object[][] {
-            new Object[] {
-               new ItemStack(Item.flint), stairRoof
-            }
-        });
-		
+		GameRegistry.addRecipe(new ItemStack(stairRoof,3), new Object[] {
+            "#  ", "## ", "###", Character.valueOf('#'), Item.flint
+				});
 		addSpannerRecipes();
 		addStorageBlockRecipes();
 		addDecorBlockRecipes();
-		addStairRecipes();
-		
-		//ItemPickaxe.addSteamcraftBlocks();
-		ItemSCPickaxe.addSteamcraftBlocks();
-		ItemSCDrill.addSteamcraftBlocks();
 		
 		//EntityHighwayman.setHeldItem(flintlockMusket, flintlockRifle, matchlockMusket, matchlockRifle, percussionCapMusket, percussionCapRifle);
 		if(event.getSide()==Side.CLIENT)
 			addAchievements();
-}
-
-	
-
- /*public void AddRecipes(CraftingManager craftingmanager)
-        {
-                craftingmanager.addRecipe(new ItemStack(obsidianSlate, 1), new Object[]{
-                                  "#", Character.valueOf('#'), Block.obsidian
-        });
-  }*/
-    
-	private void addStairRecipes(){
-		for(int i = 0; i < StairRecipeItems.length; i++){
-			Block block = (Block)StairRecipeItems[i][1];
-            ItemStack itemstack = (ItemStack)StairRecipeItems[i][0];
-            GameRegistry.addRecipe(new ItemStack(block,3), new Object[] {
-            "#  ", "## ", "###", Character.valueOf('#'), itemstack
-				});
-			}
-		}
+	}
   
 	private void addDecorBlockRecipes(){
 		for(int i = 0; i < DecorBlockRecipeItems.length; i++){
-			Block block = (Block)DecorBlockRecipeItems[i][0];
+			ItemStack block = (ItemStack)DecorBlockRecipeItems[i][0];
             ItemStack itemstack = (ItemStack)DecorBlockRecipeItems[i][1];
-            GameRegistry.addShapelessRecipe(new ItemStack(block), new Object[] {
+            GameRegistry.addShapelessRecipe(block, new Object[] {
             itemstack, new ItemStack(chisel, 1, -1)
 				});
-            GameRegistry.addSmelting(block.blockID, itemstack,1.0F);
+            GameRegistry.addSmelting(block.itemID, itemstack,1.0F);
 			}
 		}
   
@@ -901,9 +856,9 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
     {
         for(int i = 0; i < StoreBlockRecipeItems.length; i++)
         {
-            Block block = (Block)StoreBlockRecipeItems[i][0];
+        	ItemStack block = (ItemStack)StoreBlockRecipeItems[i][0];
             ItemStack itemstack = (ItemStack)StoreBlockRecipeItems[i][1];
-            GameRegistry.addRecipe(new ItemStack(block), new Object[] {
+            GameRegistry.addRecipe(block, new Object[] {
                 "###", "###", "###", Character.valueOf('#'), itemstack
             });
             GameRegistry.addRecipe(itemstack, new Object[] {
@@ -931,7 +886,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		addAchievement("Heaven Piercing", "WHO THE HELL DO YOU THINK I AM?");
 		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",0,4, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("It's Alive!", "Construct a tesla coil");
-		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,7, decorCastIron, AchievementList.acquireIron)).registerAchievement();
+		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,7, decorBlock, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Master Craftsman", "Engrave a block");
 		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,7, uraniumStone, ach_Fallout)).registerAchievement();
 		addAchievement("Ruined Everything", "Melt down a nuclear reactor");
@@ -1045,7 +1000,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		 if(item.itemID == torchTeslaIdle.blockID){
             player.triggerAchievement(ach_ItsAlive);
          }
-		 if(item.itemID == decorIron.blockID || item.itemID == decorCastIron.blockID || item.itemID == decorBrass.blockID || item.itemID == decorGold.blockID || item.itemID == decorLapis.blockID || item.itemID == decorDiamond.blockID || item.itemID == decorVolucite.blockID || item.itemID == decorUranium.blockID || item.itemID == carvedStone.blockID){
+		 if(item.itemID == decorBlock.blockID){// || item.itemID == decorCastIron.blockID || item.itemID == decorBrass.blockID || item.itemID == decorGold.blockID || item.itemID == decorLapis.blockID || item.itemID == decorDiamond.blockID || item.itemID == decorVolucite.blockID || item.itemID == decorUranium.blockID || item.itemID == carvedStone.blockID){
             player.triggerAchievement(ach_MasterCraftsman);
          }
 		 if(item.itemID == aqualung.itemID){
