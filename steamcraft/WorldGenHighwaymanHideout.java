@@ -74,10 +74,10 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
                             world.setBlock(l1, k2, j3, Block.thinGlass.blockID);
                         } else
                         {
-						randomBlockType = random.nextInt(6);
-						if(randomBlockType > 2){
-						randomBlockType = 0;
-						}
+                        	randomBlockType = random.nextInt(6);
+                        	if(randomBlockType > 2){
+                        		randomBlockType = 0;
+                        	}
                             world.setBlock(l1, k2, j3, Block.stoneBrick.blockID, randomBlockType,3);
                         }
                     } else
@@ -85,9 +85,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
                         world.setBlockToAir(l1, k2, j3);
                     }
                 }
-
             }
-
         }
 
         for(int i2 = 0; i2 < 2; i2++)
@@ -140,7 +138,6 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
                     k4++;
                 } while(true);
             }
-
         }
 
         world.setBlock(i, j, k, Block.mobSpawner.blockID);
@@ -178,7 +175,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
         }
         if(i == 6)
         {
-            return new ItemStack(Steamcraft.musketRound, random.nextInt(8) + 1);
+            return new ItemStack(Steamcraft.part, random.nextInt(8) + 1, 0);
         }
         if(i == 7 && random.nextInt(100) == 0)
         {
@@ -198,31 +195,31 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
         }
 		if(i == 11)
         {
-            return new ItemStack(Steamcraft.percussionRound, random.nextInt(8) + 1);
+            return new ItemStack(Steamcraft.part, random.nextInt(8) + 1, 1);
         }
 		if(i == 12 && random.nextInt(3) == 0)
         {
-            return new ItemStack(Steamcraft.matchlockMusket);
+            return Steamcraft.matchlockMusket;
         }
 		if(i == 13 && random.nextInt(3) == 0)
         {
-            return new ItemStack(Steamcraft.matchlockRifle);
+            return Steamcraft.matchlockRifle;
         }
 		if(i == 14 && random.nextInt(4) == 0)
         {
-            return new ItemStack(Steamcraft.flintlockMusket);
+            return Steamcraft.flintlockMusket;
         }
 		if(i == 15 && random.nextInt(4) == 0)
         {
-            return new ItemStack(Steamcraft.flintlockRifle);
+            return Steamcraft.flintlockRifle;
         }
 		if(i == 16 && random.nextInt(8) == 0)
         {
-            return new ItemStack(Steamcraft.percussionCapMusket);
+            return Steamcraft.percussionCapMusket;
         }
 		if(i == 17 && random.nextInt(8) == 0)
         {
-            return new ItemStack(Steamcraft.percussionCapRifle);
+            return Steamcraft.percussionCapRifle;
         }
 		if(i == 18 && random.nextInt(16) == 0)
         {

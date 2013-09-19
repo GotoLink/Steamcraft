@@ -64,7 +64,7 @@ public class EntityHighwayman extends EntityMob
             double d1 = entity.posZ - posZ;
             if(attackTime == 0)
             {
-                EntityMusketBall entityarrow = new EntityMusketBall(worldObj, this, ((ItemFirearm)defaultHeldItem.getItem()).getFirePower(), ((ItemFirearm)defaultHeldItem.getItem()).getIsRifled());
+                EntityMusketBall entityarrow = new EntityMusketBall(worldObj, this, ((ItemFirearm)defaultHeldItem.getItem()).getFirePower(defaultHeldItem), ((ItemFirearm)defaultHeldItem.getItem()).isRifled(defaultHeldItem));
                 entityarrow.posY += 1.3999999761581421D;
                 double d2 = (entity.posY + (double)entity.getEyeHeight()) - 0.20000000298023224D - entityarrow.posY;
                 float f1 = MathHelper.sqrt_double(d * d + d1 * d1) * 0.2F;
@@ -102,11 +102,6 @@ public class EntityHighwayman extends EntityMob
         }
     }
     @Override
-    protected int getDropItemId()
-    {
-		return percussion?Steamcraft.percussionRound.itemID:Steamcraft.musketRound.itemID;
-    }
-    @Override
 	protected void dropFewItems(boolean flag,int fortune)
     {
 		/*if(heldItemNumber == -1){
@@ -142,41 +137,38 @@ public class EntityHighwayman extends EntityMob
 		percussion = false;
 		}*/
 		
-		if(!setDrops){
 		//System.out.println("Is Percussion:" + percussion);
 		//System.out.println("Is Rifle:" + rifled);
 		int i = rand.nextInt(8);
         for(int j = 0; j < i; j++)
         {
-		dropItem(Steamcraft.musketRound.itemID, 1);
+        	entityDropItem(new ItemStack(Steamcraft.part,1,0), 1);
         }
 		if(percussion){
-		i = rand.nextInt(6);
-        for(int j = 0; j < i; j++)
-        {
-		dropItem(Steamcraft.percussionRound.itemID, 1);
-		}
+			i = rand.nextInt(6);
+	        for(int j = 0; j < i; j++)
+	        {
+	        	entityDropItem(new ItemStack(Steamcraft.part,1,1), 1);
+			}
 		}
 		
 		int p = rand.nextInt(32);
 		if(p < 4){
-            dropItem(defaultHeldItem.getItem().itemID, 1);
+            entityDropItem(defaultHeldItem, 0);
         }
 		if(p >= 2 && p < 8){
-		i = rand.nextInt(4);
-        for(int j = 0; j < i; j++)
-        {
-            dropItem(Item.ingotGold.itemID, 1);
-        }
+			i = rand.nextInt(4);
+	        for(int j = 0; j < i; j++)
+	        {
+	            dropItem(Item.ingotGold.itemID, 1);
+	        }
 		}
 		if(p == 8 || p == 1){
-		i = rand.nextInt(2);
-        for(int j = 0; j < i; j++)
-        {
-            dropItem(Item.diamond.itemID, 1);
-        }
-		}
-		setDrops = true;
+			i = rand.nextInt(2);
+	        for(int j = 0; j < i; j++)
+	        {
+	            dropItem(Item.diamond.itemID, 1);
+	        }
 		}
 
     }
@@ -193,47 +185,40 @@ public class EntityHighwayman extends EntityMob
 			heldItemNumber = rand.nextInt(10);
 		}
 		//System.out.println(heldItemNumber);
-	if(heldItemNumber >= 2 && heldItemNumber < 4){
-		rifled = true;
-		percussion = false;
-		return heldItems[1];
-		}else
-		if(heldItemNumber >= 4 && heldItemNumber < 6){
-		rifled = false;
-		percussion = false;
-		return heldItems[2];
-		}else
-		if(heldItemNumber >= 6 && heldItemNumber < 8){
-		rifled = true;
-		percussion = false;
-		return heldItems[3];
-		}else
-		if(heldItemNumber == 8){
-		rifled = false;
-		percussion = true;
-		return heldItems[4];
-		}else
-		if(heldItemNumber == 9){
-		rifled = true;
-		percussion = true;
-		return heldItems[5];
+		if(heldItemNumber >= 2 && heldItemNumber < 4){
+			rifled = true;
+			percussion = false;
+			return heldItems[1];
+		}else if(heldItemNumber >= 4 && heldItemNumber < 6){
+			rifled = false;
+			percussion = false;
+			return heldItems[2];
+		}else if(heldItemNumber >= 6 && heldItemNumber < 8){
+			rifled = true;
+			percussion = false;
+			return heldItems[3];
+		}else if(heldItemNumber == 8){
+			rifled = false;
+			percussion = true;
+			return heldItems[4];
+		}else if(heldItemNumber == 9){
+			rifled = true;
+			percussion = true;
+			return heldItems[5];
 		}else{
-		rifled = false;
-		percussion = false;
-		return heldItems[0];
+			rifled = false;
+			percussion = false;
+			return heldItems[0];
 		}
 	}
 	
-	public boolean setDrops = false;
 	public int heldItemNumber = -1;
 	public boolean rifled = false;
 	public boolean percussion = false;
     private ItemStack defaultHeldItem = setHeldItem();
 	/*public int heldItemRand = -1;
 	public static int heldItemNumber = -1;*/
-	public static ItemStack heldItems[] = new ItemStack[]{ new ItemStack(Steamcraft.flintlockMusket, 1), new ItemStack(Steamcraft.flintlockRifle, 1), 
-	new ItemStack(Steamcraft.matchlockMusket, 1), new ItemStack(Steamcraft.matchlockRifle, 1), 
-	new ItemStack(Steamcraft.percussionCapMusket, 1), new ItemStack(Steamcraft.percussionCapRifle, 1)};
+	public static ItemStack heldItems[] = new ItemStack[6];
 
 	/*public static void setHeldItem(Item item, Item item2, Item item3, Item item4, Item item5, Item item6){
 		if(heldItemNumber >= 2 && heldItemNumber < 4){

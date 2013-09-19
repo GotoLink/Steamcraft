@@ -6,10 +6,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockOre;
-import net.minecraft.block.BlockOreStorage;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLogic;
@@ -70,57 +67,47 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 5, 210, 7F, 4);
 	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, 6, -1, 8F, 3);
 	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 7, 2, 321, 12F, 5);
+	
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
-	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive;
+	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive,battery;
+	public static Block redstoneWire,torchRedstoneIdle,torchRedstoneActive,wirelessLampIdle;
+	public static Block redstoneRepeaterIdle,redstoneRepeaterActive,railPowered,wirelessLampActive;
+	
 	public static Block steamOvenIdle,steamOvenActive,chemOvenIdle,chemOvenActive;
-	public static Block nukeOvenIdle,nukeOvenActive,battery;
-	public static Block borniteOre,orePhosphate,oreUranite,oreQuartz,oreQuartzActive,oreVolucite;
-	public static Block brimstone;
+	public static Block nukeOvenIdle,nukeOvenActive;
+	public static Block borniteOre,orePhosphate,oreUranite,oreQuartz,
+						oreQuartzActive,oreVolucite,brimstone;
 	
-	public static Block decorBlock;
+	public static Block decorBlock,railingCastIron,gateCastIron;
 	
-	public static Block railingCastIron,gateCastIron;
-	
-	public static Block lamp,lampoff;
-	public static Block woodBrass;
-	public static Block leavesLamp,wirelessLampIdle,wirelessLampActive;
+	public static Block lamp,lampoff,woodBrass,leavesLamp;
 	
 	public static Block stairRoof,roofTile;
 	
 	public static Block teaPlant;
 	
-	public static Block redstoneWire,torchRedstoneIdle,torchRedstoneActive;
-	public static Block redstoneRepeaterIdle,redstoneRepeaterActive,railPowered;
-	
-	public static Item etherium,chemicSalt,bornite,obsidianSlate;
-	public static Item ingotBrass,ingotCastIron;
-	public static Item lightBulb;
-	public static Item phosphorus,uraniumStone,uranium;
-	public static Item reactorCore,coreDrill,drillBase;
+	public static Item material;
 	
 	public static Item pickaxeObsidian,shovelObsidian,axeObsidian,hoeObsidian;
 	public static Item swordObsidian,drillObsidian;
-	
 	public static Item helmetObsidian,plateObsidian,legsObsidian,bootsObsidian;
 	
 	public static Item brassGoggles,aqualung,rollerSkates,legBraces;
 	
 	public static Item pickaxeEtherium,shovelEtherium,axeEtherium,hoeEtherium;
 	public static Item swordEtherium,drillEtherium;
-	
 	public static Item helmetEtherium,plateEtherium,legsEtherium,bootsEtherium;
 	
 	public static Item swordSteam,shovelSteam,pickaxeSteam;
 	public static Item drillSteam,axeSteam,hoeSteam;
-	
+	public static Item coreDrill;
 	public static Item drillSteel,drillWood,drillStone,drillDiamond,drillGold;
 	
 	public static Item chisel,spanner;
 	
-	public static Item smoothBarrel,rifledBarrel,woodenStock,percussionLock;
-	public static Item flintlockMusket,matchlockMusket,percussionCapMusket;
-	public static Item flintlockRifle,matchlockRifle,percussionCapRifle;
-	public static Item musketRound,percussionRound;
+	public static Item firearm, part;
+	public static ItemStack flintlockMusket,matchlockMusket,percussionCapMusket;
+	public static ItemStack flintlockRifle,matchlockRifle,percussionCapRifle;
 	
 	public static Item electricLamp,wirelessLamp;
 	
@@ -133,6 +120,13 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	
 	private Object[][] DrillRecipeItems,SpannerRecipeItems,
 						StoreBlockRecipeItems,DecorBlockRecipeItems;
+	private static final String[] materials = {
+		"etherium","sulphur","copper","obsidianslate","ingotbrass","ingotcastiron","lightbulb",
+		"phosphorus","uraniumstone","uraniumpellet","reactorcore","coredrillbase"};
+	private static final String[] firearmParts = 
+		{"musketcartridge","percussioncap","percussionlock",
+		"smoothbarrel","rifledbarrel","woodenstock"};
+	
 	private static final String[] decorBlockNames = {
 		"Block of Cast Iron","Block of Volucite","Block of Brass","Block of Uranium",
 		"Engraved Iron Block","Engraved Gold Block","Engraved Diamond Block",
@@ -185,8 +179,8 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		gateCastIron = new BlockSCFenceGate(config.getBlock("CastIronGate",2536).getInt() ).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:gateCastIron").setTextureName("steamcraft:castironblock");
 		railingCastIron = new BlockSCFence(config.getBlock("CastIronRailing",2537).getInt(),  Material.iron, Steamcraft.gateCastIron, true).setHardness(7F).setResistance(20F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:railingCastIron").setTextureName("steamcraft:castironblock");
 		
-		lamp = new BlockLamp(config.getBlock("LampBlock",2538).getInt(),  Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(1.0F).setUnlocalizedName("steamcraft:lampOn").setTextureName("steamcraft:lampblock");
-		lampoff = new BlockLamp(config.getBlock("LampBlockOFF",2539).getInt() , Material.wood).setHardness(2.0F).setStepSound(Block.soundGlassFootstep).setLightValue(0.0F).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
+		lamp = new BlockLamp(config.getBlock("LampBlock",2538).getInt(), true).setUnlocalizedName("steamcraft:lampOn").setTextureName("steamcraft:lampblock");
+		lampoff = new BlockLamp(config.getBlock("LampBlockOFF",2539).getInt() , false).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
 		woodBrass = new BlockBrassLog(config.getBlock("BrassLog",2540).getInt()).setHardness(5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:logBrass").setTextureName("steamcraft:brasslog");
 		leavesLamp = new Block(config.getBlock("BrassLeaves",2541).getInt(), Material.wood).setHardness(2F).setLightOpacity(1).setLightValue(0.9375F).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("steamcraft:leavesLamp").setTextureName("steamcraft:brassleaves");
 		wirelessLampIdle = new BlockWirelessLamp(config.getBlock("WirelessLamp",2542).getInt() , TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:wirelessLamp").disableStats().setTextureName("steamcraft:wirelesslamp");
@@ -196,19 +190,9 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		teaPlant = new BlockSCTeaPlant(config.getBlock("TeaPlant",2546).getInt()).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setUnlocalizedName("steamcraft:teaplant").disableStats().setTextureName("steamcraft:teaplant");
 				
-		etherium = new Item(config.getItem("Etherium",25000).getInt()).setUnlocalizedName("steamcraft:etherium").setTextureName("steamcraft:etherium");
-		chemicSalt = new Item(config.getItem("Sulphur",25001).getInt()).setUnlocalizedName("steamcraft:chemicSalt").setTextureName("steamcraft:sulphur");
-		bornite = new Item(config.getItem("Copper",25002).getInt()).setUnlocalizedName("steamcraft:bornite").setTextureName("steamcraft:copper");
-		obsidianSlate = new Item(config.getItem("ObsidianSlate",25003).getInt()).setUnlocalizedName("steamcraft:obsidianSlate").setTextureName("steamcraft:obsidianslate");
-		ingotBrass = new Item(config.getItem("BrassIngot",25004).getInt()).setUnlocalizedName("steamcraft:ingotBrass").setTextureName("steamcraft:ingotbrass");
-		ingotCastIron = new Item(config.getItem("CastIronIngot",25005).getInt()).setUnlocalizedName("steamcraft:ingotCastIron").setTextureName("steamcraft:ingotcastiron");
-		lightBulb = new Item(config.getItem("LightBulb",25006).getInt()).setUnlocalizedName("steamcraft:lightBulb").setTextureName("steamcraft:lightbulb");
-		phosphorus = new Item(config.getItem("Phosphorus",25007).getInt()).setUnlocalizedName("steamcraft:phosphorus").setTextureName("steamcraft:phosphorus");
-		uraniumStone = new Item(config.getItem("Uranium",25008).getInt()).setUnlocalizedName("steamcraft:uraniumStone").setTextureName("steamcraft:uraniumstone");
-		uranium = new Item(config.getItem("UraniumPellet",25009).getInt()).setUnlocalizedName("steamcraft:uranium").setTextureName("steamcraft:uraniumpellet");
-		reactorCore = new Item(config.getItem("ReactorCore",25010).getInt()).setUnlocalizedName("steamcraft:reactorCore").setTextureName("steamcraft:reactorcore");
+		material = new MultiItem(config.getItem("Materials",25010).getInt(), materials).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:");
+		
 		coreDrill = new ItemCoreDrill(config.getItem("CoreDrill",25011).getInt()).setUnlocalizedName("steamcraft:coreDrill").setTextureName("steamcraft:coredrill");
-		drillBase = new Item(config.getItem("DrillBase",25012).getInt()).setUnlocalizedName("steamcraft:drillBase").setTextureName("steamcraft:coredrillbase");
 		
 		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools/obsidianpick");
 		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
@@ -262,31 +246,51 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		chisel = new Item(config.getItem("Chisel",25049).getInt()).setFull3D().setMaxDamage(64).setMaxStackSize(1).setUnlocalizedName("steamcraft:chisel").setTextureName("steamcraft:tools/chisel");
 		spanner = new Item(config.getItem("Spanner",25050).getInt()).setFull3D().setMaxDamage(3).setMaxStackSize(1).setUnlocalizedName("steamcraft:spanner").setTextureName("steamcraft:tools/spanner");				
 		
-		musketRound = new Item(config.getItem("MusketCartridge",25051).getInt()).setUnlocalizedName("steamcraft:musketRound").setTextureName("steamcraft:musketcartridge");
-		percussionRound = new Item(config.getItem("PercussionCap",25052).getInt()).setUnlocalizedName("steamcraft:percussionRound").setTextureName("steamcraft:percussioncap");
-		
-		percussionLock = new Item(config.getItem("PercussionLock",25053).getInt()).setUnlocalizedName("steamcraft:percussionLock").setTextureName("steamcraft:percussionlock");
-		smoothBarrel = new Item(config.getItem("SmoothBarrel",25054).getInt()).setUnlocalizedName("steamcraft:smoothBarrel").setTextureName("steamcraft:smoothbarrel");
-		rifledBarrel = new Item(config.getItem("RifledBarrel",25055).getInt()).setUnlocalizedName("steamcraft:rifledBarrel").setTextureName("steamcraft:rifledbarrel");
-		woodenStock = new Item(config.getItem("WoodStock",25056).getInt()).setUnlocalizedName("steamcraft:woodenStock").setTextureName("steamcraft:woodenstock");
-		flintlockMusket = new ItemFirearm(config.getItem("FlintlockMusket",25057).getInt(), 100, musketRound, musketRound, 8, false).setUnlocalizedName("steamcraft:flintlockMusket").setTextureName("steamcraft:tools/flintlockmusket");
-		matchlockMusket = new ItemFirearm(config.getItem("MatchlockMusket",25058).getInt(), 200, musketRound, musketRound, 6, false).setUnlocalizedName("steamcraft:matchlockMusket").setTextureName("steamcraft:tools/matchlockmusket");
-		percussionCapMusket = new ItemFirearm(config.getItem("PercussionMusket",25059).getInt(), 50, percussionRound, musketRound, 10, false).setUnlocalizedName("steamcraft:percussionMusket").setTextureName("steamcraft:tools/percussionmusket");
-		flintlockRifle = new ItemFirearm(config.getItem("FlintlockRifle",25060).getInt(), 120, musketRound, musketRound, 10, true).setUnlocalizedName("steamcraft:flintlockRifle").setTextureName("steamcraft:tools/flintlockrifle");
-		matchlockRifle = new ItemFirearm(config.getItem("MatchlockRifle",25061).getInt(), 240, musketRound, musketRound, 8, true).setUnlocalizedName("steamcraft:matchlockRifle").setTextureName("steamcraft:tools/matchlockrifle");
-		percussionCapRifle = new ItemFirearm(config.getItem("PercussionRifle",25062).getInt(), 60, percussionRound, musketRound, 12, true).setUnlocalizedName("steamcraft:percussionRifle").setTextureName("steamcraft:tools/percussionrifle");
+		part = new MultiItem(config.getItem("FirearmParts",25056).getInt(),firearmParts).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:");
+		firearm = new ItemFirearm(config.getItem("Firearm",25057).getInt()).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:tools/");
+		flintlockMusket = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(flintlockMusket,8);
+		ItemFirearm.setMaxDamage(flintlockMusket, 100);
+		matchlockMusket = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(matchlockMusket,6);
+		ItemFirearm.setMaxDamage(matchlockMusket, 200);
+		percussionCapMusket = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(percussionCapMusket,10);
+		ItemFirearm.setMaxDamage(percussionCapMusket, 50);
+		ItemFirearm.setPercussion(percussionCapMusket);
+		flintlockRifle = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(flintlockRifle,10);
+		ItemFirearm.setMaxDamage(flintlockRifle, 120);
+		ItemFirearm.setRifled(flintlockRifle);
+		matchlockRifle = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(matchlockRifle,8);
+		ItemFirearm.setMaxDamage(matchlockRifle, 240);
+		ItemFirearm.setRifled(matchlockRifle);
+		percussionCapRifle = new ItemStack(firearm,1,0);
+		ItemFirearm.setFirePower(percussionCapRifle,12);
+		ItemFirearm.setMaxDamage(percussionCapRifle, 60);
+		ItemFirearm.setRifled(percussionCapRifle);
+		ItemFirearm.setPercussion(percussionCapRifle);
+		EntityHighwayman.heldItems[0]=flintlockMusket;
+		EntityHighwayman.heldItems[1]=flintlockRifle;
+		EntityHighwayman.heldItems[2]=matchlockMusket;
+		EntityHighwayman.heldItems[3]=matchlockRifle;
+		EntityHighwayman.heldItems[4]=percussionCapMusket;
+		EntityHighwayman.heldItems[5]=percussionCapRifle;
 		
 		electricLamp = new ItemElectricLamp(config.getItem("ElectricLamp",25063).getInt(), torchElectricIdle).setUnlocalizedName("steamcraft:electricLamp").setTextureName("steamcraft:electriclamp");
 		wirelessLamp = new ItemElectricLamp(config.getItem("WirelessLamp",25064).getInt(), wirelessLampIdle).setUnlocalizedName("steamcraft:wirelessLamp").setTextureName("steamcraft:wirelesslamp");
 		
 		teaSeed = new ItemSeeds(config.getItem("TeaSeed",25065).getInt(), teaPlant.blockID, Block.tilledField.blockID).setUnlocalizedName("steamcraft:teaSeeds").setTextureName("steamcraft:teaseed");
 		teaLeaves = new Item(config.getItem("TeaLeaf",25066).getInt()).setUnlocalizedName("steamcraft:teaLeaf").setTextureName("steamcraft:tealeaves");
-		coldKettle = new ItemKettle(config.getItem("KettleCold",25067).getInt(), 300).setUnlocalizedName("steamcraft:kettle").setTextureName("steamcraft:kettle");
-		hotKettle = new ItemKettle(config.getItem("KettleHot",25068).getInt(), 300).setUnlocalizedName("steamcraft:kettleHot").setTextureName("steamcraft:kettle");
+		coldKettle = new ItemKettle(config.getItem("KettleCold",25067).getInt()).setUnlocalizedName("steamcraft:kettle").setTextureName("steamcraft:kettle");
+		hotKettle = new ItemKettle(config.getItem("KettleHot",25068).getInt()).setUnlocalizedName("steamcraft:kettleHot").setTextureName("steamcraft:kettle");
 		emptyTeacup = new ItemTeacup(config.getItem("TeacupEmpty",25069).getInt(), 0).setUnlocalizedName("steamcraft:teacupEmpty").setTextureName("steamcraft:teacupempty");
 		fullTeacup = new ItemTeacup(config.getItem("TeacupFull",25070).getInt(), 4).setUnlocalizedName("steamcraft:teacup").setTextureName("steamcraft:teacupfull");
-		emptyKettle = new ItemKettle(config.getItem("KettleEmpty",25071).getInt(), 300).setUnlocalizedName("steamcraft:kettleempty").setTextureName("steamcraft:kettle");
+		emptyKettle = new ItemKettle(config.getItem("KettleEmpty",25071).getInt()).setUnlocalizedName("steamcraft:kettleempty").setTextureName("steamcraft:kettle");
 		
+		if(config.hasChanged())
+			config.save();
 		data.put(torchElectricIdle, new Object[]{"Electric Torch"});
 		data.put(torchElectricActive, new Object[]{"Electric Torch Active"});
 		data.put(electricLamp, new Object[]{"Electric Lamp"});
@@ -302,28 +306,29 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		data.put(torchRedstoneActive, new Object[]{"Inverter Active"});
 		data.put(redstoneRepeaterIdle, new Object[]{"Diode"});
 		data.put(redstoneRepeaterActive, new Object[]{"Diode Active"});
+		data.put(railPowered, new Object[]{"Rail"});
 		data.put(brimstone, new Object[]{"Brimstone"});
 		data.put(borniteOre, new Object[]{"Bornite"});
 		data.put(orePhosphate, new Object[]{"Phosphate Ore"});
 		data.put(oreUranite, new Object[]{"Uranite"});
 		data.put(oreVolucite, new Object[]{"Volucite"});
-		data.put(etherium, new Object[]{"Etherium Crystal"});
-		data.put(bornite, new Object[]{"Purified Copper"});
-		data.put(obsidianSlate, new Object[]{"Obsidian Slate"});
-		data.put(ingotBrass, new Object[]{"Brass Ingot"});
-		data.put(ingotCastIron, new Object[]{"Cast Iron Ingot"});
-		data.put(lightBulb, new Object[]{"Light Bulb"});
-		data.put(phosphorus, new Object[]{"Phosphorus"});
+		data.put(new ItemStack(material,1,0), new Object[]{"Etherium Crystal"});
+		data.put(new ItemStack(material,1,2), new Object[]{"Purified Copper"});
+		data.put(new ItemStack(material,1,3), new Object[]{"Obsidian Slate"});
+		data.put(new ItemStack(material,1,4), new Object[]{"Brass Ingot"});
+		data.put(new ItemStack(material,1,5), new Object[]{"Cast Iron Ingot"});
+		data.put(new ItemStack(material,1,6), new Object[]{"Light Bulb"});
+		data.put(new ItemStack(material,1,7), new Object[]{"Phosphorus"});
 		data.put(torchPhosphorus, new Object[]{"Phosphorus Torch"});
-		data.put(uraniumStone, new Object[]{"Uranium"});
-		data.put(uranium, new Object[]{"Uranium Pellet"});
+		data.put(new ItemStack(material,1,8), new Object[]{"Uranium"});
+		data.put(new ItemStack(material,1,9), new Object[]{"Uranium Pellet"});
 		data.put(chemOvenIdle, new Object[]{"Chemical Furnace"});
 		data.put(chemOvenActive, new Object[]{"Chemical Furnace Active"});
 		data.put(nukeOvenIdle, new Object[]{"Nuclear Reactor"});
 		data.put(nukeOvenActive, new Object[]{"Nuclear Reactor Active"});
-		data.put(reactorCore, new Object[]{"Reactor Core"});
+		data.put(new ItemStack(material,1,10), new Object[]{"Reactor Core"});
 		data.put(coreDrill, new Object[]{"Core Drill"});
-		data.put(drillBase, new Object[]{"Drill Base"});
+		data.put(new ItemStack(material,1,11), new Object[]{"Drill Base"});
 		data.put(chisel, new Object[]{"Chisel"});
 		data.put(spanner, new Object[]{"Spanner"});
 		data.put(roofTile, new Object[]{"Slate Tiles"});
@@ -380,18 +385,19 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		data.put(drillStone, new Object[]{"Stone Drill"});
 		data.put(drillDiamond, new Object[]{"Diamond Drill"});
 		data.put(drillGold, new Object[]{"Golden Drill"});
-		data.put(percussionLock, new Object[]{"Percussion Lock"});
-		data.put(woodenStock, new Object[]{"Wooden Stock"});
-		data.put(smoothBarrel, new Object[]{"Smoothbore Barrel"});
-		data.put(rifledBarrel, new Object[]{"Rifled Barrel"});
+		data.put(new ItemStack(part,1,0), new Object[]{"Musket Cartridge"});
+		data.put(new ItemStack(part,1,1), new Object[]{"Percussion Cap"});
+		data.put(new ItemStack(part,1,2), new Object[]{"Percussion Lock"});
+		data.put(new ItemStack(part,1,3), new Object[]{"Smoothbore Barrel"});
+		data.put(new ItemStack(part,1,4), new Object[]{"Rifled Barrel"});
+		data.put(new ItemStack(part,1,5), new Object[]{"Wooden Stock"});
 		data.put(flintlockMusket, new Object[]{"Flintlock Musket"});
 		data.put(matchlockMusket, new Object[]{"Matchlock Musket"});
 		data.put(percussionCapMusket, new Object[]{"Percussion Musket"});
 		data.put(flintlockRifle, new Object[]{"Flintlock Rifle"});
 		data.put(matchlockRifle, new Object[]{"Matchlock Rifle"});
 		data.put(percussionCapRifle, new Object[]{"Percussion Rifle"});
-		data.put(musketRound, new Object[]{"Musket Cartridge"});
-		data.put(percussionRound, new Object[]{"Percussion Cap"});
+		
 	}
 	@EventHandler
 	public void registering(FMLInitializationEvent event)
@@ -413,6 +419,10 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 				if(!((String)data.get(obj)[0]).toLowerCase().contains("active")||obj instanceof BlockInverter)
 					((Block) obj).setCreativeTab(steamTab);
 				GameRegistry.registerBlock((Block) obj,(String) data.get(obj)[0]);
+			}
+			else if(obj instanceof Item)
+			{
+				((Item) obj).setCreativeTab(steamTab);
 			}
 		}
 		MinecraftForge.setToolClass(drillWood, "drill", 0);
@@ -460,60 +470,60 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.registerTileEntity(TileEntityNukeFurnace.class, "Nuclear Furnace");
 		GameRegistry.registerTileEntity(TileEntityLamp.class, "Electric Lamp");
 		
-		GameRegistry.addSmelting(borniteOre.blockID, new ItemStack(bornite),1.0F);
-		GameRegistry.addSmelting(brimstone.blockID, new ItemStack(chemicSalt),1.0F);
-		GameRegistry.addSmelting(oreVolucite.blockID, new ItemStack(etherium),1.0F);
-		GameRegistry.addSmelting(Item.ingotIron.itemID, new ItemStack(ingotCastIron),1.0F);
-		GameRegistry.addSmelting(orePhosphate.blockID, new ItemStack(phosphorus),1.0F);
-		GameRegistry.addSmelting(oreUranite.blockID, new ItemStack(uraniumStone),1.0F);
+		GameRegistry.addSmelting(borniteOre.blockID, new ItemStack(material,1,0),1.0F);
+		GameRegistry.addSmelting(brimstone.blockID, new ItemStack(material,1,1),1.0F);
+		GameRegistry.addSmelting(oreVolucite.blockID, new ItemStack(material,1,0),1.0F);
+		GameRegistry.addSmelting(Item.ingotIron.itemID, new ItemStack(material,1,5),1.0F);
+		GameRegistry.addSmelting(orePhosphate.blockID, new ItemStack(material,1,7),1.0F);
+		GameRegistry.addSmelting(oreUranite.blockID, new ItemStack(material,1,8),1.0F);
 		GameRegistry.addSmelting(Block.gravel.blockID, new ItemStack(Item.flint),1.0F);
 		GameRegistry.addSmelting(coldKettle.itemID, new ItemStack(hotKettle, 1, 1),1.0F);
 		GameRegistry.addSmelting(Block.stoneBrick.blockID, new ItemStack(Block.stone),1.0F);
 		
-		GameRegistry.addRecipe(new ItemStack(obsidianSlate, 2), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(material, 2, 3), new Object[]{
                                   "#", Character.valueOf('#'), Block.obsidian
         });
 		GameRegistry.addRecipe(new ItemStack(Block.obsidian, 1), new Object[] {
-            "##", "##", Character.valueOf('#'), obsidianSlate
+            "##", "##", Character.valueOf('#'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(steamOvenIdle, 1), new Object[]{
-                                "# #", "#X#", "#I#", Character.valueOf('#'), ingotBrass, Character.valueOf('X'), Item.bucketEmpty, Character.valueOf('I'), Block.furnaceIdle
+                                "# #", "#X#", "#I#", Character.valueOf('#'), new ItemStack(material,1,4), Character.valueOf('X'), Item.bucketEmpty, Character.valueOf('I'), Block.furnaceIdle
         });
 		GameRegistry.addRecipe(new ItemStack(Item.redstone, 8), new Object[]{
-                                "###", Character.valueOf('#'), bornite
+                                "###", Character.valueOf('#'), new ItemStack(material,1,2)
         });
-		GameRegistry.addRecipe(new ItemStack(lightBulb, 4), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(material, 4, 6), new Object[]{
                                 "I", "#", "X", Character.valueOf('#'), Item.redstone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('I'), Block.glass
         });
 		GameRegistry.addRecipe(new ItemStack(electricLamp, 1), new Object[]{
-                                "I", "#", "X", Character.valueOf('#'), bornite, Character.valueOf('X'), ingotCastIron, Character.valueOf('I'), lightBulb
+                                "I", "#", "X", Character.valueOf('#'), new ItemStack(material,1,2), Character.valueOf('X'), new ItemStack(material,1,5), Character.valueOf('I'), new ItemStack(material, 1, 6)
         });
 		GameRegistry.addRecipe(new ItemStack(torchPhosphorus, 4), new Object[]{
-                                "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), phosphorus
+                                "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,7)
         });
 		GameRegistry.addRecipe(new ItemStack(battery, 1), new Object[]{
                                 "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'), Item.redstone
         });
 		GameRegistry.addRecipe(new ItemStack(chemOvenIdle, 1), new Object[]{
-                                "###", "#X#", "#I#", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Item.diamond, Character.valueOf('I'), steamOvenIdle
+                                "###", "#X#", "#I#", Character.valueOf('#'), new ItemStack(material,1,5), Character.valueOf('X'), Item.diamond, Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(nukeOvenIdle, 1), new Object[]{
-                                "#I#", "#X#", "#I#", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), reactorCore, Character.valueOf('I'), etherium
+                                "#I#", "#X#", "#I#", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), new ItemStack(material, 1, 10), Character.valueOf('I'), material
         });
-		GameRegistry.addRecipe(new ItemStack(reactorCore, 1), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(material, 1, 10), new Object[]{
                                 "###", "#X#", "###", Character.valueOf('#'), Block.obsidian, Character.valueOf('X'), chemOvenIdle
         });
-		GameRegistry.addRecipe(new ItemStack(drillBase, 1), new Object[]{
-                                "#X#", "# #", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), etherium
+		GameRegistry.addRecipe(new ItemStack(material, 1, 11), new Object[]{
+                                "#X#", "# #", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(coreDrill, 1), new Object[]{
-                                "X", "#", "I", Character.valueOf('#'), phosphorus, Character.valueOf('X'), new ItemStack(drillGold, 1, -1), Character.valueOf('I'), drillBase
+                                "X", "#", "I", Character.valueOf('#'), new ItemStack(material,1,7), Character.valueOf('X'), new ItemStack(drillGold, 1, -1), Character.valueOf('I'), new ItemStack(material,1,11)
         });
 		GameRegistry.addRecipe(new ItemStack(roofTile, 4), new Object[] {
             "###", "###", "###", Character.valueOf('#'), Item.flint
         });
 		GameRegistry.addRecipe(new ItemStack(lamp), new Object[] {
-            "#X#", "XIX", "#X#", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.glowstone
+            "#X#", "XIX", "#X#", Character.valueOf('#'), new ItemStack(material,1,5), Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.glowstone
         });
 	/*	GameRegistry.addRecipe(new ItemStack(woodBrass, 4), new Object[] {
             "###", "#I#", "###", Character.valueOf('#'), ingotBrass, Character.valueOf('I'), Block.wood
@@ -525,114 +535,114 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
             "#", "X", Character.valueOf('#'), electricLamp, Character.valueOf('X'), teslaReceiver
         });
 		GameRegistry.addRecipe(new ItemStack(railingCastIron, 2), new Object[] {
-            "###", "###", Character.valueOf('#'), ingotCastIron
+            "###", "###", Character.valueOf('#'), new ItemStack(material,1,5)
         });
 		GameRegistry.addRecipe(new ItemStack(gateCastIron, 1), new Object[] {
-            "#X#", "#X#", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), railingCastIron
+            "#X#", "#X#", Character.valueOf('#'), new ItemStack(material,1,5), Character.valueOf('X'), railingCastIron
         });
 	
-		GameRegistry.addShapelessRecipe(new ItemStack(ingotBrass, 1), new Object[]{
-                                 Item.ingotIron, bornite
+		GameRegistry.addShapelessRecipe(new ItemStack(material,1,4), new Object[]{
+                                 Item.ingotIron, new ItemStack(material,1,2)
         });
-		GameRegistry.addShapelessRecipe(new ItemStack(uranium, 2), uraniumStone);
+		GameRegistry.addShapelessRecipe(new ItemStack(material, 2, 9), new ItemStack(material,1,8));
 		
 		GameRegistry.addRecipe(new ItemStack(pickaxeEtherium, 1), new Object[]{
-                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
+                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(shovelEtherium, 1), new Object[]{
-                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
+                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(axeEtherium, 1), new Object[]{
-                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
+                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(hoeEtherium, 1), new Object[]{
-                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
+                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(swordEtherium, 1), new Object[]{
-                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), etherium
+                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(pickaxeObsidian, 1), new Object[]{
-                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), obsidianSlate
+                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(shovelObsidian, 1), new Object[]{
-                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), obsidianSlate
+                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(axeObsidian, 1), new Object[]{
-                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), obsidianSlate
+                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(hoeObsidian, 1), new Object[]{
-                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), obsidianSlate
+                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(swordObsidian, 1), new Object[]{
-                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), obsidianSlate
+                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(pickaxeSteam, 1), new Object[]{
-                                 "XIX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "XIX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(shovelSteam, 1), new Object[]{
-                                 "X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(axeSteam, 1), new Object[]{
-                                 "X ", "XI", "# ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "X ", "XI", "# ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(hoeSteam, 1), new Object[]{
-                                 "XI", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "XI", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(swordSteam, 1), new Object[]{
-                                 "X", "I", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "X", "I", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		GameRegistry.addRecipe(new ItemStack(drillSteam, 1), new Object[]{
-                                 "XXX", "XIX", "XX#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), ingotBrass, Character.valueOf('I'), steamOvenIdle
+                                 "XXX", "XIX", "XX#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('I'), steamOvenIdle
         });
 		
 		
 		GameRegistry.addRecipe(new ItemStack(helmetObsidian, 1), new Object[]{
-                                 "XXX", "X X", Character.valueOf('X'), obsidianSlate
+                                 "XXX", "X X", Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(plateObsidian, 1), new Object[]{
-                                 "X X", "XXX", "XXX", Character.valueOf('X'), obsidianSlate
+                                 "X X", "XXX", "XXX", Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(legsObsidian, 1), new Object[]{
-                                 "XXX", "X X", "X X", Character.valueOf('X'), obsidianSlate
+                                 "XXX", "X X", "X X", Character.valueOf('X'), new ItemStack(material, 2, 3)
         });
 		GameRegistry.addRecipe(new ItemStack(bootsObsidian, 1), new Object[]{
-                                 "X X", "X X", Character.valueOf('X'), obsidianSlate
+                                 "X X", "X X", Character.valueOf('X'), new ItemStack(material,1,3)
         });
 		GameRegistry.addRecipe(new ItemStack(helmetEtherium, 1), new Object[]{
-                                 "XXX", "X X", Character.valueOf('X'), etherium
+                                 "XXX", "X X", Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(plateEtherium, 1), new Object[]{
-                                 "X X", "XXX", "XXX", Character.valueOf('X'), etherium
+                                 "X X", "XXX", "XXX", Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(legsEtherium, 1), new Object[]{
-                                 "XXX", "X X", "X X", Character.valueOf('X'), etherium
+                                 "XXX", "X X", "X X", Character.valueOf('X'), material
         });
 		GameRegistry.addRecipe(new ItemStack(bootsEtherium, 1), new Object[]{
-                                 "X X", "X X", Character.valueOf('X'), etherium
+                                 "X X", "X X", Character.valueOf('X'), material
         });
 		
 		GameRegistry.addRecipe(new ItemStack(brassGoggles, 1), new Object[]{
-                                 "X#X", "# #", Character.valueOf('X'), Block.glass, Character.valueOf('#'), ingotBrass
+                                 "X#X", "# #", Character.valueOf('X'), Block.glass, Character.valueOf('#'), new ItemStack(material,1,4)
         });
 		
 		GameRegistry.addRecipe(new ItemStack(aqualung, 1), new Object[]{
-                                 "XTX", "X X", "X#X", Character.valueOf('X'), ingotBrass, Character.valueOf('#'), Block.pistonBase, Character.valueOf('T'), Block.glass
+                                 "XTX", "X X", "X#X", Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('#'), Block.pistonBase, Character.valueOf('T'), Block.glass
         });
 		
 		GameRegistry.addRecipe(new ItemStack(rollerSkates, 1), new Object[]{
-                                 "X X", "X X", "# #", Character.valueOf('X'), ingotBrass, Character.valueOf('#'), Item.ingotIron
+                                 "X X", "X X", "# #", Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('#'), Item.ingotIron
         });
 		
 		GameRegistry.addRecipe(new ItemStack(legBraces, 1), new Object[]{
-                                 "XXX", "X X", "# #", Character.valueOf('X'), ingotBrass, Character.valueOf('#'), Block.pistonBase
+                                 "XXX", "X X", "# #", Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('#'), Block.pistonBase
         });
 		
 		GameRegistry.addRecipe(new ItemStack(spanner, 1), new Object[]{
-                                 "# #", "###", " # ", Character.valueOf('#'), ingotBrass
+                                 "# #", "###", " # ", Character.valueOf('#'), new ItemStack(material,1,4)
         });
 		
 		GameRegistry.addRecipe(new ItemStack(chisel, 1), new Object[]{
-                                 "#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), ingotBrass
+                                 "#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), new ItemStack(material,1,4)
         });
 		
 		GameRegistry.addRecipe(new ItemStack(Block.music, 1), new Object[] {
@@ -672,67 +682,73 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
             "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.gunpowder, 1), new Object[] {
-            "#X#", Character.valueOf('#'), chemicSalt, Character.valueOf('X'), Item.coal
+            "#X#", Character.valueOf('#'), new ItemStack(material, 1, 1), Character.valueOf('X'), Item.coal
         });
 		GameRegistry.addRecipe(new ItemStack(torchTeslaIdle, 1), new Object[] {
-            " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), lightBulb, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
+            " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), new ItemStack(material, 1, 6), Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Item.glowstone, 4), new Object[] {
-           "X#X", "#I#", "X#X", Character.valueOf('#'), phosphorus, Character.valueOf('X'), chemicSalt, Character.valueOf('I'), uraniumStone
+           "X#X", "#I#", "X#X", Character.valueOf('#'), new ItemStack(material,1,7), Character.valueOf('X'), new ItemStack(material, 1, 1), Character.valueOf('I'), new ItemStack(material,1,8)
         });
 		GameRegistry.addRecipe(new ItemStack(teslaReceiver, 1), new Object[] {
-           "#X#", "ITI", Character.valueOf('#'), ingotCastIron, Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
+           "#X#", "ITI", Character.valueOf('#'), new ItemStack(material,1,5), Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {
-            "TTT", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), bornite, Character.valueOf('T'), 
+            "TTT", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), new ItemStack(material,1,2), Character.valueOf('T'), 
             new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         });
 		
-		GameRegistry.addRecipe(new ItemStack(percussionLock, 1), new Object[] {
-            "X ", "##", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), ingotBrass
+		GameRegistry.addRecipe(new ItemStack(part, 1, 2), new Object[] {
+            "X ", "##", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), new ItemStack(material,1,4)
         });
-		GameRegistry.addRecipe(new ItemStack(woodenStock, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(part, 1, 5), new Object[] {
             "#  ", " # ", "  #", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         });
-		GameRegistry.addRecipe(new ItemStack(smoothBarrel, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(part, 1, 3), new Object[] {
             "#  ", " # ", "  #", Character.valueOf('#'), Item.ingotIron
         });
-		GameRegistry.addShapelessRecipe(new ItemStack(rifledBarrel, 1), new Object[] {
-            new ItemStack(smoothBarrel, 1), new ItemStack(chisel, 1, -1)
+		GameRegistry.addShapelessRecipe(new ItemStack(part, 1, 4), new Object[] {
+            new ItemStack(part, 1, 3), new ItemStack(chisel, 1, -1)
 		});
-		GameRegistry.addRecipe(new ItemStack(flintlockMusket, 1, new ItemStack(flintlockMusket, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), smoothBarrel, Character.valueOf('X'), new ItemStack(Item.flintAndSteel, 1, -1), Character.valueOf('T'), woodenStock 
+		flintlockMusket.setItemDamage(flintlockMusket.getMaxDamage()-1);
+		GameRegistry.addRecipe(flintlockMusket, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 3), Character.valueOf('X'), new ItemStack(Item.flintAndSteel, 1, -1), Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
-		GameRegistry.addRecipe(new ItemStack(matchlockMusket, 1, new ItemStack(matchlockMusket, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), smoothBarrel, Character.valueOf('X'), Item.silk, Character.valueOf('T'), woodenStock 
+		matchlockMusket.setItemDamage(matchlockMusket.getMaxDamage()-1);
+		GameRegistry.addRecipe(matchlockMusket, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 3), Character.valueOf('X'), Item.silk, Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
-		GameRegistry.addRecipe(new ItemStack(percussionCapMusket, 1, new ItemStack(percussionCapMusket, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), smoothBarrel, Character.valueOf('X'), percussionLock, Character.valueOf('T'), woodenStock 
+        percussionCapMusket.setItemDamage(percussionCapMusket.getMaxDamage()-1);
+		GameRegistry.addRecipe(percussionCapMusket, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 3), Character.valueOf('X'), new ItemStack(part, 1, 2), Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
-		GameRegistry.addRecipe(new ItemStack(flintlockRifle, 1, new ItemStack(flintlockRifle, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), rifledBarrel, Character.valueOf('X'), new ItemStack(Item.flintAndSteel, 1, -1), Character.valueOf('T'), woodenStock 
+        flintlockRifle.setItemDamage(flintlockRifle.getMaxDamage()-1);
+		GameRegistry.addRecipe(flintlockRifle, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 4), Character.valueOf('X'), new ItemStack(Item.flintAndSteel, 1, -1), Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
-		GameRegistry.addRecipe(new ItemStack(matchlockRifle, 1, new ItemStack(matchlockRifle, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), rifledBarrel, Character.valueOf('X'), Item.silk, Character.valueOf('T'), woodenStock 
+        matchlockRifle.setItemDamage(matchlockRifle.getMaxDamage()-1);
+		GameRegistry.addRecipe(matchlockRifle, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 4), Character.valueOf('X'), Item.silk, Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
-		GameRegistry.addRecipe(new ItemStack(percussionCapRifle, 1, new ItemStack(percussionCapRifle, 1).getMaxDamage()-1), new Object[] {
-            "X", "#", "T", Character.valueOf('#'), rifledBarrel, Character.valueOf('X'), percussionLock, Character.valueOf('T'), woodenStock 
+        percussionCapRifle.setItemDamage(percussionCapRifle.getMaxDamage()-1);
+		GameRegistry.addRecipe(percussionCapRifle, new Object[] {
+            "X", "#", "T", Character.valueOf('#'), new ItemStack(part, 1, 4), Character.valueOf('X'), new ItemStack(part, 1, 2), Character.valueOf('T'), new ItemStack(part, 1, 5) 
         });
 		
-		GameRegistry.addRecipe(new ItemStack(musketRound, 8), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(part, 8), new Object[] {
             "X", "#", "T", Character.valueOf('#'), Item.gunpowder, Character.valueOf('X'), Item.ingotIron, Character.valueOf('T'), Item.paper 
         });
-		GameRegistry.addRecipe(new ItemStack(percussionRound, 8), new Object[] {
-            "T", "#", "X", Character.valueOf('#'), Item.gunpowder, Character.valueOf('X'), ingotBrass, Character.valueOf('T'), Item.paper
+		GameRegistry.addRecipe(new ItemStack(part, 8, 1), new Object[] {
+            "T", "#", "X", Character.valueOf('#'), Item.gunpowder, Character.valueOf('X'), new ItemStack(material,1,4), Character.valueOf('T'), Item.paper
         });
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.slimeBall, 1), new Object[] {
-			Item.bucketWater, chemicSalt
+			Item.bucketWater, new ItemStack(material, 1, 1)
 		});
 		
 		
 		GameRegistry.addRecipe(new ItemStack(emptyKettle, 1, emptyKettle.getMaxDamage()-1), new Object[]{
-                                  "#  ", "###", " ##", Character.valueOf('#'), ingotCastIron
+                                  "#  ", "###", " ##", Character.valueOf('#'), new ItemStack(material,1,5)
         });
 		GameRegistry.addRecipe(new ItemStack(emptyTeacup, 1), new Object[]{
                                   "# #", " # ", Character.valueOf('#'), Item.clay
@@ -743,7 +759,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		DrillRecipeItems = (new Object[][] {
 			new Object[] {
-                new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Block.cobblestone, Item.ingotIron, Item.diamond, Item.ingotGold, obsidianSlate, etherium
+                new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Block.cobblestone, Item.ingotIron, Item.diamond, Item.ingotGold, new ItemStack(material,1,3), material
 			}, new Object[] {
                 drillWood, drillStone, drillSteel, drillDiamond, drillGold, drillObsidian, drillEtherium
             }
@@ -781,13 +797,13 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		StoreBlockRecipeItems = (new Object[][] {
             new Object[] {
-                new ItemStack(decorBlock,1,0), new ItemStack(ingotCastIron, 9)
+                new ItemStack(decorBlock,1,0), new ItemStack(material,9,5)
             }, new Object[] {
-        		new ItemStack(decorBlock,1,1), new ItemStack(etherium, 9)
+        		new ItemStack(decorBlock,1,1), new ItemStack(material, 9)
             }, new Object[] {
-        		new ItemStack(decorBlock,1,2), new ItemStack(ingotBrass, 9)
+        		new ItemStack(decorBlock,1,2), new ItemStack(material,9,4)
             }, new Object[] {
-        		new ItemStack(decorBlock,1,3), new ItemStack(uraniumStone, 9)
+        		new ItemStack(decorBlock,1,3), new ItemStack(material,9,8),
             }
         });
 		
@@ -876,7 +892,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static void addAchievements(){
 		ach_BlackMagic = (new Achievement(AchievementList.achievementList.size(),"Black Magic",6,4, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
 		addAchievement("Black Magic", "Construct an obsidian pickaxe");
-		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",8,4, etherium, ach_BlackMagic)).registerAchievement();
+		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",8,4, material, ach_BlackMagic)).registerAchievement();
 		addAchievement("Carrying You", "Mine some volucite");
 		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",5,1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
 		addAchievement("Spiral Nemesis", "Construct a drill");
@@ -888,11 +904,11 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		addAchievement("It's Alive!", "Construct a tesla coil");
 		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,7, decorBlock, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Master Craftsman", "Engrave a block");
-		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,7, uraniumStone, ach_Fallout)).registerAchievement();
+		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,7, new ItemStack(material,1,8), ach_Fallout)).registerAchievement();
 		addAchievement("Ruined Everything", "Melt down a nuclear reactor");
 		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",1,2, aqualung, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Jethro Tull", "Construct an aqualung");
-		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",0,3, flintlockMusket, AchievementList.acquireIron)).registerAchievement();
+		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",0,3, firearm, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Lock, Stock and Barrel", "Construct a musket or rifle");
 		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",2,5, fullTeacup, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Time For A Cuppa!", "Pour yourself a cup of tea");
@@ -981,7 +997,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 
 	@Override
 	public void notifyPickup(EntityItem item, EntityPlayer player) {
-		if(item.getEntityItem().itemID == etherium.itemID){
+		if(item.getEntityItem().isItemEqual(new ItemStack(material))){
             player.triggerAchievement(ach_CarryingYou);
          }
 	}
@@ -1006,7 +1022,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		 if(item.itemID == aqualung.itemID){
             player.triggerAchievement(ach_JethroTull);
          }
-		 if(item.itemID == matchlockMusket.itemID || item.itemID == flintlockMusket.itemID || item.itemID == percussionCapMusket.itemID || item.itemID == matchlockRifle.itemID || item.itemID == flintlockRifle.itemID || item.itemID == percussionCapRifle.itemID){
+		 if(item.itemID == firearm.itemID){
             player.triggerAchievement(ach_LockStockAndBarrel);
          }
 		 int repairDmg = -1000;
@@ -1025,7 +1041,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	            		craftMatrix.decrStackSize(i, 1);
 	            	}
 	            	if(itemstack1.getItem() == chisel && itemstack1.getItemDamage()+1 < itemstack1.getMaxDamage()){
-	            		if(item.getItem() == rifledBarrel){
+	            		if(item.isItemEqual(new ItemStack(part,1,4))){
 	            			craftMatrix.setInventorySlotContents(i, new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +16));
 	            		}else{
 	            			craftMatrix.setInventorySlotContents(i, new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +1));
@@ -1059,9 +1075,9 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	}
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		if(TileEntityChemFurnace.fuels.containsKey(fuel.itemID))
-			return (int) TileEntityChemFurnace.fuels.get(fuel.itemID);
-		else if(fuel.itemID==uranium.itemID)
+		if(TileEntityChemFurnace.fuels.containsKey(fuel))
+			return (int) TileEntityChemFurnace.fuels.get(fuel);
+		else if(fuel.isItemEqual(new ItemStack(material, 1, 9)))
 		{
 			return 3200;
 		}

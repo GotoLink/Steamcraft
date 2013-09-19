@@ -112,17 +112,17 @@ public class TileEntityChemFurnace extends TileEntityFurnace
     public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
     {
     	if(par1 == 1 || par1 == 3)
-    		return fuels.containsKey(par2ItemStack.itemID);
+    		return fuels.containsKey(par2ItemStack);
     	else
     		return super.isItemValidForSlot(par1, par2ItemStack);
     }
     public static Map fuels = new HashMap();
     {
-    	fuels.put(Item.sugar.itemID,20);
-    	fuels.put(Item.gunpowder.itemID, 100);
-    	fuels.put(Steamcraft.bornite.itemID, 200);
-    	fuels.put(Steamcraft.chemicSalt.itemID,1000);	
-    	fuels.put(Steamcraft.phosphorus.itemID, 1600);
-    	fuels.put(Item.glowstone.itemID, 3200);
+    	fuels.put(new ItemStack(Item.sugar),20);
+    	fuels.put(new ItemStack(Item.gunpowder), 100);
+    	fuels.put(new ItemStack(Steamcraft.material,1,2), 200);
+    	fuels.put(new ItemStack(Steamcraft.material,1,1),1000);	
+    	fuels.put(new ItemStack(Steamcraft.material,1,7), 1600);
+    	fuels.put(new ItemStack(Item.glowstone), 3200);
     }
 }
