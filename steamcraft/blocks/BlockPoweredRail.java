@@ -16,7 +16,7 @@ public class BlockPoweredRail extends BlockRailPowered
     {
         if(isPowered)
         {
-            return super.getIcon(i,8);
+            return super.getIcon(i, 8);
         } 
         else
 	        return super.getIcon(i, 0);

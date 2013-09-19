@@ -24,7 +24,7 @@ public class BlockSCOre extends BlockOre
     {
 		if(blockID == Steamcraft.oreVolucite.blockID)
         {
-			return Steamcraft.etherium.itemID;
+			return Steamcraft.material.itemID;
 		}		
 		else
         {

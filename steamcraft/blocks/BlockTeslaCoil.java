@@ -41,62 +41,62 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 		int f2 = 0;
         if(l2 == 3)
         {
-			 f = 0;
-            f1 = 1;
-			f2 = 0;
+        	f = 0;
+        	f1 = 1;
+            f2 = 0;
         } else
         if(l2 == 2)
         {
-            f = -1;
-           f1 = 0;
-		   f2 = 0;
-        } else
-        if(l2 == 1)
+        	f = -1;
+        	f1 = 0;
+        	f2 = 0;
+        } 
+        else if(l2 == 1)
         {
-            f = 1;
-           f1 = 0;
-		   f2 = 0;
-        } else
-        if(l2 == 4)
+        	f = 1;
+        	f1 = 0;
+        	f2 = 0;
+        }
+        else if(l2 == 4)
         {
             f = 0;
             f1 = -1;
 			f2 = 0;
-        } else
+        } 
+        else
         {
-             f = 0;
+            f = 0;
             f1 = 0;
 			f2 = 1;
         }
 
 		int nn = 0;
 		while (nn <= 8) {
-		nn=nn+1;
-		int t1 = (i + f * nn);
-		int t2 = (k + f1 * nn);
-		int t3 = (j + f2 * nn);
-
-           if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
-            world.setBlockMetadataWithNotify(t1, t3, t2, 1, 2);
-
-            world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
+			nn=nn+1;
+			int t1 = (i + f * nn);
+			int t2 = (k + f1 * nn);
+			int t3 = (j + f2 * nn);
+			if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+	            world.setBlockMetadataWithNotify(t1, t3, t2, 1, 2);
+	
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
 			if((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
-			world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
-			}
+		}
         if(torchActive)
         {
             world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
@@ -122,7 +122,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 
         if(torchActive)
 		{
-    	  nnum = 2;
+        	nnum = 2;
 		}
 		else	
 		{
@@ -135,59 +135,60 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
 		int f2 = 0;
         if(l2 == 3)
         {
-			 f = 0;
+        	f = 0;
             f1 = 1;
 			f2 = 0;
-        } else
-        if(l2 == 2)
+        } 
+        else if(l2 == 2)
         {
-            f = -1;
-           f1 = 0;
-		   f2 = 0;
-        } else
-        if(l2 == 1)
+        	f = -1;
+        	f1 = 0;
+        	f2 = 0;
+        } 
+        else if(l2 == 1)
         {
             f = 1;
-           f1 = 0;
-		   f2 = 0;
-        } else
-        if(l2 == 4)
+            f1 = 0;
+            f2 = 0;
+        } 
+        else if(l2 == 4)
         {
             f = 0;
             f1 = -1;
 			f2 = 0;
-        } else
+        } 
+        else
         {
              f = 0;
-            f1 = 0;
-			f2 = 1;
+             f1 = 0;
+             f2 = 1;
         }
 
 		int nn = 0;
 		while (nn <= 8) {
-		nn=nn+1;
-		int t1 = (i + f * nn);
-		int t2 = (k + f1 * nn);
-		int t3 = (j + f2 * nn);
-
-       if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
-    	   world.setBlockMetadataWithNotify(t1, t3, t2, nnum, 2);
-	        world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
-	        world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
-	        world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
-	        world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
-	        world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
-	        world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
-	        world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
-       }
-	   	if((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
-			world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
-            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
+			nn=nn+1;
+			int t1 = (i + f * nn);
+			int t2 = (k + f1 * nn);
+			int t3 = (j + f2 * nn);
+	
+			if((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+				world.setBlockMetadataWithNotify(t1, t3, t2, nnum, 2);
+		        world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
+		        world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
+		        world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
+		        world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
+		        world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
+		        world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
+		        world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
+			}
+		   	if((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 - 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3, t2 + 1, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
+	            world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
 		}
 	

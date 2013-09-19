@@ -9,11 +9,11 @@ import steamcraft.Steamcraft;
 
 public class ItemKettle extends Item
 {
-    public ItemKettle(int i,int j)
+    public ItemKettle(int i)
     {
         super(i);
-        maxStackSize = 1;
-        setMaxDamage(j);
+        setMaxStackSize(1);
+        setMaxDamage(300);
     }
     @Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

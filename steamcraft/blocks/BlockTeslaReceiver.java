@@ -155,16 +155,6 @@ public class BlockTeslaReceiver extends Block
         {
             return true;
         }
-        if(!super.shouldSideBeRendered(iblockaccess, i, j, k, l))
-        {
-            return false;
-        }
-        if(l == 0)
-        {
-            return true;
-        } else
-        {
-        return (true);
-        }
+        return super.shouldSideBeRendered(iblockaccess, i, j, k, l);
     }
 }
