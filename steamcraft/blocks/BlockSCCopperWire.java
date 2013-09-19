@@ -18,6 +18,7 @@ public class BlockSCCopperWire extends BlockRedstoneWire
 	public BlockSCCopperWire(int i)
     {
         super(i);
+        disableStats();
     }
     @Override
     @SideOnly(Side.CLIENT)

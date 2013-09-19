@@ -1,6 +1,8 @@
 package steamcraft.blocks;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -85,7 +87,7 @@ public class BlockInverter extends BlockRedstoneTorch
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
         boolean flag = this.isIndirectlyPowered(par1World, par2, par3, par4);
-        List list = (List)redstoneUpdateInfoCache.get(par1World);
+        List list = (List)getRedstoneUpdateList().get(par1World);
 
         while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
         {
@@ -116,5 +118,23 @@ public class BlockInverter extends BlockRedstoneTorch
         {
             par1World.setBlock(par2, par3, par4, Steamcraft.torchRedstoneActive.blockID, par1World.getBlockMetadata(par2, par3, par4), 3);
         }
+    }
+    
+    public static Map getRedstoneUpdateList(){
+    	Field f;
+    	Object obj = null;
+		try {
+			f = BlockRedstoneTorch.class.getDeclaredFields()[1];//redstoneUpdateInfoCache
+    	if(!f.isAccessible())
+    		f.setAccessible(true);
+    	obj = f.get(null);
+    	}catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return Map.class.cast(obj);
     }
 }

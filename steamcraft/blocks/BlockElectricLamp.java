@@ -23,6 +23,7 @@ public class BlockElectricLamp extends BlockRedstoneTorch
 		float f = 0.25F;
         float f1 = 1.0F;
         setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
+        disableStats();
     }
 	@Override
     public int tickRate(World world)
@@ -61,7 +62,7 @@ public class BlockElectricLamp extends BlockRedstoneTorch
     public void updateTick(World world, int i, int j, int k, Random random)
     {
     	boolean flag = this.isIndirectlyPowered(world, i, j, k);
-        List list = (List)redstoneUpdateInfoCache.get(world);
+        List list = (List)BlockInverter.getRedstoneUpdateList().get(world);
 
         while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
         {

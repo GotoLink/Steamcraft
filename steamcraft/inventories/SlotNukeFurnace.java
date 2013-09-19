@@ -8,9 +8,11 @@ import steamcraft.Steamcraft;
 
 public class SlotNukeFurnace extends SlotFurnace
 {
-    public SlotNukeFurnace(EntityPlayer entityplayer, IInventory iinventory, int i, int j, int k)
+    private EntityPlayer thePlayer;
+	public SlotNukeFurnace(EntityPlayer entityplayer, IInventory iinventory, int i, int j, int k)
     {
         super(entityplayer, iinventory, i, j, k);
+        this.thePlayer = entityplayer;
     }
     @Override
     public boolean isItemValid(ItemStack itemstack)

@@ -1,8 +1,10 @@
 package steamcraft;
 
 import java.util.EnumSet;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -120,7 +122,7 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 			}
 		}
 		if(entityPlayer.getEntityData().getShort("Aqualung") > 0 && entityPlayer.isInsideOfMaterial(Material.water) && entityPlayer.isEntityAlive()){
-			entityPlayer.getEntityData().setShort("Aqualung",(short) entityPlayer.decreaseAirSupply(entityPlayer.getEntityData().getShort("Aqualung")));
+			entityPlayer.getEntityData().setShort("Aqualung",(short) decreaseAirSupply(entityPlayer,entityPlayer.getEntityData().getShort("Aqualung")));
 			entityPlayer.setAir(300);
 		}
 		//GL11.glDisable(3042 /*GL_BLEND*/);
@@ -156,6 +158,12 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 			}
 		}
 	}
+
+	protected int decreaseAirSupply(EntityPlayer entityPlayer, int par1)
+    {
+        int j = EnchantmentHelper.getRespiration(entityPlayer);
+        return j > 0 && new Random().nextInt(j + 1) > 0 ? par1 : par1 - 1;
+    }
 
 	public int getStackPosition(InventoryPlayer inventory, ItemStack itemStack)
 	{

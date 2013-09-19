@@ -22,6 +22,7 @@ public class BlockDiode extends BlockRedstoneRepeater
 	public BlockDiode(int i, boolean flag)
     {
         super(i, flag);
+        disableStats();
     }
     @Override
     @SideOnly(Side.CLIENT)
@@ -67,5 +68,56 @@ public class BlockDiode extends BlockRedstoneRepeater
     public int idPicked(World par1World, int par2, int par3, int par4)
     {
         return Steamcraft.redstoneRepeaterIdle.blockID;
+    }
+    @Override
+    public void randomDisplayTick(World world, int i, int j, int k, Random random)
+    {
+        if(!isRepeaterPowered)
+        {
+            return;
+        }
+        int l = world.getBlockMetadata(i, j, k);
+        int i1 = getDirection(l);
+        double d = (double)((float)i + 0.5F) + (double)(random.nextFloat() - 0.5F) * 0.20000000000000001D;
+        double d1 = (double)((float)j + 0.4F) + (double)(random.nextFloat() - 0.5F) * 0.20000000000000001D;
+        double d2 = (double)((float)k + 0.5F) + (double)(random.nextFloat() - 0.5F) * 0.20000000000000001D;
+        double d3 = 0.0D;
+        double d4 = 0.0D;
+        if(random.nextInt(2) == 0)
+        {
+            switch(i1)
+            {
+            case 0:
+                d4 = -0.3125D;
+                break;
+            case 1:
+                d3 = 0.3125D;
+                break;
+            case 2:
+                d4 = 0.3125D;
+                break;
+            case 3:
+                d3 = -0.3125D;
+            }
+        } else
+        {
+        	int j1 = (l & 12) >> 2;
+
+            switch (i1)
+            {
+                case 0:
+                    d4 = repeaterTorchOffset[j1];
+                    break;
+                case 1:
+                    d3 = -repeaterTorchOffset[j1];
+                    break;
+                case 2:
+                    d4 = -repeaterTorchOffset[j1];
+                    break;
+                case 3:
+                    d3 = repeaterTorchOffset[j1];
+            }
+        }
+        world.spawnParticle("reddust", d + d3, d1, d2 + d4, -1.0D, 0.7D, 1.0D);
     }
 }

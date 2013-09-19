@@ -112,7 +112,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch
     public void updateTick(World world, int i, int j, int k, Random random)
     {
     	boolean flag = this.isIndirectlyPowered(world, i, j, k);
-        List list = (List)redstoneUpdateInfoCache.get(world);
+        List list = (List)BlockInverter.getRedstoneUpdateList().get(world);
 
         while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo)list.get(0)).updateTime > 60L)
         {

@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import steamcraft.blocks.BlockMainFurnace;
 import steamcraft.blocks.BlockSteamFurnace;
 
 public class TileEntitySteamFurnace extends TileEntityFurnace
@@ -129,7 +130,7 @@ public class TileEntitySteamFurnace extends TileEntityFurnace
             if(flag != (furnaceBurnTime > 0))
             {
                 flag1 = true;
-                BlockSteamFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
+                BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord,Steamcraft.steamOvenActive.blockID, Steamcraft.steamOvenIdle.blockID, false);
             }
         }
         if (flag1)

@@ -12,11 +12,11 @@ import steamcraft.TileEntityNukeFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockNukeFurnace extends BlockFurnace
+public class BlockNukeFurnace extends BlockMainFurnace
 {
     public BlockNukeFurnace(int i, boolean flag)
     {
-        super(i, flag/* Material.iron*/);
+        super(i, flag,"nukefurnaceside","nukefurnacetop","nukefurnace");
 		setTickRandomly(true);
     }
     @Override
@@ -30,15 +30,6 @@ public class BlockNukeFurnace extends BlockFurnace
     {
         return Steamcraft.nukeOvenIdle.blockID;
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister)
-	{
-	    this.blockIcon = par1IconRegister.registerIcon("steamcraft:nukefurnaceside");
-	    this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "nukefurnaceactive" : "nukefurnaceidle"));
-	    this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:nukefurnacetop");
-	}
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
@@ -87,31 +78,6 @@ public class BlockNukeFurnace extends BlockFurnace
         return true;
     }
 
-    public static void updateFurnaceBlockState(boolean flag, World world, int i, int j, int k)
-    {
-        int l = world.getBlockMetadata(i, j, k);
-        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
-		keepFurnaceInventory = true;
-        if(flag)
-        {
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.ghast.fireball", 1.0F, 0.8F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "mob.zombiepig.zpigdeath", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.6F);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "fire.ignite", 1.5F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlock(i, j, k, Steamcraft.nukeOvenActive.blockID);
-        } else
-        {
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "ambient.cave.cave", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            world.setBlock(i, j, k, Steamcraft.nukeOvenIdle.blockID);
-        }
-		keepFurnaceInventory = false;
-        world.setBlockMetadataWithNotify(i, j, k, l, 3);
-		if(tileentity != null)
-        {
-			tileentity.validate();
-			world.setBlockTileEntity(i, j, k, tileentity);
-		}
-    }
-
 	public static void meltdown(World world, int i, int j, int k){
 		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
 		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.ach_RuinedEverything);
@@ -140,7 +106,7 @@ public class BlockNukeFurnace extends BlockFurnace
 		int k2 = world.getBlockId(i, j, k-1);
 		if(tileentityfurnace.getHeat() >= 1000){
 		if(i1 == waterStill.blockID){
-		tileentityfurnace.addHeat(-10);
+			tileentityfurnace.addHeat(-10);
 			world.setBlock(i+1, j, k, 0, world.getBlockMetadata(i+1, j, k), 3);
 			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 			spawnSmoke(world, i+1, j, k, random);

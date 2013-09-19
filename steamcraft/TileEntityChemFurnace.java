@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.blocks.BlockChemFurnace;
+import steamcraft.blocks.BlockMainFurnace;
 
 public class TileEntityChemFurnace extends TileEntityFurnace
 {
@@ -100,7 +101,7 @@ public class TileEntityChemFurnace extends TileEntityFurnace
             if(flag != (furnaceBurnTime > 0))
             {
                 flag1 = true;
-                BlockChemFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
+                BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, Steamcraft.chemOvenActive.blockID, Steamcraft.chemOvenIdle.blockID, false);
             }
 		}
         if (flag1)
@@ -116,7 +117,7 @@ public class TileEntityChemFurnace extends TileEntityFurnace
     	else
     		return super.isItemValidForSlot(par1, par2ItemStack);
     }
-    public static Map fuels = new HashMap();
+    public static Map<ItemStack,Integer> fuels = new HashMap();
     {
     	fuels.put(new ItemStack(Item.sugar),20);
     	fuels.put(new ItemStack(Item.gunpowder), 100);

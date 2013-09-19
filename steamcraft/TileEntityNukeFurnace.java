@@ -3,6 +3,7 @@ package steamcraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import steamcraft.blocks.BlockMainFurnace;
 import steamcraft.blocks.BlockNukeFurnace;
 
 public class TileEntityNukeFurnace extends TileEntityFurnace
@@ -106,7 +107,7 @@ public class TileEntityNukeFurnace extends TileEntityFurnace
             if(flag != (furnaceBurnTime > 0))
             {
                 flag1 = true;
-                BlockNukeFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
+                BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord,Steamcraft.nukeOvenActive.blockID,Steamcraft.nukeOvenIdle.blockID,true);
             }
 			if(furnaceHeat >= 2560){
 				BlockNukeFurnace.meltdown(worldObj, xCoord, yCoord, zCoord);

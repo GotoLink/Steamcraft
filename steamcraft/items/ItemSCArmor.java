@@ -1,5 +1,7 @@
 package steamcraft.items;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
@@ -11,7 +13,7 @@ public class ItemSCArmor extends ItemArmor
     public ItemSCArmor(int i, int j, int k, int l)
     {
         super(i, EnumArmorMaterial.values()[j], k, l);
-        damageReduceAmount = damageReduceAmountArray[l];
+        setDamageReduceAmount(damageReduceAmountArray[l]);
 		if(k == Steamcraft.armorIndexes[0]){
 			setMaxDamage(-1);
 		}else{
@@ -19,6 +21,22 @@ public class ItemSCArmor extends ItemArmor
 		}
     }
 
+    private void setDamageReduceAmount(int amount){
+    	Field f;
+		try {
+			f = ItemArmor.class.getDeclaredFields()[5];//damagereduceamount
+	        if(!f.isAccessible())
+	        	f.setAccessible(true);
+	        f.set(this,amount);
+		}
+        catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+    }
     private static final int damageReduceAmountArray[] = {
         3, 8, 6, 3
     };

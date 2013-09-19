@@ -17,25 +17,17 @@ import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSteamFurnace extends BlockFurnace
+public class BlockSteamFurnace extends BlockMainFurnace
 {
-    public BlockSteamFurnace(int i, boolean flag)
+	public BlockSteamFurnace(int i, boolean flag)
     {
-        super(i, flag/*Material.iron*/);
+        super(i, flag,"steamfurnaceside","steamfurnacetop","steamfurnace");
     }
     
     @Override
     public int idDropped(int i, Random random, int j)
     {
         return Steamcraft.steamOvenIdle.blockID;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
-    {
-        this.blockIcon = par1IconRegister.registerIcon("steamcraft:steamfurnaceside");
-        this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "steamfurnaceactive" : "steamfurnaceidle"));
-        this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:steamfurnacetop");
     }
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
@@ -93,27 +85,6 @@ public class BlockSteamFurnace extends BlockFurnace
             entityplayer.openGui(Steamcraft.instance, 0,world, i, j, k);
         }
 		return true;
-    }
-
-    public static void updateFurnaceBlockState(boolean flag, World world, int i, int j, int k)
-    {
-        int l = world.getBlockMetadata(i, j, k);
-        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
-		keepFurnaceInventory = true;
-        if(flag)
-        {
-            world.setBlock(i, j, k, Steamcraft.steamOvenActive.blockID);
-        } else
-        {
-            world.setBlock(i, j, k, Steamcraft.steamOvenIdle.blockID);
-        }
-        keepFurnaceInventory = false;
-        world.setBlockMetadataWithNotify(i, j, k, l, 2);
-        if(tileentity != null)
-        {
-            tileentity.validate();
-            world.setBlockTileEntity(i, j, k, tileentity);
-        }
     }
 
 	@Override

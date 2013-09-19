@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.TileEntityChemFurnace;
@@ -16,25 +17,17 @@ import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockChemFurnace extends BlockFurnace
+public class BlockChemFurnace extends BlockMainFurnace
 {
-    public BlockChemFurnace(int i, boolean flag)
+	public BlockChemFurnace(int i, boolean flag)
     {
-        super(i, flag/*Material.iron*/);
+        super(i, flag,"chemfurnaceside","castironblock","chemfurnace");
     }
     @Override
     public int idDropped(int i, Random random, int j)
     {
         return Steamcraft.chemOvenIdle.blockID;
     }
-    @Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister)
-	{
-	    this.blockIcon = par1IconRegister.registerIcon("steamcraft:chemfurnaceside");
-	    this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:"+(this.isActive ? "chemfurnaceactive" : "chemfurnaceidle"));
-	    this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:castironblock");
-	}
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
@@ -80,27 +73,6 @@ public class BlockChemFurnace extends BlockFurnace
             entityplayer.openGui(Steamcraft.instance, 1,world, i, j, k);
 		}
         return true;
-    }
-
-    public static void updateFurnaceBlockState(boolean flag, World world, int i, int j, int k)
-    {
-        int l = world.getBlockMetadata(i, j, k);
-        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
-		keepFurnaceInventory = true;
-        if(flag)
-        {
-            world.setBlock(i, j, k, Steamcraft.chemOvenActive.blockID);
-        } else
-        {
-            world.setBlock(i, j, k, Steamcraft.chemOvenIdle.blockID);
-        }
-		keepFurnaceInventory = false;
-        world.setBlockMetadataWithNotify(i, j, k, l, 3);
-		 if(tileentity != null)
-        {
-		tileentity.validate();
-        world.setBlockTileEntity(i, j, k, tileentity);
-		}
     }
 
 	@Override

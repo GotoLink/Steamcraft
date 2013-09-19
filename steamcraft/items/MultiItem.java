@@ -2,6 +2,8 @@ package steamcraft.items;
 
 import java.util.List;
 
+import steamcraft.Steamcraft;
+
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -18,6 +20,7 @@ public class MultiItem extends Item{
 		super(par1);
 		setHasSubtypes(true);
 		this.names = names;
+		setCreativeTab(Steamcraft.steamTab);
 	}
 
 	@Override
