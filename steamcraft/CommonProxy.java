@@ -71,18 +71,11 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 	}
 
 	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		if(type.contains(TickType.PLAYER))
-			onPlayerTick((EntityPlayer)tickData[0]);
-		else if(type.contains(TickType.RENDER))
-			onRenderTick();
+	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		onPlayerTick((EntityPlayer)tickData[0]);
 	}
 
-	public void onRenderTick() {
-		
-	}
-
-	private void onPlayerTick(EntityPlayer entityPlayer) {
+	protected void onPlayerTick(EntityPlayer entityPlayer) {
 		 //Boots = 0
         //Legs = 1
         //Chest = 2
@@ -100,13 +93,13 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 				}
 				if(heldItem.getItemDamage() == heldItem.getMaxDamage()-1){
 					ItemFirearm heldFirearm = (ItemFirearm)heldItem.getItem();
-					if(heldFirearm.getAmmoA() != heldFirearm.getAmmoB() && getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoA()) > -1 && getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoB()) > -1){
-						if(entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA().itemID) && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoB().itemID))
+					if(heldFirearm.getAmmoA(heldItem) != heldFirearm.getAmmoB() && getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoA(heldItem)) > -1 && getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoB()) > -1){
+						if(entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(heldItem).itemID) && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoB().itemID))
 				        {
 							heldItem.setItemDamage(heldItem.getItemDamage()-1);
 						}
 					}
-					if(heldFirearm.getAmmoA() == heldFirearm.getAmmoB() && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA().itemID)){
+					if(heldFirearm.getAmmoA(heldItem) == heldFirearm.getAmmoB() && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(heldItem).itemID)){
 						heldItem.setItemDamage(heldItem.getItemDamage()-1);
 					}
 				}
@@ -164,11 +157,11 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 		}
 	}
 
-	public int getStackPosition(InventoryPlayer inventory, Item item)
+	public int getStackPosition(InventoryPlayer inventory, ItemStack itemStack)
 	{
 		for(int i = 0; i < inventory.getSizeInventory(); i++)
 		{
-			if(inventory.getStackInSlot(i) != null && item == inventory.getStackInSlot(i).getItem())
+			if(inventory.getStackInSlot(i) != null && itemStack.isItemEqual(inventory.getStackInSlot(i)))
 			{
 				return i;
 			}
@@ -178,13 +171,13 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
 	
 	
 	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		
 	}
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.PLAYER,TickType.RENDER);
+		return EnumSet.of(TickType.PLAYER);
 	}
 
 	@Override

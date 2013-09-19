@@ -1,5 +1,7 @@
 package steamcraft;
 
+import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -27,6 +29,7 @@ import steamcraft.render.TileEntityLampRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.TickType;
 
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler{
 
@@ -70,6 +73,17 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		return RenderingRegistry.addNewArmourRendererPrefix(string);
 	}
 	@Override
+	public EnumSet<TickType> ticks() {
+		return EnumSet.of(TickType.PLAYER,TickType.RENDER);
+	}
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		if(type.contains(TickType.PLAYER))
+			onPlayerTick((EntityPlayer)tickData[0]);
+		if(type.contains(TickType.RENDER))
+			onRenderTick();
+	}
+
 	public void onRenderTick() {
 		if(minecraft.thePlayer!=null && minecraft.theWorld!=null)
 		{
