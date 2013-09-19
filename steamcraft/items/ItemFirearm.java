@@ -98,12 +98,12 @@ public class ItemFirearm extends Item
     public void registerIcons(IconRegister par1IconRegister)
     {
         icons = new Icon[6];
-        icons[0] = par1IconRegister.registerIcon(getIconString()+"percussionRifle");
-        icons[1] = par1IconRegister.registerIcon(getIconString()+"flintlockRifle");
-        icons[2] = par1IconRegister.registerIcon(getIconString()+"matchlockRifle");
-        icons[3] = par1IconRegister.registerIcon(getIconString()+"percussionMusket");
-        icons[4] = par1IconRegister.registerIcon(getIconString()+"flintlockMusket");
-        icons[5] = par1IconRegister.registerIcon(getIconString()+"matchlockMusket");
+        icons[0] = par1IconRegister.registerIcon(getIconString()+"percussionrifle");
+        icons[1] = par1IconRegister.registerIcon(getIconString()+"flintlockrifle");
+        icons[2] = par1IconRegister.registerIcon(getIconString()+"matchlockrifle");
+        icons[3] = par1IconRegister.registerIcon(getIconString()+"percussionmusket");
+        icons[4] = par1IconRegister.registerIcon(getIconString()+"flintlockmusket");
+        icons[5] = par1IconRegister.registerIcon(getIconString()+"matchlockmusket");
     }
 	@Override
 	@SideOnly(Side.CLIENT)
