@@ -2,6 +2,9 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
@@ -9,91 +12,54 @@ import steamcraft.Steamcraft;
 
 public class BlockLamp extends Block
 {
-    public BlockLamp(int i, Material material)
+    public BlockLamp(int i, boolean flag)
     {
-        super(i, material);
-		isPowered = false;
-    }
-    @Override
-	public int tickRate(World world)
-    {
-        return 1;
-    }
-    @Override
-	public boolean isOpaqueCube()
-    {
-        return true;
+        super(i, Material.wood);
+		isPowered = flag;
+		setHardness(2.0F);
+		setStepSound(Block.soundGlassFootstep);
+		if(flag){
+			setLightValue(1.0F);
+		}
     }
     @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
-        world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-    }
-    @Override
-    public void breakBlock(World world, int i, int j, int k, int par5, int par6)
-    {
-        world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-        world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-        world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
+    	if (!world.isRemote)
+        {
+            if (this.isPowered && !world.isBlockIndirectlyGettingPowered(i, j, k))
+            {
+                world.scheduleBlockUpdate(i, j, k, this.blockID, 4);
+            }
+            else if (!this.isPowered && world.isBlockIndirectlyGettingPowered(i, j, k))
+            {
+                world.setBlock(i, j, k, Steamcraft.lamp.blockID, 0, 2);
+            }
+        }
     }
     @Override
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-		isPowered = isPowered(world, i, j, k);
-		if(isPowered){
-			world.setBlock(i, j, k, Steamcraft.lampoff.blockID, world.getBlockMetadata(i, j, k), 2);
-		}else{
-			world.setBlock(i, j, k, Steamcraft.lamp.blockID, world.getBlockMetadata(i, j, k), 2);
-		}
+    	if (!world.isRemote && this.isPowered && !world.isBlockIndirectlyGettingPowered(i, j, k))
+        {
+            world.setBlock(i, j, k, Steamcraft.lampoff.blockID, 0, 2);
+        }
 	}
     @Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-        super.onNeighborBlockChange(world, i, j, k, l);
-        world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+    	onBlockAdded(world,i,j,k);
     }
     @Override
     public int idDropped(int i, Random random, int j)
     {
-        return Steamcraft.lamp.blockID;
+        return Steamcraft.lampoff.blockID;
     }
-	
-	private static boolean isPowered(World world, int i, int j, int k)
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int idPicked(World par1World, int par2, int par3, int par4)
     {
-      if(world.isBlockProvidingPowerTo(i, j - 1, k, 0)>0)
-        {
-            return true;
-        }
-        if(world.isBlockProvidingPowerTo(i, j + 1, k, 1)>0)
-        {
-            return true;
-        }
-        if(world.isBlockProvidingPowerTo(i, j, k - 1, 2)>0)
-        {
-            return true;
-        }
-        if(world.isBlockProvidingPowerTo(i, j, k + 1, 3)>0)
-        {
-            return true;
-        }
-        if(world.isBlockProvidingPowerTo(i - 1, j, k, 4)>0)
-        {
-            return true;
-        }
-        return world.isBlockProvidingPowerTo(i + 1, j, k, 5)>0;
-    }
-	@Override
-	public boolean canProvidePower()
-    {
-        return false;
+        return Steamcraft.lampoff.blockID;
     }
 	
 	private boolean isPowered;
