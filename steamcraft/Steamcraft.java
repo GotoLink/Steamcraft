@@ -1009,69 +1009,63 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(item.itemID == pickaxeObsidian.itemID){
-            player.triggerAchievement(ach_BlackMagic);
-         }
-		 if(item.itemID == drillWood.itemID || item.itemID == drillStone.itemID || item.itemID == drillSteel.itemID || item.itemID == drillDiamond.itemID || item.itemID == drillGold.itemID || item.itemID == drillObsidian.itemID || item.itemID == drillEtherium.itemID){
-            player.triggerAchievement(ach_SpiralNemesis);
-         }
-		 if(item.itemID == coreDrill.itemID){
-            player.triggerAchievement(ach_WhoTheHellDoYouThinkIAm);
-         }
-		 if(item.itemID == torchTeslaIdle.blockID){
-            player.triggerAchievement(ach_ItsAlive);
-         }
-		 if(item.itemID == decorBlock.blockID){// || item.itemID == decorCastIron.blockID || item.itemID == decorBrass.blockID || item.itemID == decorGold.blockID || item.itemID == decorLapis.blockID || item.itemID == decorDiamond.blockID || item.itemID == decorVolucite.blockID || item.itemID == decorUranium.blockID || item.itemID == carvedStone.blockID){
-            player.triggerAchievement(ach_MasterCraftsman);
-         }
-		 if(item.itemID == aqualung.itemID){
-            player.triggerAchievement(ach_JethroTull);
-         }
-		 if(item.itemID == firearm.itemID){
-            player.triggerAchievement(ach_LockStockAndBarrel);
-         }
-		 int repairDmg = -1000;
-			int spannerpos = -1;
-			int spannerdmg = -1;
-			int spannermaxdmg = -1;
-	        for(int i = 0; i < craftMatrix.getSizeInventory(); i++)
-	        {
-	        	ItemStack itemstack1 = craftMatrix.getStackInSlot(i);
-	            if(itemstack1 != null)
-	            {
-	            	if(itemstack1.getItem() != spanner && itemstack1.isItemStackDamageable()){
-	            		repairDmg = itemstack1.getItemDamage();
-	            	}
-	            	if(itemstack1.getItem() != spanner){
-	            		craftMatrix.decrStackSize(i, 1);
-	            	}
-	            	if(itemstack1.getItem() == chisel && itemstack1.getItemDamage()+1 < itemstack1.getMaxDamage()){
-	            		if(item.isItemEqual(new ItemStack(part,1,4))){
-	            			craftMatrix.setInventorySlotContents(i, new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +16));
-	            		}else{
-	            			craftMatrix.setInventorySlotContents(i, new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +1));
-	            		}
-	            	}
-	            	if(itemstack1.getItem() == spanner){
-	            		spannerpos = i;
-	            		spannerdmg = itemstack1.getItemDamage();
-	            		spannermaxdmg = itemstack1.getMaxDamage();
-	            	}
-	                if(itemstack1.getItem().hasContainerItem())
-	                {
-	                    craftMatrix.setInventorySlotContents(i, new ItemStack(itemstack1.getItem().getContainerItem()));
-	                }
-	            }
-	        }
-			if(spannerpos > -1 && repairDmg >= 0){
-				craftMatrix.decrStackSize(spannerpos, 1);
-				if(repairDmg > 0 && spannerdmg+1 < spannermaxdmg){
-					craftMatrix.setInventorySlotContents(spannerpos, new ItemStack(spanner, 1, spannerdmg+1));
-				}
-				else if(repairDmg == 0)
-				{
-					craftMatrix.setInventorySlotContents(spannerpos, new ItemStack(spanner, 1, spannerdmg));
-				}
+			player.triggerAchievement(ach_BlackMagic);
+		}
+		if(item.itemID == drillWood.itemID || item.itemID == drillStone.itemID || item.itemID == drillSteel.itemID || item.itemID == drillDiamond.itemID || item.itemID == drillGold.itemID || item.itemID == drillObsidian.itemID || item.itemID == drillEtherium.itemID){
+	        player.triggerAchievement(ach_SpiralNemesis);
+		}
+	 	if(item.itemID == coreDrill.itemID){
+	        player.triggerAchievement(ach_WhoTheHellDoYouThinkIAm);
+	 	}
+	 	if(item.itemID == torchTeslaIdle.blockID){
+	        player.triggerAchievement(ach_ItsAlive);
+	 	}
+	 	if(item.itemID == decorBlock.blockID){
+			player.triggerAchievement(ach_MasterCraftsman);
+	 	}
+	 	if(item.itemID == aqualung.itemID){
+	        player.triggerAchievement(ach_JethroTull);
+     	}
+	 	if(item.itemID == firearm.itemID){
+	        player.triggerAchievement(ach_LockStockAndBarrel);
+	 	}
+	 	int repairDmg = -1;
+		boolean hasSpanner = false;
+		int spannerdmg = -1;
+		int spannermaxdmg = -1;
+        for(int i = 0; i < craftMatrix.getSizeInventory(); i++)
+        {
+        	ItemStack itemstack1 = craftMatrix.getStackInSlot(i);
+            if(itemstack1 != null)
+            {
+            	if(itemstack1.getItem().itemID != spanner.itemID && itemstack1.isItemStackDamageable()){
+        			repairDmg = itemstack1.getItemDamage();
+    			}
+            	if(itemstack1.getItem().itemID == chisel.itemID && itemstack1.getItemDamage()+1 < itemstack1.getMaxDamage()){
+            		if(item.isItemEqual(new ItemStack(part,1,4))){
+            			player.inventory.addItemStackToInventory(new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +16));
+            		}else{
+            			player.inventory.addItemStackToInventory(new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage() +1));
+            		}
+            	}
+            	if(itemstack1.getItem().itemID == spanner.itemID){
+            		if(!hasSpanner)
+            			hasSpanner = true;
+            		else
+            			return;
+            		spannerdmg = itemstack1.getItemDamage();
+            		spannermaxdmg = itemstack1.getMaxDamage();
+            	}
+            }
+        }
+		if(hasSpanner && repairDmg >= 0){
+			if(repairDmg == 0){
+				player.inventory.addItemStackToInventory(new ItemStack(spanner, 1, spannerdmg));
 			}
+			 else if(spannerdmg+1 < spannermaxdmg){
+				player.inventory.addItemStackToInventory(new ItemStack(spanner, 1, spannerdmg+1));
+			}
+		}
 	}
 
 	@Override
