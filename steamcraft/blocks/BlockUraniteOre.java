@@ -14,11 +14,18 @@ import steamcraft.Steamcraft;
 
 public class BlockUraniteOre extends Block
 {
-    public BlockUraniteOre(int i)
+	public BlockUraniteOre(int i)
     {
         super(i, Material.rock);
         setTickRandomly(true);
     }
+    /*@Override
+	public void onBlockAdded(World world, int i, int j, int k)
+    {
+		if(blockID == Steamcraft.oreUranite.blockID){
+			System.out.println("Uranite at "+i+","+j+","+k);
+		}
+	}*/
     @Override
     public int tickRate(World world)
     {

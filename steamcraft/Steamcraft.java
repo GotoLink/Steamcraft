@@ -921,81 +921,81 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.provider.isHellWorld)
-			generateNether(world,random,chunkX,chunkZ);
+			generateNether(world,random,chunkX*16,chunkZ*16);
 		else
-			generateSurface(world,random,chunkX,chunkZ);
+			generateSurface(world,random,chunkX*16,chunkZ*16);
 	}
 	
 	public void generateSurface(World world, Random rand, int k, int l)
 	{
-		for(int j29 = 0; j29 < 12; j29++)
+		int x,y,z;
+		for(int i = 0; i < 12; i++)
         {
-            int k30 = k + rand.nextInt(16);
-            int l30 = rand.nextInt(64);
-            int j30 = l + rand.nextInt(16);
-            (new WorldGenMinable(brimstone.blockID, 8)).generate(world, rand, k30, l30, j30);
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(64);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(brimstone.blockID, 8)).generate(world, rand, x, y, z);
         }
-		for(int j3 = 0; j3 < 6; j3++)
+		/*for(int i = 0; i < 6; i++)
         {
-            int k6 = k + rand.nextInt(16);
-            int l9 = rand.nextInt(64);
-            int j14 = l + rand.nextInt(16);
-            (new WorldGenMinable(Block.oreIron.blockID, 16)).generate(world, rand, k6, l9, j14);
-        }
-		for(int l3 = 0; l3 < 20; l3++)
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(64);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(Block.oreIron.blockID, 16)).generate(world, rand, x, y, z);
+        }*/
+		for(int i = 0; i < 20; i++)
         {
-            int i7 = k + rand.nextInt(16);
-            int j10 = rand.nextInt(48);
-            int l14 = l + rand.nextInt(16);
-            (new WorldGenMinable(borniteOre.blockID, 8)).generate(world, rand, i7, j10, l14);
-        }
-		
-		 for(int i29 = 0; i29 < 3; i29++)
-        {
-            int k31 = k + rand.nextInt(16);
-            int l31 = rand.nextInt(36);
-            int j31 = l + rand.nextInt(16);
-            (new WorldGenMinable(orePhosphate.blockID, 6)).generate(world, rand, k31, l31, j31);
-        }
-		for(int i32 = 0; i32 < 2; i32++)
-        {
-            int j33 = k + rand.nextInt(16);
-            int k33 = rand.nextInt(24);
-            int i33 = l + rand.nextInt(16);
-            (new WorldGenMinable(oreUranite.blockID, 4)).generate(world, rand, j33, k33, i33);
-        }
-		for(int i33 = 0; i33 < 4; i33++)
-        {
-            int j34 = k + rand.nextInt(16);
-            int k34 = rand.nextInt(48);
-            int i34 = l + rand.nextInt(16);
-            (new WorldGenMinable(Block.oreRedstone.blockID, 4)).generate(world, rand, j34, k34, i34);
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(48);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(borniteOre.blockID, 8)).generate(world, rand, x, y, z);
         }
 		
-		for(int i31 = 0; i31 < 1; i31++)
+		 for(int i = 0; i < 3; i++)
         {
-            int j32 = k + rand.nextInt(16);
-            int k32 = rand.nextInt(16)+12;
-            int i32 = l + rand.nextInt(16);
-            (new WorldGenMinable(oreVolucite.blockID, 3)).generate(world, rand, j32, k32, i32);
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(36);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(orePhosphate.blockID, 6)).generate(world, rand, x, y, z);
         }
-		for(int k1 = 0; k1 < 8; k1++)
+		for(int i = 0; i < 2; i++)
         {
-            int j5 = k + rand.nextInt(16) + 8;
-            int k8 = rand.nextInt(128);
-            int j11 = l + rand.nextInt(16) + 8;
-            (new WorldGenHighwaymanHideout()).generate(world, rand, j5, k8, j11);
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(24);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(oreUranite.blockID, 4)).generate(world, rand, x, y, z);
+        }
+		/*for(int i = 0; i < 4; i++)
+        {
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(48);
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(Block.oreRedstone.blockID, 4)).generate(world, rand, x, y, z);
+        }*/
+		for(int i = 0; i < 1; i++)
+        {
+            x = k + rand.nextInt(16);
+            y = rand.nextInt(16)+12;
+            z = l + rand.nextInt(16);
+            (new WorldGenMinable(oreVolucite.blockID, 3)).generate(world, rand, x, y, z);
+        }
+		for(int i = 0; i < 8; i++)
+        {
+            x = k + rand.nextInt(16) + 8;
+            y = rand.nextInt(128);
+            z = l + rand.nextInt(16) + 8;
+            (new WorldGenHighwaymanHideout()).generate(world, rand, x, y, z);
         }
 	}
 	
 	public void generateNether(World world, Random rand, int k, int l)
 	{
-		for(int i32 = 0; i32 < 20; i32++)
+		for(int i = 0; i < 20; i++)
         {
-            int j33 = k + rand.nextInt(16);
-            int k33 = rand.nextInt(128);
-            int i33 = l + rand.nextInt(16);
-            (new WorldGenSCNetherTrees()).generate(world, rand, j33, k33, i33);
+            int x = k + rand.nextInt(16);
+            int y = rand.nextInt(128);
+            int z = l + rand.nextInt(16);
+            (new WorldGenSCNetherTrees()).generate(world, rand, x, y, z);
         }
 	}
 

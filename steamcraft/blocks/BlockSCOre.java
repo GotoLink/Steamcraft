@@ -12,13 +12,13 @@ public class BlockSCOre extends BlockOre
     {
         super(i);
     }
-	@Override
+	/*@Override
 	public void onBlockAdded(World world, int i, int j, int k)
     {
 		if(blockID == Steamcraft.oreVolucite.blockID){
-			//System.out.println("Volucite Generated At: " + i + ", " + j + ", " + k);
+			System.out.println("Volucite at " + i+","+j+","+k);
 		}
-	}
+	}*/
 	@Override
     public int idDropped(int i, Random random, int j)
     {
