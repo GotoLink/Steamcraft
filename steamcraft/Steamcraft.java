@@ -63,10 +63,10 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static Achievement ach_Fallout,ach_WhoTheHellDoYouThinkIAm,ach_ItsAlive;
 	public static Achievement ach_MasterCraftsman,ach_RuinedEverything,ach_JethroTull;
 	public static Achievement ach_LockStockAndBarrel,ach_TimeForACuppa;
-	
-	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 5, 210, 7F, 4);
-	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, 6, -1, 8F, 3);
-	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 7, 2, 321, 12F, 5);
+	//harvestLevel, maxUses,efficiencyOnProperMaterial,damageVsEntity,enchantability;
+	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
+	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
+	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 6);
 	
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
 	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive,battery;
@@ -378,7 +378,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		data.put(rollerSkates, new Object[]{"Roller Skates"});
 		data.put(legBraces, new Object[]{"Pneumatic Braces"});
 		data.put(helmetEtherium, new Object[]{"Etherium Helmet"});
-		data.put(plateEtherium, new Object[]{"Etherium Chest Plat"});
+		data.put(plateEtherium, new Object[]{"Etherium Chest Plate"});
 		data.put(legsEtherium, new Object[]{"Etherium Leggings"});
 		data.put(bootsEtherium, new Object[]{"Etherium Boots"});
 		data.put(drillSteel, new Object[]{"Iron Drill"});
