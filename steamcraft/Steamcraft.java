@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
@@ -424,6 +425,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 			else if(obj instanceof Item)
 			{
 				((Item) obj).setCreativeTab(steamTab);
+				GameRegistry.registerItem((Item)obj, (String) data.get(obj)[0]);
 			}
 			else if(obj instanceof ItemStack)
 			{
@@ -842,7 +844,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		addDecorBlockRecipes();
 		
 		//EntityHighwayman.setHeldItem(flintlockMusket, flintlockRifle, matchlockMusket, matchlockRifle, percussionCapMusket, percussionCapRifle);
-		if(event.getSide()==Side.CLIENT)
+		if(event.getSide().isClient())
 			addAchievements();
 	}
   
@@ -894,28 +896,32 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	}
 	
 	public static void addAchievements(){
-		ach_BlackMagic = (new Achievement(AchievementList.achievementList.size(),"Black Magic",6,4, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
+		ach_BlackMagic = (new Achievement(AchievementList.achievementList.size(),"Black Magic",3,2, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
 		addAchievement("Black Magic", "Construct an obsidian pickaxe");
-		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",8,4, material, ach_BlackMagic)).registerAchievement();
+		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",4,2, material, ach_BlackMagic)).registerAchievement();
 		addAchievement("Carrying You", "Mine some volucite");
-		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",5,1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
+		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",2,-1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
 		addAchievement("Spiral Nemesis", "Construct a drill");
-		ach_Fallout = (new Achievement(AchievementList.achievementList.size(),"Fallout",0,6, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
-		addAchievement("Fallout", "Smelt something with a nuclear reactor");
-		ach_WhoTheHellDoYouThinkIAm = (new Achievement(AchievementList.achievementList.size(),"Heaven Piercing",6,1, coreDrill, ach_SpiralNemesis)).setSpecial().registerAchievement();
+		ach_WhoTheHellDoYouThinkIAm = (new Achievement(AchievementList.achievementList.size(),"Heaven Piercing",3,-1, coreDrill, ach_SpiralNemesis)).setSpecial().registerAchievement();
 		addAchievement("Heaven Piercing", "WHO THE HELL DO YOU THINK I AM?");
-		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",0,4, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
-		addAchievement("It's Alive!", "Construct a tesla coil");
-		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,7, decorBlock, AchievementList.acquireIron)).registerAchievement();
-		addAchievement("Master Craftsman", "Engrave a block");
-		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,7, new ItemStack(material,1,8), ach_Fallout)).registerAchievement();
+		ach_Fallout = (new Achievement(AchievementList.achievementList.size(),"Fallout",0,1, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Fallout", "Smelt something with a nuclear reactor");
+		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,0, new ItemStack(material,1,8), ach_Fallout)).registerAchievement();
 		addAchievement("Ruined Everything", "Melt down a nuclear reactor");
-		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",1,2, aqualung, AchievementList.acquireIron)).registerAchievement();
+		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",1,2, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("It's Alive!", "Construct a tesla coil");
+		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,3, decorBlock, AchievementList.acquireIron)).registerAchievement();
+		addAchievement("Master Craftsman", "Engrave a block");
+		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",0,3, aqualung, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Jethro Tull", "Construct an aqualung");
-		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",0,3, firearm, AchievementList.acquireIron)).registerAchievement();
+		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",-1,3, firearm, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Lock, Stock and Barrel", "Construct a musket or rifle");
-		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",2,5, fullTeacup, AchievementList.acquireIron)).registerAchievement();
+		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",-1,2, fullTeacup, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Time For A Cuppa!", "Pour yourself a cup of tea");
+		AchievementPage.registerAchievementPage(
+				new AchievementPage("Steamcraft",ach_BlackMagic, ach_CarryingYou,ach_SpiralNemesis,
+						ach_Fallout,ach_WhoTheHellDoYouThinkIAm,ach_ItsAlive,ach_MasterCraftsman,
+						ach_RuinedEverything,ach_JethroTull,ach_LockStockAndBarrel,ach_TimeForACuppa));
 	}
 	
 	@Override

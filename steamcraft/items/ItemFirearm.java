@@ -116,8 +116,11 @@ public class ItemFirearm extends Item
         par3List.add(Steamcraft.matchlockRifle);
         par3List.add(Steamcraft.percussionCapRifle);
     }
-	public static int getFirePower(ItemStack itemstack){
-		return itemstack.getTagCompound().getInteger("power");
+	public static int getFirePower(ItemStack stack){
+		if(stack.hasTagCompound())
+			return stack.getTagCompound().getInteger("power");
+		else
+			return 0;
 	}
 	
 	public static void setFirePower(ItemStack stack, int power){
@@ -135,7 +138,10 @@ public class ItemFirearm extends Item
 	}
 	
 	public static boolean isRifled(ItemStack stack){
-		return stack.getTagCompound().getBoolean("rifled");
+		if(stack.hasTagCompound())
+			return stack.getTagCompound().getBoolean("rifled");
+		else
+			return false;
 	}
 	public static void setRifled(ItemStack stack){
 		if(!stack.hasTagCompound())
@@ -143,7 +149,10 @@ public class ItemFirearm extends Item
 		stack.getTagCompound().setBoolean("rifled", true);
 	}
 	public static boolean hasPercussion(ItemStack stack){
-		return stack.getTagCompound().getBoolean("percussion");
+		if(stack.hasTagCompound())
+			return stack.getTagCompound().getBoolean("percussion");
+		else
+			return false;
 	}
 	public static void setPercussion(ItemStack stack){
 		if(!stack.hasTagCompound())
