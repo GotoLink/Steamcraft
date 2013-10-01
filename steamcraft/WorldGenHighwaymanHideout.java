@@ -16,7 +16,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
     public WorldGenHighwaymanHideout()
     {
     }
-
+    @Override
     public boolean generate(World world, Random random, int i, int j, int k)
     {
         byte byte0 = 3;
@@ -74,8 +74,8 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
                             world.setBlock(l1, k2, j3, Block.thinGlass.blockID);
                         } else
                         {
-                        	randomBlockType = random.nextInt(6);
-                        	if(randomBlockType > 2){
+                        	int randomBlockType = random.nextInt(6);
+                        	if(randomBlockType > 3){
                         		randomBlockType = 0;
                         	}
                             world.setBlock(l1, k2, j3, Block.stoneBrick.blockID, randomBlockType,3);
@@ -235,5 +235,4 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
     {
         return "Highwayman";
     }
-	private int randomBlockType = 0;
 }
