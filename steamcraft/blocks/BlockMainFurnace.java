@@ -67,7 +67,7 @@ public class BlockMainFurnace extends BlockFurnace{
     }
     public static void setKeepInventory(boolean value){
     	try {
-			Field f = BlockFurnace.class.getDeclaredField("keepFurnaceInventory");
+			Field f = BlockFurnace.class.getDeclaredFields()[2];//keepInventory
 			if(!f.isAccessible())
 				f.setAccessible(true);
 			f.set(null,value);
