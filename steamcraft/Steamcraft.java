@@ -145,7 +145,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	{	
 		logger = event.getModLog();
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-		steamTab = new CreativeTabs("Steamcraft");
+		steamTab = new SteamTab();
 		config.load();
 		redstoneWire = new BlockSCCopperWire(config.getBlock("CopperWire",2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire").setTextureName("redstone_dust");
 		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter",2494).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle").setTextureName("steamcraft:inverteridle");
@@ -470,7 +470,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
 		EntityRegistry.registerModEntity(EntityHighwayman.class, "Highwayman", 2, this, 120, 1, true);
 		
-		EntityRegistry.addSpawn(EntityHighwayman.class, 5, 4, 5, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityHighwayman.class, 5, 1, 5, EnumCreatureType.monster, WorldType.base12Biomes);
 
 		GameRegistry.registerTileEntity(TileEntitySteamFurnace.class, "Steam Furnace");
 		GameRegistry.registerTileEntity(TileEntityChemFurnace.class, "Chemical Furnace");
