@@ -15,11 +15,6 @@ public class SlotNukeFurnace extends SlotFurnace
         this.thePlayer = entityplayer;
     }
     @Override
-    public boolean isItemValid(ItemStack itemstack)
-    {
-        return false;
-    }
-    @Override
     protected void onCrafting(ItemStack par1ItemStack)
     {
 		thePlayer.triggerAchievement(Steamcraft.ach_Fallout);

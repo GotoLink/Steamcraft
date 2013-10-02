@@ -7,6 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.TileEntityChemFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -98,39 +99,34 @@ public class ContainerChemFurnace extends Container
     {
         ItemStack itemstack = null;
         Slot slot = (Slot)inventorySlots.get(i);
-        if(slot != null && slot.getHasStack())
-        {
+        if(slot != null && slot.getHasStack()){
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if(i == 2)
-            {
-            	mergeItemStack(itemstack1, 4, 40, true);
-            } else
-            if(i >= 4 && i < 31)
-            {
+            if(i <= 3){
+            	if (!this.mergeItemStack(itemstack1, 4, 40, true)){
+                    return null;
+                }
+                slot.onSlotChange(itemstack1, itemstack);
+            }else if (TileEntityFurnace.isItemFuel(itemstack1)){
+                if (!this.mergeItemStack(itemstack1, 1, 3, false)){
+                    return null;
+                }
+            } else if(i >= 4 && i < 31){
             	mergeItemStack(itemstack1, 31, 40, false);
-            } else
-            if(i >= 31 && i < 40)
-            {
+            } else if(i >= 31 && i < 40){
             	mergeItemStack(itemstack1, 4, 31, false);
-            } else
-            {
+            } else{
             	mergeItemStack(itemstack1, 4, 40, false);
             }
-            if(itemstack1.stackSize == 0)
-            {
+            if(itemstack1.stackSize == 0){
                 slot.putStack(null);
-            } else
-            {
+            } else{
                 slot.onSlotChanged();
             }
-            if(itemstack1.stackSize != itemstack.stackSize)
-            {
-                slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
-            } else
-            {
+            if (itemstack1.stackSize == itemstack.stackSize){
                 return null;
             }
+            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
         }
         return itemstack;
     }

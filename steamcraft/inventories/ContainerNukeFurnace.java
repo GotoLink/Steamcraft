@@ -6,6 +6,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.TileEntityNukeFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -95,39 +97,43 @@ public class ContainerNukeFurnace extends Container
     {
         ItemStack itemstack = null;
         Slot slot = (Slot)inventorySlots.get(i);
-        if(slot != null && slot.getHasStack())
-        {
+        if(slot != null && slot.getHasStack()){
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if(i == 2)
-            {
-            	mergeItemStack(itemstack1, 3, 39, true);
-            } else
-            if(i >= 3 && i < 30)
-            {
-            	mergeItemStack(itemstack1, 30, 39, false);
-            } else
-            if(i >= 30 && i < 39)
-            {
-            	mergeItemStack(itemstack1, 3, 30, false);
-            } else
-            {
-            	mergeItemStack(itemstack1, 3, 39, false);
-            }
-            if(itemstack1.stackSize == 0)
-            {
-                slot.putStack(null);
-            } else
-            {
-                slot.onSlotChanged();
-            }
-            if(itemstack1.stackSize != itemstack.stackSize)
-            {
-                slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
-            } else
-            {
+            if (i == 2){
+                if (!this.mergeItemStack(itemstack1, 3, 39, true)){
+                    return null;
+                }
+                slot.onSlotChange(itemstack1, itemstack);
+            } else if (i > 1){
+                if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null){
+                    if (!this.mergeItemStack(itemstack1, 0, 1, false)){
+                        return null;
+                    }
+                }else if (TileEntityFurnace.isItemFuel(itemstack1)){
+                    if (!this.mergeItemStack(itemstack1, 1, 2, false)){
+                        return null;
+                    }
+                }else if (i >= 3 && i < 30){
+                    if (!this.mergeItemStack(itemstack1, 30, 39, false)){
+                        return null;
+                    }
+                }else if (i >= 30 && i < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)){
+                    return null;
+                }
+            }else if (!this.mergeItemStack(itemstack1, 3, 39, false)){
                 return null;
             }
+            if (itemstack1.stackSize == 0){
+                slot.putStack((ItemStack)null);
+            }
+            else{
+                slot.onSlotChanged();
+            }
+            if (itemstack1.stackSize == itemstack.stackSize){
+                return null;
+            }
+            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
         }
         return itemstack;
     }
