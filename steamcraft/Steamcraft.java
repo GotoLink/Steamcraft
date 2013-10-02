@@ -487,47 +487,45 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addSmelting(coldKettle.itemID, new ItemStack(hotKettle, 1, 1),1.0F);
 		GameRegistry.addSmelting(Block.stoneBrick.blockID, new ItemStack(Block.stone),1.0F);
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(material, 2, 3),Block.obsidian);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 3),
+				new Object[] {"#", "#", Character.valueOf('#'), Block.obsidian}));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.obsidian, 1), new Object[] {
-            "##", "##", Character.valueOf('#'), new ItemStack(material, 2, 3)
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.obsidian), 
+				new Object[] {"##", "##", Character.valueOf('#'), "itemObsidianSlate"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(steamOvenIdle, 1),
+				new Object[]{"# #", "#X#", "#I#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.bucketEmpty, Character.valueOf('I'), Block.furnaceIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(steamOvenIdle, 1), new Object[]{
-                                "# #", "#X#", "#I#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.bucketEmpty, Character.valueOf('I'), Block.furnaceIdle
-        }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.redstone, 8), new Object[]{
-                                "###", Character.valueOf('#'), "oreCopper"
-        }));
-		GameRegistry.addRecipe(new ItemStack(material, 4, 6), new Object[]{
-                                "I", "#", "X", Character.valueOf('#'), Item.redstone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('I'), Block.glass
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.redstone, 8),
+				new Object[]{"###", Character.valueOf('#'), "oreCopper"}));
+		GameRegistry.addRecipe(new ItemStack(material, 4, 6), 
+				new Object[]{"I", "#", "X", Character.valueOf('#'), Item.redstone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('I'), Block.glass
         });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(electricLamp, 1), new Object[]{
-                                "I", "#", "X", Character.valueOf('#'), "oreCopper", Character.valueOf('X'), "ingotCastIron", Character.valueOf('I'), new ItemStack(material, 1, 6)
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(electricLamp),
+				new Object[]{"I", "#", "X", Character.valueOf('#'), "oreCopper", Character.valueOf('X'), "ingotCastIron", Character.valueOf('I'), new ItemStack(material, 1, 6)
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchPhosphorus, 4), new Object[]{
-                                "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotPosphate"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchPhosphorus, 4),
+				new Object[]{"X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotPosphate"
         }));
-		GameRegistry.addRecipe(new ItemStack(battery, 1), new Object[]{
-                                "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'), Item.redstone
+		GameRegistry.addRecipe(new ItemStack(battery),
+				new Object[]{"###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'), Item.redstone
         });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chemOvenIdle, 1), new Object[]{
-                                "###", "#X#", "#I#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Item.diamond, Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chemOvenIdle),
+				new Object[]{"###", "#X#", "#I#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Item.diamond, Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(nukeOvenIdle, 1), new Object[]{
-                                "#I#", "#X#", "#I#", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "itemReactorCore", Character.valueOf('I'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(nukeOvenIdle),
+				new Object[]{"#I#", "#X#", "#I#", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "itemReactorCore", Character.valueOf('I'), "oreEtherium"
         }));
-		GameRegistry.addRecipe(new ItemStack(material, 1, 10), new Object[]{
-                                "###", "#X#", "###", Character.valueOf('#'), Block.obsidian, Character.valueOf('X'), chemOvenIdle
+		GameRegistry.addRecipe(new ItemStack(material, 1, 10),
+				new Object[]{"###", "#X#", "###", Character.valueOf('#'), Block.obsidian, Character.valueOf('X'), chemOvenIdle
         });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 1, 11), new Object[]{
-                                "#X#", "# #", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 1, 11),
+				new Object[]{"#X#", "# #", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "oreEtherium"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(coreDrill, 1), new Object[]{
-                                "X", "#", "I", Character.valueOf('#'), "ingotPosphate", Character.valueOf('X'), new ItemStack(drillGold, 1, OreDictionary.WILDCARD_VALUE), Character.valueOf('I'), "itemDrillBase"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(coreDrill),
+				new Object[]{"X", "#", "I", Character.valueOf('#'), "ingotPosphate", Character.valueOf('X'), new ItemStack(drillGold, 1, OreDictionary.WILDCARD_VALUE), Character.valueOf('I'), "itemDrillBase"
         }));
-		GameRegistry.addRecipe(new ItemStack(roofTile, 4), new Object[] {
-            "###", "###", "###", Character.valueOf('#'), Item.flint
-        });
+		GameRegistry.addRecipe(new ItemStack(roofTile, 4),
+				new Object[] {"###", "###", "###", Character.valueOf('#'), Item.flint});
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(lamp), new Object[] {
             "#X#", "XIX", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.glowstone
         }));
@@ -537,121 +535,108 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addRecipe(new ItemStack(leavesLamp, 4), new Object[] {
             "#X#", "XIX", "#X#", Character.valueOf('#'), ingotBrass, Character.valueOf('X'), Block.glass, Character.valueOf('I'), Item.lightStoneDust
         });*/
-		GameRegistry.addRecipe(new ItemStack(wirelessLamp, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(wirelessLamp), new Object[] {
             "#", "X", Character.valueOf('#'), electricLamp, Character.valueOf('X'), teslaReceiver
         });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(railingCastIron, 2), new Object[] {
-            "###", "###", Character.valueOf('#'), "ingotCastIron"
-        }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(gateCastIron, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(railingCastIron, 2),
+				new Object[] {"###", "###", Character.valueOf('#'), "ingotCastIron"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(gateCastIron), new Object[] {
             "#X#", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), railingCastIron
         }));
 	
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material,1,4), new Object[]{
-                                 Item.ingotIron, "oreCopper"
-        }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material,1,4),
+				new Object[]{Item.ingotIron, "oreCopper"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 2, 9), "oreUranium"));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeEtherium, 1), new Object[]{
-                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeEtherium),
+				new Object[]{"XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelEtherium),
+				new Object[]{"X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeEtherium),
+				new Object[]{"XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeEtherium),
+				new Object[]{"XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordEtherium),
+				new Object[]{"X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeObsidian),
+				new Object[]{"XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "itemObsidianSlate"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelObsidian), new Object[]{
+                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelEtherium, 1), new Object[]{
-                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeObsidian),
+				new Object[]{"XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeEtherium, 1), new Object[]{
-                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeObsidian),
+				new Object[]{"XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeEtherium, 1), new Object[]{
-                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordObsidian),
+				new Object[]{"X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordEtherium, 1), new Object[]{
-                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeSteam),
+				new Object[]{"XIX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ItemStack(pickaxeObsidian, 1), new Object[]{
-                                 "XXX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(shovelObsidian, 1), new Object[]{
-                                 "X", "#", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(axeObsidian, 1), new Object[]{
-                                 "XX", "X#", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(hoeObsidian, 1), new Object[]{
-                                 "XX", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(swordObsidian, 1), new Object[]{
-                                 "X", "X", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeSteam, 1), new Object[]{
-                                 "XIX", " # ", " # ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelSteam),
+				new Object[]{"X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelSteam, 1), new Object[]{
-                                 "X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeSteam),
+				new Object[]{"X ", "XI", "# ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeSteam, 1), new Object[]{
-                                 "X ", "XI", "# ", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeSteam),
+				new Object[]{"XI", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeSteam, 1), new Object[]{
-                                 "XI", " #", " #", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordSteam),
+				new Object[]{"X", "I", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordSteam, 1), new Object[]{
-                                 "X", "I", "#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
-        }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(drillSteam, 1), new Object[]{
-                                 "XXX", "XIX", "XX#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(drillSteam),
+				new Object[]{"XXX", "XIX", "XX#", Character.valueOf('#'), Item.stick, Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), steamOvenIdle
         }));
 		
 		
-		GameRegistry.addRecipe(new ItemStack(helmetObsidian, 1), new Object[]{
-                                 "XXX", "X X", Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(plateObsidian, 1), new Object[]{
-                                 "X X", "XXX", "XXX", Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ItemStack(legsObsidian, 1), new Object[]{
-                                 "XXX", "X X", "X X", Character.valueOf('X'), new ItemStack(material, 2, 3)
-        });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bootsObsidian, 1), new Object[]{
-                                 "X X", "X X", Character.valueOf('X'), "itemObsidianSlate"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(helmetObsidian),
+				new Object[]{"XXX", "X X", Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(helmetEtherium, 1), new Object[]{
-                                 "XXX", "X X", Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plateObsidian),
+				new Object[]{"X X", "XXX", "XXX", Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plateEtherium, 1), new Object[]{
-                                 "X X", "XXX", "XXX", Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legsObsidian),
+				new Object[]{ "XXX", "X X", "X X", Character.valueOf('X'), "itemObsidianSlate"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legsEtherium, 1), new Object[]{
-                                 "XXX", "X X", "X X", Character.valueOf('X'), "oreEtherium"
-        }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bootsEtherium, 1), new Object[]{
-                                 "X X", "X X", Character.valueOf('X'), "oreEtherium"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bootsObsidian),
+				new Object[]{"X X", "X X", Character.valueOf('X'), "itemObsidianSlate"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(helmetEtherium),
+				new Object[]{"XXX", "X X", Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plateEtherium),
+				new Object[]{"X X", "XXX", "XXX", Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legsEtherium),
+				new Object[]{"XXX", "X X", "X X", Character.valueOf('X'), "oreEtherium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bootsEtherium),
+				new Object[]{"X X", "X X", Character.valueOf('X'), "oreEtherium"}));
+		
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brassGoggles),
+				new Object[]{"X#X", "# #", Character.valueOf('X'), Block.glass, Character.valueOf('#'), "ingotBrass"
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brassGoggles, 1), new Object[]{
-                                 "X#X", "# #", Character.valueOf('X'), Block.glass, Character.valueOf('#'), "ingotBrass"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(aqualung),
+				new Object[]{"XTX", "X X", "X#X", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase, Character.valueOf('T'), Block.glass
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(aqualung, 1), new Object[]{
-                                 "XTX", "X X", "X#X", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase, Character.valueOf('T'), Block.glass
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rollerSkates),
+				new Object[]{"X X", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Item.ingotIron
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rollerSkates, 1), new Object[]{
-                                 "X X", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Item.ingotIron
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legBraces),
+				new Object[]{"XXX", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legBraces, 1), new Object[]{
-                                 "XXX", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner),
+				new Object[]{"# #", "###", " # ", Character.valueOf('#'), "ingotBrass"
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner, 1), new Object[]{
-                                 "# #", "###", " # ", Character.valueOf('#'), "ingotBrass"
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chisel),
+				new Object[]{"#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass"
         }));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chisel, 1), new Object[]{
-                                 "#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass"
-        }));
-		
-		GameRegistry.addRecipe(new ItemStack(Block.music, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.music), new Object[] {
             "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Character.valueOf('X'), Item.netherQuartz
         });
 		GameRegistry.addRecipe(new ItemStack(Block.railPowered, 6), new Object[] {
@@ -660,46 +645,46 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addRecipe(new ItemStack(Block.railDetector, 6), new Object[] {
             "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), Item.redstone, Character.valueOf('#'), Block.pressurePlateStone
         });
-		GameRegistry.addRecipe(new ItemStack(Block.lever, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.lever), new Object[] {
             "X", "#", "I", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.stick, Character.valueOf('I'), battery
         });
 		GameRegistry.addRecipe(new ItemStack(Block.torchRedstoneActive, 4), new Object[] {
             "X", "#", "I", Character.valueOf('#'), Item.stick, Character.valueOf('X'), Item.redstone, Character.valueOf('I'), battery
         });
-		GameRegistry.addRecipe(new ItemStack(Item.redstoneRepeater, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Item.redstoneRepeater), new Object[] {
             "#X#", "IRI", Character.valueOf('#'), Block.torchRedstoneActive, Character.valueOf('X'), Item.redstone, Character.valueOf('I'), Block.stone, Character.valueOf('R'), Item.netherQuartz
         });
-		GameRegistry.addRecipe(new ItemStack(Item.pocketSundial, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Item.pocketSundial), new Object[] {
             " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), Item.netherQuartz
         });
-		GameRegistry.addRecipe(new ItemStack(Item.compass, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Item.compass), new Object[] {
             " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz
         });
-		GameRegistry.addRecipe(new ItemStack(Block.stoneButton, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.stoneButton), new Object[] {
             "#", "#", "X", Character.valueOf('#'), Block.stone, Character.valueOf('X'), battery
         });
-		GameRegistry.addRecipe(new ItemStack(Block.pressurePlateStone, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.pressurePlateStone), new Object[] {
             "##", "X ", Character.valueOf('#'), Block.stone, Character.valueOf('X'), battery
         });
-		GameRegistry.addRecipe(new ItemStack(Block.pressurePlatePlanks, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.pressurePlatePlanks), new Object[] {
             "##", "X ", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE), Character.valueOf('X'), battery
         });
-		GameRegistry.addRecipe(new ItemStack(Block.dispenser, 1), new Object[] {
+		GameRegistry.addRecipe(new ItemStack(Block.dispenser), new Object[] {
             "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), Item.netherQuartz
         });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.gunpowder, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.gunpowder), new Object[] {
             "#X#", Character.valueOf('#'), "oreSulphur", Character.valueOf('X'), Item.coal
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchTeslaIdle, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchTeslaIdle), new Object[] {
             " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), "itemLightBulb", Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.glowstone, 4), new Object[] {
            "X#X", "#I#", "X#X", Character.valueOf('#'), "ingotPosphate", Character.valueOf('X'), "oreSulphur", Character.valueOf('I'), "oreUranium"
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(teslaReceiver, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(teslaReceiver), new Object[] {
            "#X#", "ITI", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz
         }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.pistonBase), new Object[] {
             "TTT", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), "oreCopper", Character.valueOf('T'), 
             new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         }));
@@ -711,11 +696,9 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
             "#  ", " # ", "  #", Character.valueOf('#'), new ItemStack(Block.planks,1,OreDictionary.WILDCARD_VALUE)
         });
 		GameRegistry.addRecipe(new ItemStack(part, 1, 3), new Object[] {
-            "#  ", " # ", "  #", Character.valueOf('#'), Item.ingotIron
-        });
+            "#  ", " # ", "  #", Character.valueOf('#'), Item.ingotIron});
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(part, 1, 4), new Object[] {
-			"itemBarrel", new ItemStack(chisel, 1, OreDictionary.WILDCARD_VALUE)
-		}));
+			"itemBarrel", new ItemStack(chisel, 1, OreDictionary.WILDCARD_VALUE)}));
 		flintlockMusket.setItemDamage(flintlockMusket.getMaxDamage()-1);
 		GameRegistry.addRecipe(new ShapedOreRecipe(flintlockMusket, new Object[] {
             "X", "#", "T", Character.valueOf('#'), "itemBarrel", Character.valueOf('X'), new ItemStack(Item.flintAndSteel, 1, OreDictionary.WILDCARD_VALUE), Character.valueOf('T'), "itemWoodenStock" 
@@ -748,7 +731,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
             "T", "#", "X", Character.valueOf('#'), Item.gunpowder, Character.valueOf('X'), "ingotBrass", Character.valueOf('T'), Item.paper
         }));
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.slimeBall, 1), new Object[] {
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.slimeBall), new Object[] {
 			Item.bucketWater, "oreSulphur"
 		}));
 		
@@ -756,7 +739,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(emptyKettle, 1, emptyKettle.getMaxDamage()-1), new Object[]{
                                   "#  ", "###", " ##", Character.valueOf('#'), "ingotCastIron"
         }));
-		GameRegistry.addRecipe(new ItemStack(emptyTeacup, 1), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(emptyTeacup), new Object[]{
                                   "# #", " # ", Character.valueOf('#'), Item.clay
         });
 		GameRegistry.addShapelessRecipe(new ItemStack(coldKettle, 1, 1), new Object[]{
@@ -1016,24 +999,31 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(item.itemID == pickaxeObsidian.itemID){
 			player.triggerAchievement(ach_BlackMagic);
+			return;
 		}
 		if(item.itemID == drillWood.itemID || item.itemID == drillStone.itemID || item.itemID == drillSteel.itemID || item.itemID == drillDiamond.itemID || item.itemID == drillGold.itemID || item.itemID == drillObsidian.itemID || item.itemID == drillEtherium.itemID){
 	        player.triggerAchievement(ach_SpiralNemesis);
+	        return;
 		}
 	 	if(item.itemID == coreDrill.itemID){
 	        player.triggerAchievement(ach_WhoTheHellDoYouThinkIAm);
+	        return;
 	 	}
 	 	if(item.itemID == torchTeslaIdle.blockID){
 	        player.triggerAchievement(ach_ItsAlive);
+	        return;
 	 	}
 	 	if(item.itemID == decorBlock.blockID){
 			player.triggerAchievement(ach_MasterCraftsman);
+			return;
 	 	}
 	 	if(item.itemID == aqualung.itemID){
 	        player.triggerAchievement(ach_JethroTull);
+	        return;
      	}
 	 	if(item.itemID == firearm.itemID){
 	        player.triggerAchievement(ach_LockStockAndBarrel);
+	        return;
 	 	}
 	 	int repairDmg = -1;
 		boolean hasSpanner = false;
