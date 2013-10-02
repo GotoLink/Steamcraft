@@ -15,9 +15,9 @@ public class ItemTeacup extends ItemFood
     }
     
     @Override
-    protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+    public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-        super.onFoodEaten(par1ItemStack, par2World, par3EntityPlayer);
-        par1ItemStack = new ItemStack(Steamcraft.emptyTeacup, 1);
+        super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+        return new ItemStack(Steamcraft.emptyTeacup, 1);
     }
 }
