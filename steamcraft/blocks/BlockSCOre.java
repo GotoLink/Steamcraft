@@ -3,7 +3,6 @@ package steamcraft.blocks;
 import java.util.Random;
 
 import net.minecraft.block.BlockOre;
-import net.minecraft.world.World;
 import steamcraft.Steamcraft;
 
 public class BlockSCOre extends BlockOre

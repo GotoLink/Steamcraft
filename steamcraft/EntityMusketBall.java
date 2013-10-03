@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +12,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.World;
 
 public class EntityMusketBall extends Entity
@@ -96,10 +94,10 @@ public class EntityMusketBall extends Entity
         float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
         prevRotationYaw = rotationYaw = (float)((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
         prevRotationPitch = rotationPitch = (float)((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
-        ticksInGround = 0;
     }
 
-    public void setVelocity(double d, double d1, double d2)
+    @Override
+	public void setVelocity(double d, double d1, double d2)
     {
         motionX = d;
         motionY = d1;
@@ -112,7 +110,6 @@ public class EntityMusketBall extends Entity
             prevRotationPitch = rotationPitch;
             prevRotationYaw = rotationYaw;
             setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
-            ticksInGround = 0;
         }
     }
     @Override
@@ -286,6 +283,5 @@ public class EntityMusketBall extends Entity
     public int arrowShake;
 	public int damagePower;
     public EntityLivingBase owner;
-    private int ticksInGround;
     private int ticksInAir;
 }

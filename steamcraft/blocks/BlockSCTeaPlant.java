@@ -1,13 +1,12 @@
 package steamcraft.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.ClientProxy;
 import steamcraft.Steamcraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSCTeaPlant extends BlockCrops
 {

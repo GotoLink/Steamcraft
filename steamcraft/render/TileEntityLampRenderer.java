@@ -82,14 +82,13 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer
         GL11.glScalef(f4, -f4, f4);
         GL11.glNormal3f(0.0F, 0.0F, -1F * f4);
         GL11.glDepthMask(false);
-        int j = 0;
-
         GL11.glDepthMask(true);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPopMatrix();
     }
 
-    public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f)
+    @Override
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f)
     {
         renderTileEntityLampAt((TileEntityLamp)tileentity, d, d1, d2, f);
     }

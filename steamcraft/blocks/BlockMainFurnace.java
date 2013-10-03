@@ -12,7 +12,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMainFurnace extends BlockFurnace{
 
-	private static boolean keepFurnaceInventory;
 	protected Icon furnaceIconTop;
 	protected Icon furnaceIconFront;
 	protected boolean isActive;

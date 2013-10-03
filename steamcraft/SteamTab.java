@@ -13,6 +13,7 @@ public class SteamTab extends CreativeTabs {
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Steamcraft", "Steamcraft");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public Item getTabIconItem()
     {

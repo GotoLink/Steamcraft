@@ -7,7 +7,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -83,8 +82,7 @@ public class CommonProxy implements IGuiHandler,ITickHandler{
         //Chest = 2
         //Helmet = 3
 		ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-        ItemStack helmetSlot = entityPlayer.inventory.armorItemInSlot(3);
-		ItemStack chestSlot = entityPlayer.inventory.armorItemInSlot(2);
+        ItemStack chestSlot = entityPlayer.inventory.armorItemInSlot(2);
 		ItemStack legSlot = entityPlayer.inventory.armorItemInSlot(1);
 		ItemStack bootSlot = entityPlayer.inventory.armorItemInSlot(0);
 		

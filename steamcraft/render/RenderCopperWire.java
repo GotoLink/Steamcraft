@@ -36,8 +36,6 @@ public class RenderCopperWire extends RenderBlocks
 			f4 = 0.14F;
         }
         tessellator.setColorOpaque_F(f2, f3, f4);
-        double d0 = 0.015625D;
-        double d1 = 0.015625D;
         boolean flag = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i - 1, j, k, 1) || !iblockaccess.isBlockNormalCube(i - 1, j, k) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i - 1, j - 1, k, -1);
         boolean flag1 = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i + 1, j, k, 3) || !iblockaccess.isBlockNormalCube(i + 1, j, k) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i + 1, j - 1, k, -1);
         boolean flag2 = BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i, j, k - 1, 2) || !iblockaccess.isBlockNormalCube(i, j, k - 1) && BlockRedstoneWire.isPowerProviderOrWire(iblockaccess, i, j - 1, k - 1, -1);
@@ -80,8 +78,6 @@ public class RenderCopperWire extends RenderBlocks
             int k1 = 0;
             int l1 = 16;
             int i2 = 16;
-            boolean flag4 = true;
-
             if (!flag)
             {
                 f5 += 0.3125F;

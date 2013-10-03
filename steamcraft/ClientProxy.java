@@ -34,6 +34,7 @@ import cpw.mods.fml.common.TickType;
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler{
 
 	public static Minecraft minecraft = Minecraft.getMinecraft();
+	@Override
 	public void registerRenderers()
 	{
 		BlockSCCopperWire.modelID=RenderingRegistry.getNextAvailableRenderId();

@@ -2,12 +2,10 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import steamcraft.ClientProxy;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

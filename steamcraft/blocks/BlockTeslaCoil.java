@@ -3,10 +3,8 @@ package steamcraft.blocks;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.RedstoneUpdateInfo;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.Steamcraft;
 

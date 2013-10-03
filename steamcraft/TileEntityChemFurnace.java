@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
-import steamcraft.blocks.BlockChemFurnace;
 import steamcraft.blocks.BlockMainFurnace;
 
 public class TileEntityChemFurnace extends TileEntityFurnace

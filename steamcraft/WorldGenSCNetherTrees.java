@@ -13,7 +13,8 @@ public class WorldGenSCNetherTrees extends WorldGenerator
     {
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k)
+    @Override
+	public boolean generate(World world, Random random, int i, int j, int k)
     {
         int l = random.nextInt(3) + 4;
         boolean flag = true;

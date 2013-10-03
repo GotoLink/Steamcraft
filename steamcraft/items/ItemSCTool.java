@@ -25,7 +25,7 @@ public class ItemSCTool extends ItemTool
         {
             if(blocksEffectiveAgainst[i] == block)
             {
-				if(toolMaterial == Steamcraft.STEAM){
+				if(toolMaterial == Steamcraft.TOOLSTEAM){
 					return (efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
 				}
 				return efficiencyOnProperMaterial;
@@ -36,7 +36,7 @@ public class ItemSCTool extends ItemTool
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
 	{
-		if(toolMaterial == Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.TOOLSTEAM){
 			damageVsEntity=baseDamage- (float)stack.getItemDamage()*10/320;
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);
@@ -44,7 +44,7 @@ public class ItemSCTool extends ItemTool
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
     {
-		if(toolMaterial == Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.TOOLSTEAM){
 			damageVsEntity=baseDamage- (float)stack.getItemDamage()*10/320;
 		}
         return super.onBlockDestroyed(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);

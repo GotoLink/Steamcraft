@@ -2,8 +2,6 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -80,7 +78,7 @@ public class BlockNukeFurnace extends BlockMainFurnace
 
 	public static void meltdown(World world, int i, int j, int k){
 		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
-		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.ach_RuinedEverything);
+		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.achs[5]);
 		world.createExplosion(null, i, j, k, 25F,world.getGameRules().getGameRuleBooleanValue("mobGriefing"));
 	    double d = (double)((float)i + 0.5F) + (double)(0.5F) * 2.0000000000000001D;
 	    double d1 = (double)((float)j + 0.7F) + (double)(0.5F) * 2.0000000000000001D;

@@ -69,7 +69,8 @@ public class ContainerChemFurnace extends Container
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int i, int j)
     {
         if(i == 0)
