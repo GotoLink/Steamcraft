@@ -33,7 +33,7 @@ public class ItemSCHoe extends ItemHoe
             } else
             {
                 world.setBlock(i, j, k, block.blockID);
-				if(theToolMaterial == Steamcraft.STEAM){
+				if(theToolMaterial == Steamcraft.TOOLSTEAM){
 					itemstack.damageItem(1 +  (int)Math.round(itemstack.getItemDamage()*5/320), entityplayer);
 					return true;
 				}

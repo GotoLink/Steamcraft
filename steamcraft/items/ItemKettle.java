@@ -20,7 +20,7 @@ public class ItemKettle extends Item
     {
 		if(itemstack.getItem().itemID == Steamcraft.hotKettle.itemID && itemstack.getItemDamage() < itemstack.getItem().getMaxDamage()-5){
 			if(getStackPosition(entityplayer.inventory, Steamcraft.emptyTeacup) > -1){
-				entityplayer.triggerAchievement(Steamcraft.ach_TimeForACuppa);
+				entityplayer.triggerAchievement(Steamcraft.achs[10]);
 				entityplayer.inventory.setInventorySlotContents(getStackPosition(entityplayer.inventory, Steamcraft.emptyTeacup), new ItemStack(Steamcraft.fullTeacup, 1));
 				itemstack.damageItem((itemstack.getItem().getMaxDamage()/3) - 1, entityplayer);
 			}
@@ -31,9 +31,9 @@ public class ItemKettle extends Item
 		return itemstack;
 	}
 	
-	public int getStackPosition(InventoryPlayer inventory, Item item){
+	public static int getStackPosition(InventoryPlayer inventory, Item item){
 		for(int i = 0; i < inventory.getSizeInventory(); i++){
-			if(inventory.getStackInSlot(i) != null && item == inventory.getStackInSlot(i).getItem()){
+			if(inventory.getStackInSlot(i) != null && item.itemID == inventory.getStackInSlot(i).getItem().itemID){
 				return i;
 			}
 		}

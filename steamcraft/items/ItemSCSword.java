@@ -1,15 +1,5 @@
 package steamcraft.items;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
-import java.util.Map.Entry;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import steamcraft.Steamcraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -17,6 +7,10 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+import steamcraft.Steamcraft;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 public class ItemSCSword extends ItemSword
 {
@@ -38,7 +32,7 @@ public class ItemSCSword extends ItemSword
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
     {
-		if(toolMaterial == Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.TOOLSTEAM){
 			damage=4 + func_82803_g()*2-(double)stack.getItemDamage()*10/320;
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);
@@ -51,7 +45,7 @@ public class ItemSCSword extends ItemSword
     @Override
 	public boolean onBlockDestroyed(ItemStack stack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
     {
-		if(toolMaterial == Steamcraft.STEAM){
+		if(toolMaterial == Steamcraft.TOOLSTEAM){
 			damage=4 + func_82803_g()*2- (float)stack.getItemDamage()*10/320;
 		}
         return super.onBlockDestroyed(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);

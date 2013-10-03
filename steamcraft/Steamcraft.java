@@ -15,6 +15,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -60,14 +61,11 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	@SidedProxy(clientSide="steamcraft.ClientProxy",serverSide="steamcraft.CommonProxy")
 	public static CommonProxy proxy;
 	
-	public static Achievement ach_CarryingYou,ach_BlackMagic,ach_SpiralNemesis;
-	public static Achievement ach_Fallout,ach_WhoTheHellDoYouThinkIAm,ach_ItsAlive;
-	public static Achievement ach_MasterCraftsman,ach_RuinedEverything,ach_JethroTull;
-	public static Achievement ach_LockStockAndBarrel,ach_TimeForACuppa;
+	public static Achievement[] achs = new Achievement[11];
 	//harvestLevel, maxUses,efficiencyOnProperMaterial,damageVsEntity,enchantability;
-	public static EnumToolMaterial OBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
-	public static EnumToolMaterial ETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
-	public static EnumToolMaterial STEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 6);
+	public static final EnumToolMaterial TOOLOBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
+	public static final EnumToolMaterial TOOLETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
+	public static final EnumToolMaterial TOOLSTEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 6);
 	
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
 	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive,battery;
@@ -115,8 +113,9 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static Item teaSeed,teaLeaves,coldKettle,hotKettle;
 	public static Item emptyTeacup,fullTeacup,emptyKettle;
 	
-	public static Material solidcircuit = new MaterialLogic(MapColor.airColor);
-	public static Material staticcircuit = new StaticMaterial(MapColor.airColor);
+	public static final Material solidcircuit = new MaterialLogic(MapColor.airColor);
+	public static final Material staticcircuit = new StaticMaterial(MapColor.airColor);
+	@SuppressWarnings("unused")
 	private Logger logger;
 	
 	private Object[][] DrillRecipeItems,SpannerRecipeItems,
@@ -135,17 +134,20 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		"Engraved Lapis Lazuli Block","Carved Stone","Engraved Uranium Block"};
 	
 	public static final String[] armorNames = {"etherium","brass","obsidian"};
+	public static final int[] REDUCTION_AMOUNTS= new int[]{3,8,6,3};
+	public static final EnumArmorMaterial ARMORETHERIUM = EnumHelper.addArmorMaterial("ETHERIUM", -1, REDUCTION_AMOUNTS, 5);
+	public static final EnumArmorMaterial ARMOROBSIDIAN = EnumHelper.addArmorMaterial("OBSIDIAN", 20, REDUCTION_AMOUNTS, 10);
+	public static final EnumArmorMaterial ARMORBRASS = EnumHelper.addArmorMaterial("BRASS", 5, REDUCTION_AMOUNTS, 15);
 	public static int[] armorIndexes = new int[armorNames.length];
 	public static Map armorMap = new HashMap();
 	public static Map<Object,Object[]> data = new HashMap();
-	public static CreativeTabs steamTab;
+	public static final CreativeTabs steamTab = new SteamTab();
 	
 	@EventHandler
 	public void load(FMLPreInitializationEvent event)
 	{	
 		logger = event.getModLog();
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-		steamTab = new SteamTab();
 		config.load();
 		redstoneWire = new BlockSCCopperWire(config.getBlock("CopperWire",2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire").setTextureName("redstone_dust");
 		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter",2494).getInt(),  false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle").setTextureName("steamcraft:inverteridle");
@@ -195,47 +197,47 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		
 		coreDrill = new ItemCoreDrill(config.getItem("CoreDrill",25011).getInt()).setUnlocalizedName("steamcraft:coreDrill").setTextureName("steamcraft:coredrill");
 		
-		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools/obsidianpick");
-		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
-		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
-		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
-		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
+		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools/obsidianpick");
+		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
+		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
+		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
+		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
 		
-		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), OBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
+		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill",25018).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
 		
 		for(int i =0; i<armorNames.length; i++)
 		{
 			armorIndexes[i] = proxy.registerArmor(armorNames[i]);
 			armorMap.put(armorIndexes[i],armorNames[i]);
 		}
-		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), 3, armorIndexes[2], 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour/obsidianhelmet");
-		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), 3, armorIndexes[2], 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour/obsidianplate");
-		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), 3, armorIndexes[2], 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour/obsidianlegs");
-		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), 3, armorIndexes[2], 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour/obsidianboots");
+		helmetObsidian = new ItemSCArmor(config.getItem("ObsidianHelmet",25019).getInt(), ARMOROBSIDIAN, armorIndexes[2], 0).setUnlocalizedName("steamcraft:helmetObsidian").setTextureName("steamcraft:armour/obsidianhelmet");
+		plateObsidian = new ItemSCArmor(config.getItem("ObsidianPlate",25020).getInt(), ARMOROBSIDIAN, armorIndexes[2], 1).setUnlocalizedName("steamcraft:chestplateObsidian").setTextureName("steamcraft:armour/obsidianplate");
+		legsObsidian = new ItemSCArmor(config.getItem("ObsidianLegs",25021).getInt(), ARMOROBSIDIAN, armorIndexes[2], 2).setUnlocalizedName("steamcraft:leggingsObsidian").setTextureName("steamcraft:armour/obsidianlegs");
+		bootsObsidian = new ItemSCArmor(config.getItem("ObsidianBoots",25022).getInt(), ARMOROBSIDIAN, armorIndexes[2], 3).setUnlocalizedName("steamcraft:bootsObsidian").setTextureName("steamcraft:armour/obsidianboots");
 		
-		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), 1, armorIndexes[1], 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour/brassgoggles");
-		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), 1, armorIndexes[1], 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour/aqualung");
-		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), 1, armorIndexes[1], 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour/rollerskates");
-		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), 1, armorIndexes[1], 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
+		brassGoggles = new ItemSCArmor(config.getItem("BrassGoggles",25023).getInt(), ARMORBRASS, armorIndexes[1], 0).setUnlocalizedName("steamcraft:brassGoggles").setTextureName("steamcraft:armour/brassgoggles");
+		aqualung = new ItemSCArmor(config.getItem("Aqualung",25024).getInt(), ARMORBRASS, armorIndexes[1], 1).setUnlocalizedName("steamcraft:aqualung").setTextureName("steamcraft:armour/aqualung");
+		rollerSkates = new ItemSCArmor(config.getItem("RollerSkates",25025).getInt(), ARMORBRASS, armorIndexes[1], 3).setUnlocalizedName("steamcraft:rollerSkates").setTextureName("steamcraft:armour/rollerskates");
+		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), ARMORBRASS, armorIndexes[1], 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
 		
-		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools/etheriumpick");
-		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), ETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
-		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe",25029).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools/etheriumaxe");
-		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe",25030).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
-		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
-		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill",25032).getInt(),ETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools/etheriumdrill");
+		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools/etheriumpick");
+		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
+		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe",25029).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools/etheriumaxe");
+		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe",25030).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
+		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
+		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill",25032).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools/etheriumdrill");
 		
-		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), 0, armorIndexes[0], 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour/etheriumhelmet");
-		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), 0, armorIndexes[0], 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour/etheriumplate");
-		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), 0, armorIndexes[0], 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour/etheriumlegs");
-		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), 0, armorIndexes[0], 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
+		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet",25033).getInt(), ARMORETHERIUM, armorIndexes[0], 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName("steamcraft:armour/etheriumhelmet");
+		plateEtherium = new ItemSCArmor(config.getItem("EtheriumPlate",25034).getInt(), ARMORETHERIUM, armorIndexes[0], 1).setUnlocalizedName("steamcraft:chestplateEtherium").setTextureName("steamcraft:armour/etheriumplate");
+		legsEtherium = new ItemSCArmor(config.getItem("EtheriumLegs",25036).getInt(), ARMORETHERIUM, armorIndexes[0], 2).setUnlocalizedName("steamcraft:leggingsEtherium").setTextureName("steamcraft:armour/etheriumlegs");
+		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), ARMORETHERIUM, armorIndexes[0], 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
 		
-		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),STEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools/steampick");
-		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),STEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
-		axeSteam = new ItemSCAxe(config.getItem("SteamAxe",25040).getInt(),STEAM).setUnlocalizedName("steamcraft:hatchetSteam").setTextureName("steamcraft:tools/steamaxe");
-		hoeSteam = new ItemSCHoe(config.getItem("SteamHoe",25041).getInt(),STEAM).setUnlocalizedName("steamcraft:hoeSteam").setTextureName("steamcraft:tools/steamhoe");
-		swordSteam =new ItemSCSword(config.getItem("SteamSword",25042).getInt(),STEAM).setUnlocalizedName("steamcraft:swordSteam").setTextureName("steamcraft:tools/steamsword");
-		drillSteam = new ItemSCDrill(config.getItem("SteamDrill",25043).getInt(),STEAM).setUnlocalizedName("steamcraft:drillSteam").setTextureName("steamcraft:tools/steamdrill");
+		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools/steampick");
+		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
+		axeSteam = new ItemSCAxe(config.getItem("SteamAxe",25040).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:hatchetSteam").setTextureName("steamcraft:tools/steamaxe");
+		hoeSteam = new ItemSCHoe(config.getItem("SteamHoe",25041).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:hoeSteam").setTextureName("steamcraft:tools/steamhoe");
+		swordSteam =new ItemSCSword(config.getItem("SteamSword",25042).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:swordSteam").setTextureName("steamcraft:tools/steamsword");
+		drillSteam = new ItemSCDrill(config.getItem("SteamDrill",25043).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:drillSteam").setTextureName("steamcraft:tools/steamdrill");
 		
 		
 		drillSteel = new ItemSCDrill(config.getItem("IronDrill",25044).getInt(), EnumToolMaterial.IRON).setUnlocalizedName("steamcraft:drillIron").setTextureName("steamcraft:tools/irondrill");
@@ -879,32 +881,29 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	}
 	
 	public static void addAchievements(){
-		ach_BlackMagic = (new Achievement(AchievementList.achievementList.size(),"Black Magic",3,2, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
+		achs[0] = (new Achievement(AchievementList.achievementList.size(),"Black Magic",3,2, pickaxeObsidian, AchievementList.buildBetterPickaxe)).registerAchievement();
 		addAchievement("Black Magic", "Construct an obsidian pickaxe");
-		ach_CarryingYou = (new Achievement(AchievementList.achievementList.size(),"Carrying You",4,2, material, ach_BlackMagic)).registerAchievement();
+		achs[1] = (new Achievement(AchievementList.achievementList.size(),"Carrying You",4,2, material, achs[0])).registerAchievement();
 		addAchievement("Carrying You", "Mine some volucite");
-		ach_SpiralNemesis = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",2,-1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
+		achs[2] = (new Achievement(AchievementList.achievementList.size(),"Spiral Nemesis",2,-1, drillSteel, AchievementList.buildWorkBench)).registerAchievement();
 		addAchievement("Spiral Nemesis", "Construct a drill");
-		ach_WhoTheHellDoYouThinkIAm = (new Achievement(AchievementList.achievementList.size(),"Heaven Piercing",3,-1, coreDrill, ach_SpiralNemesis)).setSpecial().registerAchievement();
+		achs[3] = (new Achievement(AchievementList.achievementList.size(),"Heaven Piercing",3,-1, coreDrill, achs[2])).setSpecial().registerAchievement();
 		addAchievement("Heaven Piercing", "WHO THE HELL DO YOU THINK I AM?");
-		ach_Fallout = (new Achievement(AchievementList.achievementList.size(),"Fallout",0,1, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
+		achs[4] = (new Achievement(AchievementList.achievementList.size(),"Fallout",0,1, nukeOvenIdle, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Fallout", "Smelt something with a nuclear reactor");
-		ach_RuinedEverything = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,0, new ItemStack(material,1,8), ach_Fallout)).registerAchievement();
+		achs[5] = (new Achievement(AchievementList.achievementList.size(),"Ruined Everything",0,0, new ItemStack(material,1,8), achs[4])).registerAchievement();
 		addAchievement("Ruined Everything", "Melt down a nuclear reactor");
-		ach_ItsAlive = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",1,2, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
+		achs[6] = (new Achievement(AchievementList.achievementList.size(),"It's Alive!",1,2, torchTeslaActive, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("It's Alive!", "Construct a tesla coil");
-		ach_MasterCraftsman = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,3, decorBlock, AchievementList.acquireIron)).registerAchievement();
+		achs[7] = (new Achievement(AchievementList.achievementList.size(),"Master Craftsman",1,3, decorBlock, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Master Craftsman", "Engrave a block");
-		ach_JethroTull = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",0,3, aqualung, AchievementList.acquireIron)).registerAchievement();
+		achs[8] = (new Achievement(AchievementList.achievementList.size(),"Jethro Tull",0,3, aqualung, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Jethro Tull", "Construct an aqualung");
-		ach_LockStockAndBarrel = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",-1,3, firearm, AchievementList.acquireIron)).registerAchievement();
+		achs[9] = (new Achievement(AchievementList.achievementList.size(),"Lock, Stock and Barrel",-1,3, firearm, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Lock, Stock and Barrel", "Construct a musket or rifle");
-		ach_TimeForACuppa = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",-1,2, fullTeacup, AchievementList.acquireIron)).registerAchievement();
+		achs[10] = (new Achievement(AchievementList.achievementList.size(),"Time For A Cuppa!",-1,2, fullTeacup, AchievementList.acquireIron)).registerAchievement();
 		addAchievement("Time For A Cuppa!", "Pour yourself a cup of tea");
-		AchievementPage.registerAchievementPage(
-				new AchievementPage("Steamcraft",ach_BlackMagic, ach_CarryingYou,ach_SpiralNemesis,
-						ach_Fallout,ach_WhoTheHellDoYouThinkIAm,ach_ItsAlive,ach_MasterCraftsman,
-						ach_RuinedEverything,ach_JethroTull,ach_LockStockAndBarrel,ach_TimeForACuppa));
+		AchievementPage.registerAchievementPage(new AchievementPage("Steamcraft",achs));
 	}
 	
 	@Override
@@ -991,38 +990,38 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	@Override
 	public void notifyPickup(EntityItem item, EntityPlayer player) {
 		if(item.getEntityItem().isItemEqual(new ItemStack(material))){
-            player.triggerAchievement(ach_CarryingYou);
+            player.triggerAchievement(achs[1]);
          }
 	}
 
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(item.itemID == pickaxeObsidian.itemID){
-			player.triggerAchievement(ach_BlackMagic);
+			player.triggerAchievement(achs[0]);
 			return;
 		}
 		if(item.itemID == drillWood.itemID || item.itemID == drillStone.itemID || item.itemID == drillSteel.itemID || item.itemID == drillDiamond.itemID || item.itemID == drillGold.itemID || item.itemID == drillObsidian.itemID || item.itemID == drillEtherium.itemID){
-	        player.triggerAchievement(ach_SpiralNemesis);
+	        player.triggerAchievement(achs[2]);
 	        return;
 		}
 	 	if(item.itemID == coreDrill.itemID){
-	        player.triggerAchievement(ach_WhoTheHellDoYouThinkIAm);
+	        player.triggerAchievement(achs[3]);
 	        return;
 	 	}
 	 	if(item.itemID == torchTeslaIdle.blockID){
-	        player.triggerAchievement(ach_ItsAlive);
+	        player.triggerAchievement(achs[6]);
 	        return;
 	 	}
 	 	if(item.itemID == decorBlock.blockID){
-			player.triggerAchievement(ach_MasterCraftsman);
+			player.triggerAchievement(achs[7]);
 			return;
 	 	}
 	 	if(item.itemID == aqualung.itemID){
-	        player.triggerAchievement(ach_JethroTull);
+	        player.triggerAchievement(achs[8]);
 	        return;
      	}
 	 	if(item.itemID == firearm.itemID){
-	        player.triggerAchievement(ach_LockStockAndBarrel);
+	        player.triggerAchievement(achs[9]);
 	        return;
 	 	}
 	 	int repairDmg = -1;

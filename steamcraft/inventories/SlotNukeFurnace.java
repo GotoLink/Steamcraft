@@ -17,7 +17,7 @@ public class SlotNukeFurnace extends SlotFurnace
     @Override
     protected void onCrafting(ItemStack par1ItemStack)
     {
-		thePlayer.triggerAchievement(Steamcraft.ach_Fallout);
+		thePlayer.triggerAchievement(Steamcraft.achs[4]);
         super.onCrafting(par1ItemStack);
     }
 }

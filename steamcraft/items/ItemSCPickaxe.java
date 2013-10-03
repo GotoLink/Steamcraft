@@ -3,8 +3,6 @@ package steamcraft.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemStack;
 import steamcraft.Steamcraft;
 
 public class ItemSCPickaxe extends ItemSCTool
