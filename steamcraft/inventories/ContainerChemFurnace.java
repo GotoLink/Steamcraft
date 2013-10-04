@@ -7,6 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.TileEntityChemFurnace;
 import cpw.mods.fml.relauncher.Side;
@@ -108,6 +109,10 @@ public class ContainerChemFurnace extends Container
                     return null;
                 }
                 slot.onSlotChange(itemstack1, itemstack);
+            }else if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null){
+                if (!this.mergeItemStack(itemstack1, 0, 1, false)){
+                    return null;
+                }
             }else if (TileEntityFurnace.isItemFuel(itemstack1)){
                 if (!this.mergeItemStack(itemstack1, 1, 3, false)){
                     return null;
