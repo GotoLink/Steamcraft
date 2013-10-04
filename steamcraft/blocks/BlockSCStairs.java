@@ -16,6 +16,9 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockSCStairs extends BlockStairs
 {
+    private Block modelBlock;
+	private int blockDrop;
+	private int dropQuantity;
     public BlockSCStairs(int i, Block block,int meta, int blockdrop, int quantity)
     {
         super(i, block, meta);
@@ -73,7 +76,7 @@ public class BlockSCStairs extends BlockStairs
     public int idDropped(int i, Random random, int j)
     {
 		if(blockDrop == -1){
-		blockDrop = modelBlock.idDropped(i, random, j);
+			blockDrop = modelBlock.idDropped(i, random, j);
 		}
         return blockDrop;
     }
@@ -90,39 +93,4 @@ public class BlockSCStairs extends BlockStairs
     {
         return modelBlock.getIcon(i, 0);
     }
-
-    /*public int getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
-    {
-        return modelBlock.getBlockTexture(iblockaccess, i, j, k, 0);
-    }*/
-    @Override
-	public void dropBlockAsItemWithChance(World world, int i, int j, int k, int l, float f, int g)
-    {
-        modelBlock.dropBlockAsItemWithChance(world, i, j, k, 0, f, g);
-    }
-
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
-    {
-        int l = MathHelper.floor_double((double)((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-        if(l == 0)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 2, 2);
-        }
-        if(l == 1)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 1, 2);
-        }
-        if(l == 2)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 3, 2);
-        }
-        if(l == 3)
-        {
-            world.setBlockMetadataWithNotify(i, j, k, 0, 2);
-        }
-    }
-
-    private Block modelBlock;
-	private int blockDrop;
-	private int dropQuantity;
 }
