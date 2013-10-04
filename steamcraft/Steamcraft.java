@@ -1068,23 +1068,20 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	}
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		if(TileEntityChemFurnace.fuels.containsKey(fuel.itemID))
+		if(TileEntityChemFurnace.fuels.containsKey(fuel.itemID)){
 			return TileEntityChemFurnace.fuels.get(fuel.itemID);
-		else if(fuel.isItemEqual(new ItemStack(material, 1, 1)))
-		{
-			return 1000;
 		}
-		else if(fuel.isItemEqual(new ItemStack(material, 1, 2)))
-		{
-			return 200;
-		}
-		else if(fuel.isItemEqual(new ItemStack(material, 1, 7)))
-		{
-			return 1600;
-		}
-		else if(fuel.isItemEqual(new ItemStack(material, 1, 9)))
-		{
-			return 3200;
+		else if(fuel.itemID==material.itemID){
+			switch(fuel.getItemDamage()){
+			case 1:
+				return 1000;
+			case 2:
+				return 200;
+			case 7:
+				return 1600;
+			case 9:
+				return 3200;
+			}
 		}
 		return 0;
 	}

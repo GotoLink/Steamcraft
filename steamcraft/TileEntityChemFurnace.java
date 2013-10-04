@@ -60,26 +60,23 @@ public class TileEntityChemFurnace extends TileEntityFurnace
             if(furnaceBurnTime == 0 && canSmelt())
             {
             	if(furnaceItemStacks[1] != null && furnaceItemStacks[3] != null){
-            		if(furnaceItemStacks[1].itemID != furnaceItemStacks[3].itemID){
+            		if(!furnaceItemStacks[1].isItemEqual(furnaceItemStacks[3])){
             			currentItemBurnTimea = getItemBurnTime(furnaceItemStacks[1]);
             			currentItemBurnTimeb = getItemBurnTime(furnaceItemStacks[3]);
             			if(currentItemBurnTimea > 0 && currentItemBurnTimeb > 0)
             			{
             				furnaceBurnTime = currentItemBurnTimea + currentItemBurnTimeb;
             				flag1 = true;
-            				if(furnaceItemStacks[1] != null && furnaceItemStacks[3] != null)
-            				{
-            					furnaceItemStacks[1].stackSize--;
-        						furnaceItemStacks[3].stackSize--;
-            					if(furnaceItemStacks[1].stackSize == 0)
-            					{
-            						furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
-            					} 
-            					if(furnaceItemStacks[3].stackSize == 0)
-            					{
-            						furnaceItemStacks[3] = furnaceItemStacks[3].getItem().getContainerItemStack(furnaceItemStacks[3]);
-            					}
-                    		}
+        					furnaceItemStacks[1].stackSize--;
+    						furnaceItemStacks[3].stackSize--;
+        					if(furnaceItemStacks[1].stackSize == 0)
+        					{
+        						furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
+        					} 
+        					if(furnaceItemStacks[3].stackSize == 0)
+        					{
+        						furnaceItemStacks[3] = furnaceItemStacks[3].getItem().getContainerItemStack(furnaceItemStacks[3]);
+        					}
             			}
             		}
             	}
