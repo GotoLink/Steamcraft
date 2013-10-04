@@ -52,9 +52,9 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="steamcraft",name="SteamCraft",version="0.1")
+@Mod(modid="steamcraft",name="SteamCraft",version="0.2")
 @NetworkMod(clientSideRequired=true)
-public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenerator, IFuelHandler
+public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenerator,IFuelHandler
 {
 	@Instance(value="steamcraft")
 	public static Steamcraft instance;
@@ -65,7 +65,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	//harvestLevel, maxUses,efficiencyOnProperMaterial,damageVsEntity,enchantability;
 	public static final EnumToolMaterial TOOLOBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
 	public static final EnumToolMaterial TOOLETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
-	public static final EnumToolMaterial TOOLSTEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 6);
+	public static final EnumToolMaterial TOOLSTEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 0);
 	
 	public static Block torchElectricIdle,torchElectricActive,torchTeslaIdle,torchTeslaActive;
 	public static Block torchPhosphorus,teslaReceiver,teslaReceiverActive,battery;
@@ -175,7 +175,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		borniteOre = new BlockOre(config.getBlock("BorniteOre",2517).getInt() ).setHardness(3F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:oreBornite").setTextureName("steamcraft:bornite");
 		oreVolucite = new BlockSCOre(config.getBlock("VoluciteOre",2518).getInt()).setHardness(50F).setResistance(6000000F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:oreVolucite").setTextureName("steamcraft:voluciteore");
 		torchPhosphorus = new BlockTorchPhosphorus(config.getBlock("PhosphorusTorch",2519).getInt()).setHardness(0.0F).setLightValue(1.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:torchPhosphorus").setTextureName("steamcraft:torchphosphorus");
-		roofTile = new BlockRoof(config.getBlock("SlateTiles",2520).getInt()).setHardness(2F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:roofTile").setTextureName("steamcraft:slatetiles");
+		roofTile = new Block(config.getBlock("SlateTiles",2520).getInt(),Material.rock).setHardness(2F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:roofTile").setTextureName("steamcraft:slatetiles");
 		
 		decorBlock = new BlockDecor(config.getBlock("CarvedBlock", 2521).getInt());
 		
@@ -1068,13 +1068,24 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	}
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		if(TileEntityChemFurnace.fuels.containsKey(fuel))
-			return TileEntityChemFurnace.fuels.get(fuel);
+		if(TileEntityChemFurnace.fuels.containsKey(fuel.itemID))
+			return TileEntityChemFurnace.fuels.get(fuel.itemID);
+		else if(fuel.isItemEqual(new ItemStack(material, 1, 1)))
+		{
+			return 1000;
+		}
+		else if(fuel.isItemEqual(new ItemStack(material, 1, 2)))
+		{
+			return 200;
+		}
+		else if(fuel.isItemEqual(new ItemStack(material, 1, 7)))
+		{
+			return 1600;
+		}
 		else if(fuel.isItemEqual(new ItemStack(material, 1, 9)))
 		{
 			return 3200;
 		}
 		return 0;
 	}
-	
 }
