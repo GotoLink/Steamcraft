@@ -137,7 +137,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	public static final int[] REDUCTION_AMOUNTS= new int[]{3,8,6,3};
 	public static final EnumArmorMaterial ARMORETHERIUM = EnumHelper.addArmorMaterial("ETHERIUM", -1, REDUCTION_AMOUNTS, 5);
 	public static final EnumArmorMaterial ARMOROBSIDIAN = EnumHelper.addArmorMaterial("OBSIDIAN", 20, REDUCTION_AMOUNTS, 10);
-	public static final EnumArmorMaterial ARMORBRASS = EnumHelper.addArmorMaterial("BRASS", 5, REDUCTION_AMOUNTS, 15);
+	public static final EnumArmorMaterial ARMORBRASS = EnumHelper.addArmorMaterial("BRASS", 5, REDUCTION_AMOUNTS, 0);
 	public static int[] armorIndexes = new int[armorNames.length];
 	public static Map armorMap = new HashMap();
 	public static Map<Object,Object[]> data = new HashMap();
