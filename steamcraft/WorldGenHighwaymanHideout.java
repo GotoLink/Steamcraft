@@ -233,6 +233,6 @@ public class WorldGenHighwaymanHideout extends WorldGenerator
 
     private String pickMobSpawner(Random random)
     {
-        return "Highwayman";
+        return "steamcraft.Highwayman";
     }
 }

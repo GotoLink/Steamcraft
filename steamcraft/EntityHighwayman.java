@@ -70,7 +70,8 @@ public class EntityHighwayman extends EntityMob
                 float f1 = MathHelper.sqrt_double(d * d + d1 * d1) * 0.2F;
                 worldObj.playSoundAtEntity(this, "mob.ghast.fireball", 0.8F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				worldObj.playSoundAtEntity(this, "random.explode", 0.4F, 1.0F / (rand.nextFloat() * 0.4F + 0.9F));
-                worldObj.spawnEntityInWorld(entityarrow);
+                if(!worldObj.isRemote)
+                	worldObj.spawnEntityInWorld(entityarrow);
                 entityarrow.setArrowHeading(d, d2 + (double)f1, d1, 0.6F, 12F);
                 attackTime = defaultHeldItem.getMaxDamage();
             }
@@ -93,52 +94,17 @@ public class EntityHighwayman extends EntityMob
     @Override
 	public void onStruckByLightning(EntityLightningBolt entitylightningbolt)
     {
+        EntityZombie entityzombie = new EntityZombie(worldObj);
+        entityzombie.setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
         if(!worldObj.isRemote)
         {
-            EntityZombie entityzombie = new EntityZombie(worldObj);
-            entityzombie.setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
-            worldObj.spawnEntityInWorld(entityzombie);
-            setDead();
+        	worldObj.spawnEntityInWorld(entityzombie);
         }
+        setDead();
     }
     @Override
 	protected void dropFewItems(boolean flag,int fortune)
     {
-		/*if(heldItemNumber == -1){
-		heldItemNumber = rand.nextInt(10);
-		}
-		if(heldItemNumber >= 2 && heldItemNumber < 4){
-		defaultHeldItem = new ItemStack(mod_Steamcraft.flintlockRifle, 1);
-		rifled = true;
-		percussion = false;
-		}else
-		if(heldItemNumber >= 4 && heldItemNumber < 6){
-		defaultHeldItem = new ItemStack(mod_Steamcraft.matchlockMusket, 1);
-		rifled = false;
-		percussion = false;
-		}else
-		if(heldItemNumber >= 6 && heldItemNumber < 8){
-		defaultHeldItem = new ItemStack(mod_Steamcraft.matchlockRifle, 1);
-		rifled = true;
-		percussion = false;
-		}else
-		if(heldItemNumber == 8){
-		defaultHeldItem = new ItemStack(mod_Steamcraft.percussionCapMusket, 1);
-		rifled = false;
-		percussion = true;
-		}else
-		if(heldItemNumber == 9){
-		defaultHeldItem = new ItemStack(mod_Steamcraft.percussionCapRifle, 1);
-		rifled = true;
-		percussion = true;
-		}else{
-		defaultHeldItem = new ItemStack(mod_Steamcraft.flintlockMusket, 1);
-		rifled = false;
-		percussion = false;
-		}*/
-		
-		//System.out.println("Is Percussion:" + percussion);
-		//System.out.println("Is Rifle:" + rifled);
 		int i = rand.nextInt(8);
         for(int j = 0; j < i; j++)
         {
@@ -184,7 +150,6 @@ public class EntityHighwayman extends EntityMob
 		if(heldItemNumber == -1){
 			heldItemNumber = rand.nextInt(10);
 		}
-		//System.out.println(heldItemNumber);
 		if(heldItemNumber >= 2 && heldItemNumber < 4){
 			rifled = true;
 			percussion = false;
@@ -216,39 +181,5 @@ public class EntityHighwayman extends EntityMob
 	public boolean rifled = false;
 	public boolean percussion = false;
     private ItemStack defaultHeldItem = setHeldItem();
-	/*public int heldItemRand = -1;
-	public static int heldItemNumber = -1;*/
 	public static ItemStack heldItems[] = new ItemStack[6];
-
-	/*public static void setHeldItem(Item item, Item item2, Item item3, Item item4, Item item5, Item item6){
-		if(heldItemNumber >= 2 && heldItemNumber < 4){
-		defaultHeldItem = new ItemStack(item2, 1);
-		rifled = true;
-		percussion = false;
-		}else
-		if(heldItemNumber >= 4 && heldItemNumber < 6){
-		defaultHeldItem = new ItemStack(item3, 1);
-		rifled = false;
-		percussion = false;
-		}else
-		if(heldItemNumber >= 6 && heldItemNumber < 8){
-		defaultHeldItem = new ItemStack(item4, 1);
-		rifled = true;
-		percussion = false;
-		}else
-		if(heldItemNumber == 8){
-		defaultHeldItem = new ItemStack(item5, 1);
-		rifled = false;
-		percussion = true;
-		}else
-		if(heldItemNumber == 9){
-		defaultHeldItem = new ItemStack(item6, 1);
-		rifled = true;
-		percussion = true;
-		}else{
-		defaultHeldItem = new ItemStack(item, 1);
-		rifled = false;
-		percussion = false;
-		}
-	}*/
 }
