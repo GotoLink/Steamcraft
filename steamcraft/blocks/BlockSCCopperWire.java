@@ -2,8 +2,11 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import steamcraft.Steamcraft;
+
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -41,7 +44,17 @@ public class BlockSCCopperWire extends BlockRedstoneWire
     {
         return 0x800000;
     }
-    
+    @Override
+    public int idDropped(int par1, Random par2Random, int par3)
+    {
+        return Steamcraft.redstoneWire.blockID;
+    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return Steamcraft.redstoneWire.blockID;
+    }
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
