@@ -103,97 +103,13 @@ public class BlockNukeFurnace extends BlockMainFurnace
 		int k1 = world.getBlockId(i, j, k+1);
 		int k2 = world.getBlockId(i, j, k-1);
 		if(tileentityfurnace.getHeat() >= 1000){
-		if(i1 == waterStill.blockID){
-			tileentityfurnace.addHeat(-10);
-			world.setBlock(i+1, j, k, 0, world.getBlockMetadata(i+1, j, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
+			absorbWater(world,i-1,j,k,random);
+			absorbWater(world,i+1,j,k,random);
+			absorbWater(world,i,j+1,k,random);
+			absorbWater(world,i,j-1,k,random);
+			absorbWater(world,i,j,k+1,random);
+			absorbWater(world,i,j,k-1,random);
 		}
-		if(i2 == waterStill.blockID){
-			tileentityfurnace.addHeat(-10);
-			world.setBlock(i-1, j, k, 0, world.getBlockMetadata(i-1, j, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-		}
-		if(j1 == waterStill.blockID){
-			tileentityfurnace.addHeat(-10);
-			world.setBlock(i, j+1, k, 0, world.getBlockMetadata(i, j+1, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-		}
-		if(k1 == waterStill.blockID){
-			tileentityfurnace.addHeat(-10);
-			world.setBlock(i, j, k+1, 0, world.getBlockMetadata(i, j, k+1), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-		}
-		if(k2 == waterStill.blockID){
-			tileentityfurnace.addHeat(-10);
-			world.setBlock(i, j, k-1, 0, world.getBlockMetadata(i, j, k-1), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-		}
-		if(i1 == waterMoving.blockID){
-			tileentityfurnace.addHeat(-5);
-			world.setBlock(i+1, j, k, 0, world.getBlockMetadata(i+1, j, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
-			spawnSmoke(world, i+1, j, k, random);
-		}
-		if(i2 == waterMoving.blockID){
-			tileentityfurnace.addHeat(-5);
-			world.setBlock(i-1, j, k, 0, world.getBlockMetadata(i-1, j, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-			spawnSmoke(world, i-1, j, k, random);
-		}
-		if(j1 == waterMoving.blockID){
-			tileentityfurnace.addHeat(-5);
-			world.setBlock(i, j+1, k, 0, world.getBlockMetadata(i, j+1, k), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-			spawnSmoke(world, i, j+1, k, random);
-		}
-		if(k1 == waterMoving.blockID){
-			tileentityfurnace.addHeat(-5);
-			world.setBlock(i, j, k+1, 0, world.getBlockMetadata(i, j, k+1), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-			spawnSmoke(world, i, j, k+1, random);
-		}
-		if(k2 == waterMoving.blockID){
-			tileentityfurnace.addHeat(-5);
-			world.setBlock(i, j, k-1, 0, world.getBlockMetadata(i, j, k-1), 3);
-			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-			spawnSmoke(world, i, j, k-1, random);
-		}
-	}
 		if(i1 == lavaStill.blockID || i1 == lavaMoving.blockID || i2 == lavaStill.blockID || i2 == lavaMoving.blockID || j1 == lavaStill.blockID || j1 == lavaMoving.blockID || j2 == lavaStill.blockID || j2 == lavaMoving.blockID || k1 == lavaStill.blockID || k1 == lavaMoving.blockID || k2 == lavaStill.blockID || k2 == lavaMoving.blockID){
 			tileentityfurnace.addHeat(160);
 		}
@@ -201,6 +117,23 @@ public class BlockNukeFurnace extends BlockMainFurnace
 			tileentityfurnace.addHeat(80);
 		}
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	}
+	private void absorbWater(World world, int i, int j, int k, Random random) {
+		int id = world.getBlockId(i, j, k);
+		boolean flag = false;
+		if(id == waterMoving.blockID){
+			((TileEntityNukeFurnace)world.getBlockTileEntity(i, j, k)).addHeat(-5);
+			flag  = true;
+		}else if(id == waterStill.blockID){
+			((TileEntityNukeFurnace)world.getBlockTileEntity(i, j, k)).addHeat(-10);
+			flag = true;
+		}
+		if(flag){
+			world.setBlockToAir(i, j, k);
+			world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, "random.fizz", 0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
+			for(int d=0;d<4;d++)
+				spawnSmoke(world, i, j, k, random);
+		}
 	}
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, int l)
