@@ -21,17 +21,14 @@ public class ItemSCTool extends ItemTool
     @Override
     public float getStrVsBlock(ItemStack itemstack, Block block)
     {
-        for(int i = 0; i < blocksEffectiveAgainst.length; i++)
-        {
-            if(blocksEffectiveAgainst[i] == block)
-            {
-				if(toolMaterial == Steamcraft.TOOLSTEAM){
+    	if(toolMaterial == Steamcraft.TOOLSTEAM){
+	        for(int i = 0; i < blocksEffectiveAgainst.length; i++){
+	            if(blocksEffectiveAgainst[i] == block){
 					return (efficiencyOnProperMaterial - (((float)itemstack.getItemDamage())*11/320));
-				}
-				return efficiencyOnProperMaterial;
-            }
-        }
-        return 1.0F;
+	            }
+	        }
+    	}
+        return super.getStrVsBlock(itemstack, block);
     }
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2)
