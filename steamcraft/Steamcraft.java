@@ -634,7 +634,8 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
         ));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner),
-			"# #", "###", " # ", Character.valueOf('#'), "ingotBrass"));
+			"X X", "###", " # ", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.diamond
+		));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chisel),
 			"#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass"
