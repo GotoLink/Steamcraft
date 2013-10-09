@@ -10,9 +10,9 @@ import steamcraft.Steamcraft;
 
 public class ItemSCTool extends ItemTool
 {
-    private Block[] blocksEffectiveAgainst;
-	private float baseDamage;
-	protected ItemSCTool(int i, int j, EnumToolMaterial enumtoolmaterial, Block ablock[])
+    public Block[] blocksEffectiveAgainst;
+	public float baseDamage;
+	protected ItemSCTool(int i, float j, EnumToolMaterial enumtoolmaterial, Block ablock[])
     {
         super(i, j, enumtoolmaterial, ablock);
         this.blocksEffectiveAgainst = ablock;

@@ -19,7 +19,6 @@ import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
@@ -115,7 +114,6 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 	
 	public static final Material solidcircuit = new MaterialLogic(MapColor.airColor);
 	public static final Material staticcircuit = new StaticMaterial(MapColor.airColor);
-	@SuppressWarnings("unused")
 	private Logger logger;
 	
 	private Object[][] DrillRecipeItems,SpannerRecipeItems,
@@ -198,7 +196,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		coreDrill = new ItemCoreDrill(config.getItem("CoreDrill",25011).getInt()).setUnlocalizedName("steamcraft:coreDrill").setTextureName("steamcraft:coredrill");
 		
 		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick",25013).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName("steamcraft:tools/obsidianpick");
-		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade",25014).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
+		shovelObsidian = new ItemSCSpade(config.getItem("ObsidianSpade",25014).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
 		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe",25015).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
 		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe",25016).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
 		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword",25017).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
@@ -221,7 +219,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		legBraces = new ItemSCArmor(config.getItem("PneumaticBraces",25026).getInt(), ARMORBRASS, armorIndexes[1], 2).setUnlocalizedName("steamcraft:legBraces").setTextureName("steamcraft:armour/pneumaticbraces");
 		
 		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick",25027).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName("steamcraft:tools/etheriumpick");
-		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade",25028).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
+		shovelEtherium = new ItemSCSpade(config.getItem("EtheriumSpade",25028).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
 		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe",25029).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools/etheriumaxe");
 		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe",25030).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
 		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword",25031).getInt(),TOOLETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
@@ -233,7 +231,7 @@ public class Steamcraft implements ICraftingHandler,IPickupNotifier,IWorldGenera
 		bootsEtherium = new ItemSCArmor(config.getItem("EtheriumBoots",25037).getInt(), ARMORETHERIUM, armorIndexes[0], 3).setUnlocalizedName("steamcraft:bootsEtherium").setTextureName("steamcraft:armour/etheriumboots");
 		
 		pickaxeSteam = new ItemSCPickaxe(config.getItem("SteamPick",25038).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:pickaxeSteam").setTextureName("steamcraft:tools/steampick");
-		shovelSteam = new ItemSpade(config.getItem("SteamSpade",25039).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
+		shovelSteam = new ItemSCSpade(config.getItem("SteamSpade",25039).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:shovelSteam").setTextureName("steamcraft:tools/steamspade");
 		axeSteam = new ItemSCAxe(config.getItem("SteamAxe",25040).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:hatchetSteam").setTextureName("steamcraft:tools/steamaxe");
 		hoeSteam = new ItemSCHoe(config.getItem("SteamHoe",25041).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:hoeSteam").setTextureName("steamcraft:tools/steamhoe");
 		swordSteam =new ItemSCSword(config.getItem("SteamSword",25042).getInt(),TOOLSTEAM).setUnlocalizedName("steamcraft:swordSteam").setTextureName("steamcraft:tools/steamsword");
