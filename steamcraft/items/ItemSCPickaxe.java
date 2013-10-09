@@ -1,8 +1,11 @@
 package steamcraft.items;
 
+import com.google.common.collect.ObjectArrays;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.ItemPickaxe;
 import steamcraft.Steamcraft;
 
 public class ItemSCPickaxe extends ItemSCTool
@@ -42,10 +45,8 @@ public class ItemSCPickaxe extends ItemSCTool
         return block.blockMaterial == Material.rock || block.blockMaterial == Material.iron;
     }
 
-	private static Block xblocksEffectiveAgainst[];
-    static
-    {
-        xblocksEffectiveAgainst = (new Block[] {
+	public static Block[] xblocksEffectiveAgainst = ObjectArrays.concat(
+			ItemPickaxe.blocksEffectiveAgainst, new Block[] {
             Block.cobblestone, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold,
             Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstoneGlowing, Block.oreRedstone, 
             Steamcraft.brimstone, Block.blockNetherQuartz, Block.obsidian, Block.stoneBrick,
@@ -53,6 +54,5 @@ public class ItemSCPickaxe extends ItemSCTool
 			Steamcraft.oreQuartzActive, Steamcraft.oreVolucite,
 			Steamcraft.roofTile, Steamcraft.decorBlock, Steamcraft.lamp, Steamcraft.woodBrass,
 			Steamcraft.leavesLamp, Steamcraft.railingCastIron
-        });
-    }
+    },Block.class);
 }
