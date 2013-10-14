@@ -2,112 +2,97 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import steamcraft.Steamcraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockUraniteOre extends Block
-{
-	public BlockUraniteOre(int i)
-    {
-        super(i, Material.rock);
-        setTickRandomly(true);
-    }
-    /*@Override
-	public void onBlockAdded(World world, int i, int j, int k)
-    {
-		if(blockID == Steamcraft.oreUranite.blockID){
-			System.out.println("Uranite at "+i+","+j+","+k);
+public class BlockUraniteOre extends Block {
+	public BlockUraniteOre(int i) {
+		super(i, Material.rock);
+		setTickRandomly(true);
+	}
+
+	/*
+	 * @Override public void onBlockAdded(World world, int i, int j, int k) {
+	 * if(blockID == Steamcraft.oreUranite.blockID){
+	 * System.out.println("Uranite at "+i+","+j+","+k); } }
+	 */
+	@Override
+	public int tickRate(World world) {
+		return 30;
+	}
+
+	@Override
+	public void onBlockClicked(World world, int i, int j, int k, EntityPlayer entityplayer) {
+		func_319_i(world, i, j, k);
+		super.onBlockClicked(world, i, j, k, entityplayer);
+	}
+
+	@Override
+	public void onEntityWalking(World world, int i, int j, int k, Entity entity) {
+		func_319_i(world, i, j, k);
+		super.onEntityWalking(world, i, j, k, entity);
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float a, float b, float c) {
+		func_319_i(world, i, j, k);
+		return super.onBlockActivated(world, i, j, k, entityplayer, l, a, b, c);
+	}
+
+	@Override
+	public void updateTick(World world, int i, int j, int k, Random random) {
+	}
+
+	@Override
+	public int idDropped(int i, Random random, int j) {
+		return Steamcraft.oreUranite.blockID;
+	}
+
+	@Override
+	public int quantityDropped(Random random) {
+		return 1;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+		func_319_i(world, i, j, k);
+	}
+
+	private void func_319_i(World world, int i, int j, int k) {
+		Random random = world.rand;
+		double d = 0.0625D;
+		for (int l = 0; l < 6; l++) {
+			double d1 = i + random.nextFloat();
+			double d2 = j + random.nextFloat();
+			double d3 = k + random.nextFloat();
+			if (l == 0 && !world.isBlockOpaqueCube(i, j + 1, k)) {
+				d2 = j + 1 + d;
+			}
+			if (l == 1 && !world.isBlockOpaqueCube(i, j - 1, k)) {
+				d2 = j + 0 - d;
+			}
+			if (l == 2 && !world.isBlockOpaqueCube(i, j, k + 1)) {
+				d3 = k + 1 + d;
+			}
+			if (l == 3 && !world.isBlockOpaqueCube(i, j, k - 1)) {
+				d3 = k + 0 - d;
+			}
+			if (l == 4 && !world.isBlockOpaqueCube(i + 1, j, k)) {
+				d1 = i + 1 + d;
+			}
+			if (l == 5 && !world.isBlockOpaqueCube(i - 1, j, k)) {
+				d1 = i + 0 - d;
+			}
+			if (d1 < i || d1 > i + 1 || d2 < 0.0D || d2 > j + 1 || d3 < k || d3 > k + 1) {
+				world.spawnParticle("reddust", d1, d2, d3, -1.0D, 1.0D, -1.0D);
+			}
 		}
-	}*/
-    @Override
-    public int tickRate(World world)
-    {
-        return 30;
-    }
-    @Override
-    public void onBlockClicked(World world, int i, int j, int k, EntityPlayer entityplayer)
-    {
-        func_319_i(world, i, j, k);
-        super.onBlockClicked(world, i, j, k, entityplayer);
-    }
-    @Override
-    public void onEntityWalking(World world, int i, int j, int k, Entity entity)
-    {
-        func_319_i(world, i, j, k);
-        super.onEntityWalking(world, i, j, k, entity);
-    }
-    @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer,int l,float a,float b,float c)
-    {
-        func_319_i(world, i, j, k);
-        return super.onBlockActivated(world, i, j, k, entityplayer, l, a, b, c);
-    }
-
-    @Override
-    public void updateTick(World world, int i, int j, int k, Random random)
-    {
-    }
-    @Override
-    public int idDropped(int i, Random random, int j)
-    {
-        return Steamcraft.oreUranite.blockID;
-    }
-    @Override
-    public int quantityDropped(Random random)
-    {
-        return 1;
-    }
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int i, int j, int k, Random random)
-    {
-        func_319_i(world, i, j, k);
-    }
-
-    private void func_319_i(World world, int i, int j, int k)
-    {
-        Random random = world.rand;
-        double d = 0.0625D;
-        for(int l = 0; l < 6; l++)
-        {
-            double d1 = (float)i + random.nextFloat();
-            double d2 = (float)j + random.nextFloat();
-            double d3 = (float)k + random.nextFloat();
-            if(l == 0 && !world.isBlockOpaqueCube(i, j + 1, k))
-            {
-                d2 = (double)(j + 1) + d;
-            }
-            if(l == 1 && !world.isBlockOpaqueCube(i, j - 1, k))
-            {
-                d2 = (double)(j + 0) - d;
-            }
-            if(l == 2 && !world.isBlockOpaqueCube(i, j, k + 1))
-            {
-                d3 = (double)(k + 1) + d;
-            }
-            if(l == 3 && !world.isBlockOpaqueCube(i, j, k - 1))
-            {
-                d3 = (double)(k + 0) - d;
-            }
-            if(l == 4 && !world.isBlockOpaqueCube(i + 1, j, k))
-            {
-                d1 = (double)(i + 1) + d;
-            }
-            if(l == 5 && !world.isBlockOpaqueCube(i - 1, j, k))
-            {
-                d1 = (double)(i + 0) - d;
-            }
-            if(d1 < (double)i || d1 > (double)(i + 1) || d2 < 0.0D || d2 > (double)(j + 1) || d3 < (double)k || d3 > (double)(k + 1))
-            {
-                world.spawnParticle("reddust", d1, d2, d3, -1.0D, 1.0D, -1.0D);
-            }
-        }
-    }
+	}
 }

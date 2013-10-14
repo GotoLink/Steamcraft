@@ -2,20 +2,19 @@ package steamcraft.items;
 
 import java.util.List;
 
-import steamcraft.Steamcraft;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class MultiItem extends Item{
-
+public class MultiItem extends Item {
 	public String[] names;
 	private Icon[] icons;
+
 	public MultiItem(int par1, String[] names) {
 		super(par1);
 		setHasSubtypes(true);
@@ -24,30 +23,30 @@ public class MultiItem extends Item{
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack){
-		return getUnlocalizedName()+names[stack.getItemDamage()];
+	public String getUnlocalizedName(ItemStack stack) {
+		return getUnlocalizedName() + names[stack.getItemDamage()];
 	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-    public Icon getIconFromDamage(int par1)
-    {
-        return icons[par1];
-    }
+	public Icon getIconFromDamage(int par1) {
+		return icons[par1];
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
-    {
-        icons = new Icon[names.length];
-        for(int index=0;index<names.length;index++){
-        	icons[index] = par1IconRegister.registerIcon(getIconString()+names[index]);
-        }
-    }
+	public void registerIcons(IconRegister par1IconRegister) {
+		icons = new Icon[names.length];
+		for (int index = 0; index < names.length; index++) {
+			icons[index] = par1IconRegister.registerIcon(getIconString() + names[index]);
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-		for(int index=0;index<names.length;index++){
-        	par3List.add(new ItemStack(this,1,index));
-        }
-    }
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+		for (int index = 0; index < names.length; index++) {
+			par3List.add(new ItemStack(this, 1, index));
+		}
+	}
 }

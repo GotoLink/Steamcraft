@@ -6,125 +6,107 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.blocks.BlockMainFurnace;
 import steamcraft.blocks.BlockNukeFurnace;
 
-public class TileEntityNukeFurnace extends TileEntityFurnace
-{
+public class TileEntityNukeFurnace extends TileEntityFurnace {
 	public int furnaceHeat;
-    public TileEntityNukeFurnace()
-    {
-    	setGuiDisplayName("Nuclear Reactor");
-    }
-    @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
-    {
-        super.readFromNBT(nbttagcompound);
-		furnaceHeat = nbttagcompound.getShort("Heat");
-    }
-    @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound)
-    {
-        super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("Heat", (short)furnaceHeat);
-    }
-    @Override
-    public int getCookProgressScaled(int i)
-    {
-        return (furnaceCookTime * i) / 20;
-    }
-	
-	public int getHeatScaled(int i)
-    {
-        return (furnaceHeat * i) / 2560;
-    }
+
+	public TileEntityNukeFurnace() {
+		setGuiDisplayName("Nuclear Reactor");
+	}
+
 	@Override
-    public int getBurnTimeRemainingScaled(int i)
-    {
-        if(currentItemBurnTime == 0)
-        {
-            currentItemBurnTime = 20;
-        }
-        return (furnaceBurnTime * i) / currentItemBurnTime;
-    }
-	
-	public void addHeat(int i){
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		furnaceHeat = nbttagcompound.getShort("Heat");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setShort("Heat", (short) furnaceHeat);
+	}
+
+	@Override
+	public int getCookProgressScaled(int i) {
+		return (furnaceCookTime * i) / 20;
+	}
+
+	public int getHeatScaled(int i) {
+		return (furnaceHeat * i) / 2560;
+	}
+
+	@Override
+	public int getBurnTimeRemainingScaled(int i) {
+		if (currentItemBurnTime == 0) {
+			currentItemBurnTime = 20;
+		}
+		return (furnaceBurnTime * i) / currentItemBurnTime;
+	}
+
+	public void addHeat(int i) {
 		furnaceHeat += i;
 	}
-	
-	public int getHeat(){
+
+	public int getHeat() {
 		return furnaceHeat;
 	}
+
 	@Override
-    public void updateEntity()
-    {
-        boolean flag = furnaceBurnTime > 0;
-        boolean flag1 = false;
-        if(furnaceBurnTime > 0)
-        {
-            furnaceBurnTime--;
-        }
-        if(!worldObj.isRemote)
-        {
-        	if (this.furnaceBurnTime == 0 && this.canSmelt())
-            {
-                this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
-
-                if (this.furnaceBurnTime > 0)
-                {
-                    flag1 = true;
-
-                    if (this.furnaceItemStacks[1] != null)
-                    {
-                    	--this.furnaceItemStacks[1].stackSize;
-
-                        if (this.furnaceItemStacks[1].stackSize == 0)
-                        {
-                            this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
-                        }
-                    }
-                }
-            }
-            if(isBurning() && canSmelt())
-            {
-                furnaceCookTime++;
-                if(furnaceCookTime >= 20)
-                {
-                    furnaceCookTime = 0;
-					if(furnaceHeat <= 2560){
+	public void updateEntity() {
+		boolean flag = furnaceBurnTime > 0;
+		boolean flag1 = false;
+		if (furnaceBurnTime > 0) {
+			furnaceBurnTime--;
+		}
+		if (!worldObj.isRemote) {
+			if (this.furnaceBurnTime == 0 && this.canSmelt()) {
+				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
+				if (this.furnaceBurnTime > 0) {
+					flag1 = true;
+					if (this.furnaceItemStacks[1] != null) {
+						--this.furnaceItemStacks[1].stackSize;
+						if (this.furnaceItemStacks[1].stackSize == 0) {
+							this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
+						}
+					}
+				}
+			}
+			if (isBurning() && canSmelt()) {
+				furnaceCookTime++;
+				if (furnaceCookTime >= 20) {
+					furnaceCookTime = 0;
+					if (furnaceHeat <= 2560) {
 						addHeat(40);
 					}
-					if(furnaceHeat > 2520 && furnaceHeat < 2560){
+					if (furnaceHeat > 2520 && furnaceHeat < 2560) {
 						furnaceHeat = 2560;
 					}
-                    smeltItem();
-                    flag1 = true;
-                }
-            } else
-            {
-                furnaceCookTime = 0;
-				if(furnaceHeat > 0){
+					smeltItem();
+					flag1 = true;
+				}
+			} else {
+				furnaceCookTime = 0;
+				if (furnaceHeat > 0) {
 					addHeat(-1);
 				}
-            }
-            if(flag != (furnaceBurnTime > 0))
-            {
-                flag1 = true;
-                BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord,Steamcraft.nukeOvenActive.blockID,Steamcraft.nukeOvenIdle.blockID,true);
-            }
-			if(furnaceHeat >= 2560){
+			}
+			if (flag != (furnaceBurnTime > 0)) {
+				flag1 = true;
+				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, Steamcraft.nukeOvenActive.blockID, Steamcraft.nukeOvenIdle.blockID, true);
+			}
+			if (furnaceHeat >= 2560) {
 				BlockNukeFurnace.meltdown(worldObj, xCoord, yCoord, zCoord);
 			}
-        }
-        if (flag1)
-        {
-            this.onInventoryChanged();
-        }
-    }
+		}
+		if (flag1) {
+			this.onInventoryChanged();
+		}
+	}
 
-    @Override
-    public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
-    {
-    	if(par1==1)
-    		return par2ItemStack.isItemEqual(new ItemStack(Steamcraft.material, 1, 9));
-    	else
-    		return super.isItemValidForSlot(par1, par2ItemStack);
-    }
+	@Override
+	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
+		if (par1 == 1)
+			return par2ItemStack.isItemEqual(new ItemStack(Steamcraft.material, 1, 9));
+		else
+			return super.isItemValidForSlot(par1, par2ItemStack);
+	}
 }
