@@ -6,6 +6,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import steamcraft.Steamcraft;
 
 public class ItemSCTool extends ItemTool {
@@ -19,15 +20,18 @@ public class ItemSCTool extends ItemTool {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack itemstack, Block block) {
+	public float getStrVsBlock(ItemStack itemstack, Block block, int meta) {
 		if (toolMaterial == Steamcraft.TOOLSTEAM) {
 			for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 				if (blocksEffectiveAgainst[i] == block) {
-					return (efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320));
+					return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
 				}
 			}
+			if (ForgeHooks.isToolEffective(itemstack, block, meta)) {
+				return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
+			}
 		}
-		return super.getStrVsBlock(itemstack, block);
+		return super.getStrVsBlock(itemstack, block, meta);
 	}
 
 	@Override

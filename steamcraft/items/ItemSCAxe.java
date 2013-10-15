@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import steamcraft.Steamcraft;
 
 public class ItemSCAxe extends ItemSCTool {
 	public ItemSCAxe(int i, EnumToolMaterial enumtoolmaterial) {
@@ -13,5 +15,19 @@ public class ItemSCAxe extends ItemSCTool {
 	@Override
 	public boolean canHarvestBlock(Block block) {
 		return block != null && (block.blockMaterial == Material.wood || block.blockMaterial == Material.plants || block.blockMaterial == Material.vine);
+	}
+
+	@Override
+	public float getStrVsBlock(ItemStack itemstack, Block par2Block, int meta) {
+		if (par2Block != null) {
+			if (par2Block.blockMaterial == Material.wood || par2Block.blockMaterial == Material.plants || par2Block.blockMaterial == Material.vine) {
+				if (toolMaterial == Steamcraft.TOOLSTEAM) {
+					return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
+				} else {
+					return this.efficiencyOnProperMaterial;
+				}
+			}
+		}
+		return super.getStrVsBlock(itemstack, par2Block, meta);
 	}
 }

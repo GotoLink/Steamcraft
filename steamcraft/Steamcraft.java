@@ -18,7 +18,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
@@ -53,7 +55,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "steamcraft", name = "SteamCraft", version = "0.2")
+@Mod(modid = "steamcraft", name = "SteamCraft", version = "0.3")
 @NetworkMod(clientSideRequired = true)
 public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGenerator, IFuelHandler {
 	@Instance(value = "steamcraft")
@@ -74,7 +76,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static final EnumToolMaterial TOOLSTEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 0);
 	private static final String[] FIREARM_PARTS = { "musketcartridge", "percussioncap", "percussionlock", "smoothbarrel", "rifledbarrel", "woodenstock" };
 	private static final String[] MATERIALS = { "etherium", "sulphur", "copper", "obsidianslate", "ingotbrass", "ingotcastiron", "lightbulb", "phosphorus", "uraniumstone", "uraniumpellet",
-		"reactorcore", "coredrillbase" };
+		"reactorcore", "coredrillbase", "ingotzinc" };
 	private static final String[] DECORBLOCK_NAMES = { "Block of Cast Iron", "Block of Volucite", "Block of Brass", "Block of Uranium", "Engraved Iron Block", "Engraved Gold Block",
 		"Engraved Diamond Block", "Engraved Cast Iron Block", "Engraved Volucite Block", "Engraved Brass Block", "Engraved Lapis Lazuli Block", "Carved Stone", "Engraved Uranium Block" };
 	public static final Material solidcircuit = new MaterialLogic(MapColor.airColor);
@@ -100,8 +102,8 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static Item swordSteam, shovelSteam, pickaxeSteam;
 	public static Item teaSeed, teaLeaves, coldKettle, hotKettle;
 	public static Item pickaxeObsidian, shovelObsidian, axeObsidian, hoeObsidian;
-	public static Block borniteOre, orePhosphate, oreUranite, oreQuartz, oreQuartzActive, oreVolucite, brimstone;
-	public static Block redstoneRepeaterIdle, redstoneRepeaterActive, railPowered, wirelessLampActive;
+	public static Block borniteOre, orePhosphate, oreUranite, oreVolucite, brimstone;
+	public static Block oreZinc, redstoneRepeaterIdle, redstoneRepeaterActive, railPowered, wirelessLampActive;
 	public static Block redstoneWire, torchRedstoneIdle, torchRedstoneActive, wirelessLampIdle;
 	public static Block nukeOvenIdle, nukeOvenActive;
 	public static Block steamOvenIdle, steamOvenActive, chemOvenIdle, chemOvenActive;
@@ -139,12 +141,12 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 			z = l + rand.nextInt(16);
 			(new WorldGenMinable(brimstone.blockID, 8)).generate(world, rand, x, y, z);
 		}
-		/*
-		 * for(int i = 0; i < 6; i++) { x = k + rand.nextInt(16); y =
-		 * rand.nextInt(64); z = l + rand.nextInt(16); (new
-		 * WorldGenMinable(Block.oreIron.blockID, 16)).generate(world, rand, x,
-		 * y, z); }
-		 */
+		for (int i = 0; i < 6; i++) {
+			x = k + rand.nextInt(16);
+			y = rand.nextInt(64);
+			z = l + rand.nextInt(16);
+			(new WorldGenMinable(oreZinc.blockID, 16)).generate(world, rand, x, y, z);
+		}
 		for (int i = 0; i < 20; i++) {
 			x = k + rand.nextInt(16);
 			y = rand.nextInt(48);
@@ -228,6 +230,8 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				.setTextureName("steamcraft:teslaactive");
 		teslaReceiver = new BlockTeslaReceiver(config.getBlock("Receiver", 2504).getInt()).setHardness(0.5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:receiver")
 				.setTextureName("steamcraft:receiver");
+		oreZinc = new BlockOre(config.getBlock("ZincOre", 2505).getInt()).setHardness(2.5F).setResistance(5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("steamcraft:orezinc")
+				.setTextureName("steamcraft:zincore");
 		teslaReceiverActive = new BlockTeslaReceiver(config.getBlock("ReceiverON", 2506).getInt()).setHardness(0.5F).setLightValue(0.625F).setStepSound(Block.soundMetalFootstep)
 				.setUnlocalizedName("steamcraft:receiverOn").setTextureName("steamcraft:receiveractive");
 		steamOvenIdle = new BlockSteamFurnace(config.getBlock("SteamFurnace", 2507).getInt(), false).setHardness(4F).setStepSound(Block.soundMetalFootstep)
@@ -281,10 +285,9 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		coreDrill = new ItemCoreDrill(config.getItem("CoreDrill", 25011).getInt()).setUnlocalizedName("steamcraft:coreDrill").setTextureName("steamcraft:coredrill");
 		pickaxeObsidian = new ItemSCPickaxe(config.getItem("ObsidianPick", 25013).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:pickaxeObsidian").setTextureName(
 				"steamcraft:tools/obsidianpick");
-		shovelObsidian = new ItemSCSpade(config.getItem("ObsidianSpade", 25014).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian")
-				.setTextureName("steamcraft:tools/obsidianspade");
+		shovelObsidian = new ItemSpade(config.getItem("ObsidianSpade", 25014).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:shovelObsidian").setTextureName("steamcraft:tools/obsidianspade");
 		axeObsidian = new ItemSCAxe(config.getItem("ObsidianAxe", 25015).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hatchetObsidian").setTextureName("steamcraft:tools/obsidianaxe");
-		hoeObsidian = new ItemSCHoe(config.getItem("ObsidianHoe", 25016).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
+		hoeObsidian = new ItemHoe(config.getItem("ObsidianHoe", 25016).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:hoeObsidian").setTextureName("steamcraft:tools/obsidianhoe");
 		swordObsidian = new ItemSCSword(config.getItem("ObsidianSword", 25017).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:swordObsidian").setTextureName("steamcraft:tools/obsidiansword");
 		drillObsidian = new ItemSCDrill(config.getItem("ObsidianDrill", 25018).getInt(), TOOLOBSIDIAN).setUnlocalizedName("steamcraft:drillObsidian").setTextureName("steamcraft:tools/obsidiandrill");
 		for (int i = 0; i < ARMOR_NAMES.length; i++) {
@@ -308,10 +311,9 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				"steamcraft:armour/pneumaticbraces");
 		pickaxeEtherium = new ItemSCPickaxe(config.getItem("EtheriumPick", 25027).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:pickaxeEtherium").setTextureName(
 				"steamcraft:tools/etheriumpick");
-		shovelEtherium = new ItemSCSpade(config.getItem("EtheriumSpade", 25028).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium")
-				.setTextureName("steamcraft:tools/etheriumspade");
+		shovelEtherium = new ItemSpade(config.getItem("EtheriumSpade", 25028).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:shovelEtherium").setTextureName("steamcraft:tools/etheriumspade");
 		axeEtherium = new ItemSCAxe(config.getItem("EtheriumAxe", 25029).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:hatchetEtherium").setTextureName("steamcraft:tools/etheriumaxe");
-		hoeEtherium = new ItemSCHoe(config.getItem("EtheriumHoe", 25030).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
+		hoeEtherium = new ItemHoe(config.getItem("EtheriumHoe", 25030).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:hoeEtherium").setTextureName("steamcraft:tools/etheriumhoe");
 		swordEtherium = new ItemSCSword(config.getItem("EtheriumSword", 25031).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:swordEtherium").setTextureName("steamcraft:tools/etheriumsword");
 		drillEtherium = new ItemSCDrill(config.getItem("EtheriumDrill", 25032).getInt(), TOOLETHERIUM).setUnlocalizedName("steamcraft:drillEtherium").setTextureName("steamcraft:tools/etheriumdrill");
 		helmetEtherium = new ItemSCArmor(config.getItem("EtheriumHelmet", 25033).getInt(), ARMORETHERIUM, armorIndexes[0], 0).setUnlocalizedName("steamcraft:helmetEtherium").setTextureName(
@@ -398,6 +400,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		data.put(orePhosphate, new Object[] { "Phosphate Ore", "orePhosphate" });
 		data.put(oreUranite, new Object[] { "Uranite", "oreUranite" });
 		data.put(oreVolucite, new Object[] { "Volucite", "oreVolucite" });
+		data.put(oreZinc, new Object[] { "Zinc Ore", "oreZinc" });
 		data.put(new ItemStack(material, 1, 0), new Object[] { "Etherium Crystal", "oreEtherium" });
 		data.put(new ItemStack(material, 1, 1), new Object[] { "Sulphur", "oreSulphur" });
 		data.put(new ItemStack(material, 1, 2), new Object[] { "Purified Copper", "oreCopper" });
@@ -418,6 +421,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		data.put(new ItemStack(material, 1, 10), new Object[] { "Reactor Core", "itemReactorCore" });
 		data.put(coreDrill, new Object[] { "Core Drill" });
 		data.put(new ItemStack(material, 1, 11), new Object[] { "Drill Base", "itemDrillBase" });
+		data.put(new ItemStack(material, 1, 12), new Object[] { "Zinc Ingot", "ingotZinc" });
 		data.put(chisel, new Object[] { "Chisel", "chisel" });
 		data.put(spanner, new Object[] { "Spanner", "spanner" });
 		data.put(roofTile, new Object[] { "Slate Tiles" });
@@ -615,6 +619,32 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		MinecraftForge.setToolClass(shovelSteam, "shovel", 7);
 		String[] toolsets = { "pickaxe", "drill" };
 		GameRegistry.registerBlock(decorBlock, ItemBlockDecor.class, "steamcraft:decor");
+		for (Block block : ItemSCPickaxe.xblocksEffectiveAgainst) {
+			MinecraftForge.setBlockHarvestLevel(block, toolsets[0], 0);
+		}
+		for (Block block : ItemSCDrill.xblocksEffectiveAgainst) {
+			MinecraftForge.setBlockHarvestLevel(block, toolsets[1], 0);
+		}
+		MinecraftForge.setBlockHarvestLevel(oreVolucite, "pickaxe", 5);
+		MinecraftForge.setBlockHarvestLevel(Block.blockEmerald, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(oreUranite, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(orePhosphate, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(borniteOre, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(brimstone, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(Block.obsidian, "pickaxe", 3);
+		MinecraftForge.setBlockHarvestLevel(Block.obsidian, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(oreUranite, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(orePhosphate, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(oreVolucite, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(brimstone, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(Block.oreGold, "drill", 100);
+		MinecraftForge.setBlockHarvestLevel(Block.oreLapis, "drill", 100);
+		MinecraftForge.removeBlockEffectiveness(oreUranite, "drill");
+		MinecraftForge.removeBlockEffectiveness(orePhosphate, "drill");
+		MinecraftForge.removeBlockEffectiveness(oreVolucite, "drill");
+		MinecraftForge.removeBlockEffectiveness(brimstone, "drill");
+		MinecraftForge.removeBlockEffectiveness(Block.oreGold, "drill");
+		MinecraftForge.removeBlockEffectiveness(Block.oreLapis, "drill");
 		for (int ix = 0; ix < BlockDecor.names.length; ix++) {
 			ItemStack stack = new ItemStack(decorBlock, 1, ix);
 			LanguageRegistry.addName(stack, DECORBLOCK_NAMES[stack.getItemDamage()]);
@@ -628,6 +658,23 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 			MinecraftForge.setBlockHarvestLevel(decorBlock, 10, tool, 1);
 			MinecraftForge.setBlockHarvestLevel(decorBlock, 1, tool, 5);
 			MinecraftForge.setBlockHarvestLevel(decorBlock, 8, tool, 5);
+			MinecraftForge.setBlockHarvestLevel(Block.oreEmerald, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.oreDiamond, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.blockDiamond, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.oreGold, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.blockGold, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.oreIron, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(oreZinc, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(woodBrass, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.blockNetherQuartz, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.blockIron, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(Block.oreLapis, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(Block.blockLapis, tool, 1);
+			MinecraftForge.setBlockHarvestLevel(Block.oreRedstone, tool, 2);
+			MinecraftForge.setBlockHarvestLevel(Block.oreRedstoneGlowing, tool, 2);
+			MinecraftForge.removeBlockEffectiveness(Block.oreRedstone, tool);
+			MinecraftForge.removeBlockEffectiveness(Block.obsidian, tool);
+			MinecraftForge.removeBlockEffectiveness(Block.oreRedstoneGlowing, tool);
 		}
 		MinecraftForge.addGrassSeed(new ItemStack(teaSeed), 5);
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
@@ -637,6 +684,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		GameRegistry.registerTileEntity(TileEntityChemFurnace.class, "Chemical Furnace");
 		GameRegistry.registerTileEntity(TileEntityNukeFurnace.class, "Nuclear Furnace");
 		GameRegistry.registerTileEntity(TileEntityLamp.class, "Electric Lamp");
+		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(material, 1, 12), 1.0F);
 		GameRegistry.addSmelting(borniteOre.blockID, new ItemStack(material, 1, 2), 1.0F);
 		GameRegistry.addSmelting(brimstone.blockID, new ItemStack(material, 1, 1), 1.0F);
 		GameRegistry.addSmelting(oreVolucite.blockID, new ItemStack(material, 1, 0), 1.0F);
@@ -679,7 +727,6 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		GameRegistry.addRecipe(new ItemStack(wirelessLamp), "#", "X", Character.valueOf('#'), electricLamp, Character.valueOf('X'), teslaReceiver);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(railingCastIron, 2), "###", "###", Character.valueOf('#'), "ingotCastIron"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(gateCastIron), "#X#", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), "railCastIron"));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 1, 4), Item.ingotIron, "oreCopper"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 1, 4), "ingotZinc", "oreCopper"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 2, 9), "oreUranium"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeEtherium), "XXX", " # ", " # ", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "oreEtherium"));
@@ -692,7 +739,6 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(axeObsidian), "XX", "X#", " #", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "slateObsidian"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hoeObsidian), "XX", " #", " #", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "slateObsidian"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(swordObsidian), "X", "X", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "slateObsidian"));
-
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(pickaxeSteam), "XIX", " # ", " # ", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "ingotBrass", Character.valueOf('I'),
 				"furnaceSteam"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(shovelSteam), "X", "#", "I", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "ingotBrass", Character.valueOf('I'),
