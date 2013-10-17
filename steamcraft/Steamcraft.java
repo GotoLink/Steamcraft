@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
@@ -76,9 +77,9 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static final EnumToolMaterial TOOLSTEAM = EnumHelper.addToolMaterial("STEAM", 2, 321, 12F, 5, 0);
 	private static final String[] FIREARM_PARTS = { "musketcartridge", "percussioncap", "percussionlock", "smoothbarrel", "rifledbarrel", "woodenstock" };
 	private static final String[] MATERIALS = { "etherium", "sulphur", "copper", "obsidianslate", "ingotbrass", "ingotcastiron", "lightbulb", "phosphorus", "uraniumstone", "uraniumpellet",
-		"reactorcore", "coredrillbase", "ingotzinc" };
+			"reactorcore", "coredrillbase", "ingotzinc" };
 	private static final String[] DECORBLOCK_NAMES = { "Block of Cast Iron", "Block of Volucite", "Block of Brass", "Block of Uranium", "Engraved Iron Block", "Engraved Gold Block",
-		"Engraved Diamond Block", "Engraved Cast Iron Block", "Engraved Volucite Block", "Engraved Brass Block", "Engraved Lapis Lazuli Block", "Carved Stone", "Engraved Uranium Block" };
+			"Engraved Diamond Block", "Engraved Cast Iron Block", "Engraved Volucite Block", "Engraved Brass Block", "Engraved Lapis Lazuli Block", "Carved Stone", "Engraved Uranium Block" };
 	public static final Material solidcircuit = new MaterialLogic(MapColor.airColor);
 	public static final Material staticcircuit = new StaticMaterial(MapColor.airColor);
 	public static final CreativeTabs steamTab = new SteamTab();
@@ -115,6 +116,10 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static Block torchPhosphorus, teslaReceiver, teslaReceiverActive, battery;
 	private Object[][] DrillRecipeItems, SpannerRecipeItems, StoreBlockRecipeItems, DecorBlockRecipeItems;
 	private Logger logger;
+	private static final WorldGenerator netherGen = new WorldGenNetherTrees();
+	private static final WorldGenerator hideoutGen = new WorldGenHighwaymanHideout();
+	private static WorldGenerator brimstoneGen, zincGen, bornGen, phosphGen, uranGen, volucGen;
+	public static int genNetherTree = 20, genHideout = 8, genBrin = 12, genZinc = 6, genBorn = 20, genPhos = 3, genUr = 2, genVol = 1;
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
@@ -125,63 +130,73 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	}
 
 	public void generateNether(World world, Random rand, int k, int l) {
-		for (int i = 0; i < 20; i++) {
-			int x = k + rand.nextInt(16);
-			int y = rand.nextInt(128);
-			int z = l + rand.nextInt(16);
-			(new WorldGenNetherTrees()).generate(world, rand, x, y, z);
+		if (genNetherTree > 0) {
+			for (int i = 0; i < genNetherTree; i++) {
+				int x = k + rand.nextInt(16);
+				int y = rand.nextInt(128);
+				int z = l + rand.nextInt(16);
+				netherGen.generate(world, rand, x, y, z);
+			}
 		}
 	}
 
 	public void generateSurface(World world, Random rand, int k, int l) {
 		int x, y, z;
-		for (int i = 0; i < 12; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(64);
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(brimstone.blockID, 8)).generate(world, rand, x, y, z);
+		if (genBrin > 0) {
+			for (int i = 0; i < genBrin; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(64);
+				z = l + rand.nextInt(16);
+				brimstoneGen.generate(world, rand, x, y, z);
+			}
 		}
-		for (int i = 0; i < 6; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(64);
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(oreZinc.blockID, 16)).generate(world, rand, x, y, z);
+		if (genZinc > 0) {
+			for (int i = 0; i < genZinc; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(64);
+				z = l + rand.nextInt(16);
+				zincGen.generate(world, rand, x, y, z);
+			}
 		}
-		for (int i = 0; i < 20; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(48);
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(borniteOre.blockID, 8)).generate(world, rand, x, y, z);
+		if (genBorn > 0) {
+			for (int i = 0; i < genBorn; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(48);
+				z = l + rand.nextInt(16);
+				bornGen.generate(world, rand, x, y, z);
+			}
 		}
-		for (int i = 0; i < 3; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(36);
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(orePhosphate.blockID, 6)).generate(world, rand, x, y, z);
+		if (genPhos > 0) {
+			for (int i = 0; i < genPhos; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(36);
+				z = l + rand.nextInt(16);
+				phosphGen.generate(world, rand, x, y, z);
+			}
 		}
-		for (int i = 0; i < 2; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(24);
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(oreUranite.blockID, 4)).generate(world, rand, x, y, z);
+		if (genUr > 0) {
+			for (int i = 0; i < genUr; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(24);
+				z = l + rand.nextInt(16);
+				uranGen.generate(world, rand, x, y, z);
+			}
 		}
-		/*
-		 * for(int i = 0; i < 4; i++) { x = k + rand.nextInt(16); y =
-		 * rand.nextInt(48); z = l + rand.nextInt(16); (new
-		 * WorldGenMinable(Block.oreRedstone.blockID, 4)).generate(world, rand,
-		 * x, y, z); }
-		 */
-		for (int i = 0; i < 1; i++) {
-			x = k + rand.nextInt(16);
-			y = rand.nextInt(16) + 12;
-			z = l + rand.nextInt(16);
-			(new WorldGenMinable(oreVolucite.blockID, 3)).generate(world, rand, x, y, z);
+		if (genVol > 0) {
+			for (int i = 0; i < genVol; i++) {
+				x = k + rand.nextInt(16);
+				y = rand.nextInt(16) + 12;
+				z = l + rand.nextInt(16);
+				volucGen.generate(world, rand, x, y, z);
+			}
 		}
-		for (int i = 0; i < 8; i++) {
-			x = k + rand.nextInt(16) + 8;
-			y = rand.nextInt(128);
-			z = l + rand.nextInt(16) + 8;
-			(new WorldGenHighwaymanHideout()).generate(world, rand, x, y, z);
+		if (genHideout > 0) {
+			for (int i = 0; i < genHideout; i++) {
+				x = k + rand.nextInt(16) + 8;
+				y = rand.nextInt(128);
+				z = l + rand.nextInt(16) + 8;
+				hideoutGen.generate(world, rand, x, y, z);
+			}
 		}
 	}
 
@@ -209,6 +224,15 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		logger = event.getModLog();
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
+		config.addCustomCategoryComment("Generation", "TPC:Tries per chunk");
+		genNetherTree = config.get("Generation", "Nether_Trees_TPC", genNetherTree).getInt();
+		genHideout = config.get("Generation", "Highwayman_Hideout_TPC", genHideout).getInt();
+		genBrin = config.get("Generation", "Brimstone_TPC", genBrin).getInt();
+		genZinc = config.get("Generation", "ZincOre_TPC", genZinc).getInt();
+		genBorn = config.get("Generation", "Bornite_TPC", genBorn).getInt();
+		genPhos = config.get("Generation", "PhosphateOre_TPC", genPhos).getInt();
+		genUr = config.get("Generation", "Uranite_TPC", genUr).getInt();
+		genVol = config.get("Generation", "Volucite_TPC", genVol).getInt();
 		redstoneWire = new BlockCopperWire(config.getBlock("CopperWire", 2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire")
 				.setTextureName("redstone_dust");
 		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter", 2494).getInt(), false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle")
@@ -381,6 +405,12 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		emptyKettle = new ItemKettle(config.getItem("KettleEmpty", 25071).getInt()).setUnlocalizedName("steamcraft:kettleempty").setTextureName("steamcraft:kettle");
 		if (config.hasChanged())
 			config.save();
+		brimstoneGen = new WorldGenMinable(brimstone.blockID, 8);
+		zincGen = new WorldGenMinable(oreZinc.blockID, 16);
+		bornGen = new WorldGenMinable(borniteOre.blockID, 8);
+		phosphGen = new WorldGenMinable(orePhosphate.blockID, 6);
+		uranGen = new WorldGenMinable(oreUranite.blockID, 4);
+		volucGen = new WorldGenMinable(oreVolucite.blockID, 3);
 		data.put(torchElectricIdle, new Object[] { "Electric Torch" });
 		data.put(torchElectricActive, new Object[] { "Electric Torch Active" });
 		data.put(electricLamp, new Object[] { "Electric Lamp" });
@@ -716,14 +746,9 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		GameRegistry.addRecipe(new ItemStack(roofTile, 4), "###", "###", "###", Character.valueOf('#'), Item.flint);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(lamp), "#X#", "XIX", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Block.glass, Character.valueOf('I'),
 				Item.glowstone));
-		/*
-		 * GameRegistry.addRecipe(new ItemStack(woodBrass, 4), new Object[] {
-		 * "###", "#I#", "###", Character.valueOf('#'), ingotBrass,
-		 * Character.valueOf('I'), Block.wood }); GameRegistry.addRecipe(new
-		 * ItemStack(leavesLamp, 4), new Object[] { "#X#", "XIX", "#X#",
-		 * Character.valueOf('#'), ingotBrass, Character.valueOf('X'),
-		 * Block.glass, Character.valueOf('I'), Item.lightStoneDust });
-		 */
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(woodBrass, 4), "###", "#I#", "###", Character.valueOf('#'), "ingotBrass", Character.valueOf('I'), "logWood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(leavesLamp, 4), "#X#", "XIX", "#X#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Block.glass,
+				Character.valueOf('I'), Item.glowstone));
 		GameRegistry.addRecipe(new ItemStack(wirelessLamp), "#", "X", Character.valueOf('#'), electricLamp, Character.valueOf('X'), teslaReceiver);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(railingCastIron, 2), "###", "###", Character.valueOf('#'), "ingotCastIron"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(gateCastIron), "#X#", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), "railCastIron"));
