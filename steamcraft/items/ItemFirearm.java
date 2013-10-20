@@ -5,7 +5,9 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,51 +29,12 @@ public class ItemFirearm extends Item {
 		setCreativeTab(Steamcraft.steamTab);
 	}
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.water)) {
-			spawnBullet(itemstack, world, entityplayer);
-		}
-		return itemstack;
+	public ItemStack getAmmoA(ItemStack stack) {
+		return new ItemStack(Steamcraft.part, 1, hasPercussion(stack) ? 1 : 0);
 	}
 
-	public void spawnBullet(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		world.playSoundAtEntity(entityplayer, "mob.ghast.fireball", 0.8F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-		world.playSoundAtEntity(entityplayer, "random.explode", 0.4F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.9F));
-		itemstack.setItemDamage(itemstack.getMaxDamage() - 1);
-		if (!world.isRemote) {
-			world.spawnEntityInWorld(new EntityMusketBall(world, entityplayer, getFirePower(itemstack), isRifled(itemstack)));
-		}
-	}
-
-	@Override
-	public int getMaxDamage(ItemStack stack) {
-		if (stack.hasTagCompound()) {
-			return stack.getTagCompound().getInteger("maxdmg");
-		}
-		return getMaxDamage();
-	}
-
-	public static void setMaxDamage(ItemStack stack, int max) {
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("maxdmg", max);
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return getUnlocalizedName() + getMaxDamage(stack) + getFirePower(stack) + isRifled(stack);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 1;
+	public ItemStack getAmmoB() {
+		return new ItemStack(Steamcraft.part);
 	}
 
 	@Override
@@ -94,15 +57,16 @@ public class ItemFirearm extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		icons = new Icon[6];
-		icons[0] = par1IconRegister.registerIcon(getIconString() + "percussionrifle");
-		icons[1] = par1IconRegister.registerIcon(getIconString() + "flintlockrifle");
-		icons[2] = par1IconRegister.registerIcon(getIconString() + "matchlockrifle");
-		icons[3] = par1IconRegister.registerIcon(getIconString() + "percussionmusket");
-		icons[4] = par1IconRegister.registerIcon(getIconString() + "flintlockmusket");
-		icons[5] = par1IconRegister.registerIcon(getIconString() + "matchlockmusket");
+	public int getMaxDamage(ItemStack stack) {
+		if (stack.hasTagCompound()) {
+			return stack.getTagCompound().getInteger("maxdmg");
+		}
+		return getMaxDamage();
+	}
+
+	@Override
+	public int getRenderPasses(int metadata) {
+		return 1;
 	}
 
 	@Override
@@ -116,6 +80,62 @@ public class ItemFirearm extends Item {
 		par3List.add(Steamcraft.percussionCapRifle);
 	}
 
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		return getUnlocalizedName() + getMaxDamage(stack) + getFirePower(stack) + isRifled(stack);
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.water)) {
+			spawnBullet(itemstack, world, entityplayer);
+		}
+		return itemstack;
+	}
+
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int slot, boolean current) {
+		if (current && entity instanceof EntityPlayer) {
+			EntityPlayer entityPlayer = (EntityPlayer) entity;
+			if (itemStack.getItem() instanceof ItemFirearm && itemStack.getItemDamage() > 0) {
+				if (itemStack.getItemDamage() < itemStack.getMaxDamage() - 1) {
+					itemStack.setItemDamage(itemStack.getItemDamage() - 1);
+				}
+				if (itemStack.getItemDamage() == itemStack.getMaxDamage() - 1) {
+					ItemFirearm heldFirearm = (ItemFirearm) itemStack.getItem();
+					if(heldFirearm.getAmmoA(itemStack).isItemEqual(heldFirearm.getAmmoB())){
+						if (entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(itemStack).itemID)) {
+							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
+						}
+					}
+					else if (getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoA(itemStack)) > -1
+							&& getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoB()) > -1) {
+						if (entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(itemStack).itemID) && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoB().itemID)) {
+							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister) {
+		icons = new Icon[6];
+		icons[0] = par1IconRegister.registerIcon(getIconString() + "percussionrifle");
+		icons[1] = par1IconRegister.registerIcon(getIconString() + "flintlockrifle");
+		icons[2] = par1IconRegister.registerIcon(getIconString() + "matchlockrifle");
+		icons[3] = par1IconRegister.registerIcon(getIconString() + "percussionmusket");
+		icons[4] = par1IconRegister.registerIcon(getIconString() + "flintlockmusket");
+		icons[5] = par1IconRegister.registerIcon(getIconString() + "matchlockmusket");
+	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
 	public static int getFirePower(ItemStack stack) {
 		if (stack.hasTagCompound())
 			return stack.getTagCompound().getInteger("power");
@@ -123,31 +143,13 @@ public class ItemFirearm extends Item {
 			return 0;
 	}
 
-	public static void setFirePower(ItemStack stack, int power) {
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("power", power);
-	}
-
-	public ItemStack getAmmoA(ItemStack stack) {
-		return new ItemStack(Steamcraft.part, 1, hasPercussion(stack) ? 1 : 0);
-	}
-
-	public ItemStack getAmmoB() {
-		return new ItemStack(Steamcraft.part);
-	}
-
-	public static boolean isRifled(ItemStack stack) {
-		if (stack.hasTagCompound())
-			return stack.getTagCompound().getBoolean("rifled");
-		else
-			return false;
-	}
-
-	public static void setRifled(ItemStack stack) {
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setBoolean("rifled", true);
+	public static int getStackPosition(InventoryPlayer inventory, ItemStack itemStack) {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			if (inventory.getStackInSlot(i) != null && itemStack.isItemEqual(inventory.getStackInSlot(i))) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public static boolean hasPercussion(ItemStack stack) {
@@ -157,9 +159,43 @@ public class ItemFirearm extends Item {
 			return false;
 	}
 
+	public static boolean isRifled(ItemStack stack) {
+		if (stack.hasTagCompound())
+			return stack.getTagCompound().getBoolean("rifled");
+		else
+			return false;
+	}
+
+	public static void setFirePower(ItemStack stack, int power) {
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("power", power);
+	}
+
+	public static void setMaxDamage(ItemStack stack, int max) {
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("maxdmg", max);
+	}
+
 	public static void setPercussion(ItemStack stack) {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setBoolean("percussion", true);
+	}
+
+	public static void setRifled(ItemStack stack) {
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setBoolean("rifled", true);
+	}
+
+	public static void spawnBullet(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		world.playSoundAtEntity(entityplayer, "mob.ghast.fireball", 0.8F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		world.playSoundAtEntity(entityplayer, "random.explode", 0.4F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.9F));
+		itemstack.setItemDamage(itemstack.getMaxDamage() - 1);
+		if (!world.isRemote) {
+			world.spawnEntityInWorld(new EntityMusketBall(world, entityplayer, getFirePower(itemstack), isRifled(itemstack)));
+		}
 	}
 }
