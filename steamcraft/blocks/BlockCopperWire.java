@@ -19,20 +19,8 @@ public class BlockCopperWire extends BlockRedstoneWire {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		super.registerIcons(par1IconRegister);
-		this.blockIcon = par1IconRegister.registerIcon("steamcraft:copperwire");
-	}
-
-	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 		return side != -1;
-	}
-
-	@Override
-	public int getRenderType() {
-		return modelID;
 	}
 
 	@Override
@@ -42,14 +30,19 @@ public class BlockCopperWire extends BlockRedstoneWire {
 	}
 
 	@Override
+	public int getRenderType() {
+		return modelID;
+	}
+
+	@Override
 	public int idDropped(int par1, Random par2Random, int par3) {
-		return Steamcraft.redstoneWire.blockID;
+		return Steamcraft.copperWire.blockID;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.redstoneWire.blockID;
+		return Steamcraft.copperWire.blockID;
 	}
 
 	@Override
@@ -71,5 +64,12 @@ public class BlockCopperWire extends BlockRedstoneWire {
 			}
 			world.spawnParticle("reddust", d, d1, d2, f1, f2, f3);
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister) {
+		super.registerIcons(par1IconRegister);
+		this.blockIcon = par1IconRegister.registerIcon("steamcraft:copperwire");
 	}
 }
