@@ -105,11 +105,11 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static Item pickaxeObsidian, shovelObsidian, axeObsidian, hoeObsidian;
 	public static Block borniteOre, orePhosphate, oreUranite, oreVolucite, brimstone;
 	public static Block oreZinc, redstoneRepeaterIdle, redstoneRepeaterActive, railPowered, wirelessLampActive;
-	public static Block redstoneWire, torchRedstoneIdle, torchRedstoneActive, wirelessLampIdle;
+	public static Block copperWire, torchRedstoneIdle, torchRedstoneActive, wirelessLampIdle;
 	public static Block nukeOvenIdle, nukeOvenActive;
 	public static Block steamOvenIdle, steamOvenActive, chemOvenIdle, chemOvenActive;
 	public static Block decorBlock, railingCastIron, gateCastIron;
-	public static Block lamp, lampoff, woodBrass, leavesLamp;
+	public static Block lamp, lampoff, woodBrass, leavesLamp, netherSapling;
 	public static Block stairRoof, roofTile;
 	public static Block teaPlant;
 	public static Block torchElectricIdle, torchElectricActive, torchTeslaIdle, torchTeslaActive;
@@ -233,7 +233,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		genPhos = config.get("Generation", "PhosphateOre_TPC", genPhos).getInt();
 		genUr = config.get("Generation", "Uranite_TPC", genUr).getInt();
 		genVol = config.get("Generation", "Volucite_TPC", genVol).getInt();
-		redstoneWire = new BlockCopperWire(config.getBlock("CopperWire", 2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire")
+		copperWire = new BlockCopperWire(config.getBlock("CopperWire", 2493).getInt()).setHardness(0.0F).setStepSound(Block.soundPowderFootstep).setUnlocalizedName("steamcraft:copperwire")
 				.setTextureName("redstone_dust");
 		torchRedstoneIdle = new BlockInverter(config.getBlock("Inverter", 2494).getInt(), false).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("steamcraft:inverteridle")
 				.setTextureName("steamcraft:inverteridle");
@@ -245,6 +245,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				.setUnlocalizedName("steamcraft:diodeactive").setTextureName("steamcraft:diodeactive");
 		railPowered = new BlockPoweredRail(config.getBlock("Rail", 2498).getInt(), true).setHardness(0.7F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:rail")
 				.setTextureName("steamcraft:rail");
+		netherSapling = new BlockNetherSapling(config.getBlock("NetherSapling", 2499).getInt()).setUnlocalizedName("steamcraft.nethersapling").setTextureName("steamcraft:nethersapling");
 		torchElectricIdle = new BlockElectricLamp(config.getBlock("ElectricLamp", 2500).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:electricLamp")
 				.setTextureName("steamcraft:electriclamp");
 		torchElectricActive = new BlockElectricLamp(config.getBlock("ElectricLampON", 2501).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F)
@@ -295,8 +296,8 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		lampoff = new BlockLamp(config.getBlock("LampBlockOFF", 2539).getInt(), false).setUnlocalizedName("steamcraft:lamp").setTextureName("steamcraft:lampblock");
 		woodBrass = new BlockBrassLog(config.getBlock("BrassLog", 2540).getInt()).setHardness(5F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("steamcraft:logBrass")
 				.setTextureName("steamcraft:brasslog");
-		leavesLamp = new Block(config.getBlock("BrassLeaves", 2541).getInt(), Material.wood).setHardness(2F).setLightOpacity(1).setLightValue(0.9375F).setStepSound(Block.soundGlassFootstep)
-				.setUnlocalizedName("steamcraft:leavesLamp").setTextureName("steamcraft:brassleaves");
+		leavesLamp = new BlockNetherLeaves(config.getBlock("BrassLeaves", 2541).getInt(), Material.wood).setHardness(2F).setLightOpacity(1).setLightValue(0.9375F)
+				.setStepSound(Block.soundGlassFootstep).setUnlocalizedName("steamcraft:leavesLamp").setTextureName("steamcraft:brassleaves");
 		wirelessLampIdle = new BlockWirelessLamp(config.getBlock("WirelessLamp", 2542).getInt(), TileEntityLamp.class, false).setHardness(0.0F).setUnlocalizedName("steamcraft:wirelessLamp")
 				.setTextureName("steamcraft:wirelesslamp");
 		wirelessLampActive = new BlockWirelessLamp(config.getBlock("WirelessLampON", 2543).getInt(), TileEntityLamp.class, true).setHardness(0.0F).setLightValue(1.0F)
@@ -419,18 +420,19 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		data.put(teslaReceiver, new Object[] { "Tesla Receiver" });
 		data.put(teslaReceiverActive, new Object[] { "Tesla Receiver Active" });
 		data.put(battery, new Object[] { "Battery" });
-		data.put(redstoneWire, new Object[] { "Copper Wire" });
+		data.put(copperWire, new Object[] { "Copper Wire", "wireCopper" });
 		data.put(torchRedstoneIdle, new Object[] { "Inverter" });
-		data.put(torchRedstoneActive, new Object[] { "Inverter Active" });
+		data.put(torchRedstoneActive, new Object[] { "Inverter Active", "torchCopper" });
 		data.put(redstoneRepeaterIdle, new Object[] { "Diode" });
 		data.put(redstoneRepeaterActive, new Object[] { "Diode Active" });
 		data.put(railPowered, new Object[] { "Rail" });
+		data.put(netherSapling, new Object[] { "Nether Sapling", "saplingNether" });
 		data.put(brimstone, new Object[] { "Brimstone", "oreBrimstone" });
 		data.put(borniteOre, new Object[] { "Bornite", "oreBornite" });
 		data.put(orePhosphate, new Object[] { "Phosphate Ore", "orePhosphate" });
 		data.put(oreUranite, new Object[] { "Uranite", "oreUranite" });
 		data.put(oreVolucite, new Object[] { "Volucite", "oreVolucite" });
-		data.put(oreZinc, new Object[] { "Zinc Ore", "oreZinc" });
+		data.put(oreZinc, new Object[] { "Sphalerite", "oreZinc" });
 		data.put(new ItemStack(material, 1, 0), new Object[] { "Etherium Crystal", "oreEtherium" });
 		data.put(new ItemStack(material, 1, 1), new Object[] { "Sulphur", "oreSulphur" });
 		data.put(new ItemStack(material, 1, 2), new Object[] { "Purified Copper", "oreCopper" });
@@ -442,23 +444,23 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		data.put(torchPhosphorus, new Object[] { "Phosphorus Torch" });
 		data.put(new ItemStack(material, 1, 8), new Object[] { "Uranium", "oreUranium" });
 		data.put(new ItemStack(material, 1, 9), new Object[] { "Uranium Pellet", "ingotUranium" });
-		data.put(steamOvenIdle, new Object[] { "Steam Furnace", " furnaceSteam" });
+		data.put(steamOvenIdle, new Object[] { "Steam Furnace", "furnaceSteam" });
 		data.put(steamOvenActive, new Object[] { "Steam Furnace Active" });
 		data.put(chemOvenIdle, new Object[] { "Chemical Furnace", "furnaceChemical" });
 		data.put(chemOvenActive, new Object[] { "Chemical Furnace Active" });
-		data.put(nukeOvenIdle, new Object[] { "Nuclear Reactor", "furnaceNuke" });
-		data.put(nukeOvenActive, new Object[] { "Nuclear Reactor Active" });
+		data.put(nukeOvenIdle, new Object[] { "Nuclear Furnace", "furnaceNuke" });
+		data.put(nukeOvenActive, new Object[] { "Nuclear Furnace Active" });
 		data.put(new ItemStack(material, 1, 10), new Object[] { "Reactor Core", "itemReactorCore" });
 		data.put(coreDrill, new Object[] { "Core Drill" });
 		data.put(new ItemStack(material, 1, 11), new Object[] { "Drill Base", "itemDrillBase" });
 		data.put(new ItemStack(material, 1, 12), new Object[] { "Zinc Ingot", "ingotZinc" });
 		data.put(chisel, new Object[] { "Chisel", "chisel" });
 		data.put(spanner, new Object[] { "Spanner", "spanner" });
-		data.put(roofTile, new Object[] { "Slate Tiles" });
+		data.put(roofTile, new Object[] { "Slate Tiles", "stairFlint" });
 		data.put(railingCastIron, new Object[] { "Cast Iron Railing", "railCastIron" });
 		data.put(gateCastIron, new Object[] { "Cast Iron Gate", "gateCastIron" });
-		data.put(teaPlant, new Object[] { "Tea Plant" });
-		data.put(teaSeed, new Object[] { "Tea Seeds" });
+		data.put(teaPlant, new Object[] { "Tea Plant", "plantTea" });
+		data.put(teaSeed, new Object[] { "Tea Seeds", "seedTea" });
 		data.put(teaLeaves, new Object[] { "Tea Leaves" });
 		data.put(coldKettle, new Object[] { "Kettle of Cold Tea", "kettleFull" });
 		data.put(hotKettle, new Object[] { "Kettle of Tea", "kettleHot" });
@@ -724,17 +726,19 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		GameRegistry.addSmelting(Block.gravel.blockID, new ItemStack(Item.flint), 1.0F);
 		GameRegistry.addSmelting(coldKettle.itemID, new ItemStack(hotKettle, 1, 0), 1.0F);
 		GameRegistry.addSmelting(Block.stoneBrick.blockID, new ItemStack(Block.stone), 1.0F);
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(redstoneWire, 4, 0), "oreCopper"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(copperWire, 4, 0), "oreCopper"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 3), "#", "#", Character.valueOf('#'), Block.obsidian));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.obsidian), "##", "##", Character.valueOf('#'), "slateObsidian"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(steamOvenIdle, 1), "# #", "#X#", "#I#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.bucketEmpty, Character
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(steamOvenIdle), "# #", "#X#", "#I#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.bucketEmpty, Character
 				.valueOf('I'), Block.furnaceIdle));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.redstone, 8), "###", Character.valueOf('#'), "oreCopper"));
-		GameRegistry.addRecipe(new ItemStack(material, 4, 6), "I", "#", "X", Character.valueOf('#'), Item.redstone, Character.valueOf('X'), Item.ingotIron, Character.valueOf('I'), Block.glass);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 6), "I", "#", "X", Character.valueOf('#'), "wireCopper", Character.valueOf('X'), Item.ingotIron, Character.valueOf('I'),
+				Block.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(electricLamp), "I", "#", "X", Character.valueOf('#'), "oreCopper", Character.valueOf('X'), "ingotCastIron", Character.valueOf('I'),
 				"itemLightBulb"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchPhosphorus, 4), "X", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "ingotPosphate"));
-		GameRegistry.addRecipe(new ItemStack(battery), "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'), Item.redstone);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(battery), "###", "IXI", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz, Character.valueOf('I'),
+				"wireCopper"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chemOvenIdle), "###", "#X#", "#I#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Item.diamond, Character
 				.valueOf('I'), "furnaceSteam"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(nukeOvenIdle), "#I#", "#X#", "#I#", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "itemReactorCore", Character
@@ -789,19 +793,19 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				Character.valueOf('T'), Block.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rollerSkates), "X X", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Item.ingotIron));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(legBraces), "XXX", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner), "X X", "###", " # ", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Item.diamond));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner), "# #", "#X#", " # ", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), "oreEtherium"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chisel), "#", "#", "X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.music), "###", "#X#", "###", Character.valueOf('#'), "plankWood", Character.valueOf('X'), Item.netherQuartz));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.railPowered, 6), "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotGold, Character.valueOf('R'), Item.redstone, Character
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.railPowered, 6), "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotGold, Character.valueOf('R'), "wireCopper", Character
 				.valueOf('#'), "stickWood"));
-		GameRegistry.addRecipe(new ItemStack(Block.railDetector, 6), "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), Item.redstone, Character.valueOf('#'),
-				Block.pressurePlateStone);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.railDetector, 6), "XRX", "X#X", "XRX", Character.valueOf('X'), Item.ingotIron, Character.valueOf('R'), "wireCopper", Character
+				.valueOf('#'), Block.pressurePlateStone));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.lever), "X", "#", "I", Character.valueOf('#'), "cobblestone", Character.valueOf('X'), "stickWood", Character.valueOf('I'),
 				battery));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.torchRedstoneActive, 4), "X", "#", "I", Character.valueOf('#'), "stickWood", Character.valueOf('X'), Item.redstone, Character
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchRedstoneActive, 4), "X", "#", "I", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "wireCopper", Character
 				.valueOf('I'), battery));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.redstoneRepeater), "#X#", "IRI", Character.valueOf('#'), Block.torchRedstoneActive, Character.valueOf('X'), Item.redstone,
-				Character.valueOf('I'), "stone", Character.valueOf('R'), Item.netherQuartz));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(redstoneRepeaterIdle), "#X#", "IRI", Character.valueOf('#'), "torchCopper", Character.valueOf('X'), "wireCopper", Character
+				.valueOf('I'), "stone", Character.valueOf('R'), Item.netherQuartz));
 		GameRegistry.addRecipe(new ItemStack(Item.pocketSundial), " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), Item.netherQuartz);
 		GameRegistry.addRecipe(new ItemStack(Item.compass), " # ", "#X#", " # ", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), Item.netherQuartz);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.stoneButton), "#", "#", "X", Character.valueOf('#'), "stone", Character.valueOf('X'), battery));
@@ -811,11 +815,11 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				Character.valueOf('R'), Item.netherQuartz));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.gunpowder), "#X#", Character.valueOf('#'), "oreSulphur", Character.valueOf('X'), Item.coal));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(torchTeslaIdle), " X ", "I#I", "ITI", Character.valueOf('#'), Item.ingotGold, Character.valueOf('X'), "itemLightBulb", Character
-				.valueOf('I'), Item.redstone, Character.valueOf('T'), Item.netherQuartz));
+				.valueOf('I'), "wireCopper", Character.valueOf('T'), Item.netherQuartz));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.glowstone, 4), "X#X", "#I#", "X#X", Character.valueOf('#'), "ingotPosphate", Character.valueOf('X'), "oreSulphur", Character
 				.valueOf('I'), "oreUranium"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(teslaReceiver), "#X#", "ITI", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Item.ingotGold, Character.valueOf('I'),
-				Item.redstone, Character.valueOf('T'), Item.netherQuartz));
+				"wireCopper", Character.valueOf('T'), Item.netherQuartz));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Block.pistonBase), "TTT", "#X#", "#R#", Character.valueOf('#'), "cobblestone", Character.valueOf('X'), Item.ingotIron, Character
 				.valueOf('R'), "oreCopper", Character.valueOf('T'), "plankWood"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 2), "X ", "##", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass"));
