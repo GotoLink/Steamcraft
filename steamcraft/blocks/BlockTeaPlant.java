@@ -4,7 +4,7 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,21 +38,21 @@ public class BlockTeaPlant extends BlockCrops {
 	}
 
 	@Override
-	protected int getSeedItem() {
-		return Steamcraft.teaSeed.itemID;
-	}
-
-	@Override
-	protected int getCropItem() {
-		return Steamcraft.teaLeaves.itemID;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		this.icons = new Icon[3];
 		for (int i = 0; i < this.icons.length; ++i) {
 			this.icons[i] = par1IconRegister.registerIcon(this.getTextureName() + "_stage_" + i);
 		}
+	}
+
+	@Override
+	protected int getCropItem() {
+		return HandlerRegistry.getItem("steamcraft:teaLeaf").getID();
+	}
+
+	@Override
+	protected int getSeedItem() {
+		return HandlerRegistry.getItem("steamcraft:teaSeeds").getID();
 	}
 }

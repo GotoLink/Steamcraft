@@ -7,9 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemElectricLamp extends Item {
-	public ItemElectricLamp(int i, Block block) {
+	private int spawnID;
+
+	public ItemElectricLamp(int i, int spawn) {
 		super(i);
-		spawnID = block.blockID;
+		spawnID = spawn;
 	}
 
 	@Override
@@ -50,13 +52,10 @@ public class ItemElectricLamp extends Item {
 					Block.blocksList[spawnID].onBlockPlaced(world, i, j, k, l, par8, par9, par10, 0);
 					Block.blocksList[spawnID].onBlockPlacedBy(world, i, j, k, entityplayer, itemstack);
 				}
-				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F,
-						block.stepSound.getPitch() * 0.8F);
+				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				itemstack.stackSize--;
 			}
 		}
 		return true;
 	}
-
-	private int spawnID;
 }

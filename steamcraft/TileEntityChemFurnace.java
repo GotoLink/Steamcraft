@@ -7,27 +7,23 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import steamcraft.blocks.BlockChemFurnace;
 import steamcraft.blocks.BlockMainFurnace;
 
 public class TileEntityChemFurnace extends TileEntityFurnace {
 	public int currentItemBurnTimea;
 	public int currentItemBurnTimeb;
+	public static Map<Integer, Integer> fuels = new HashMap();
 
 	public TileEntityChemFurnace() {
 		furnaceItemStacks = new ItemStack[4];
 		setGuiDisplayName("Chemical Furnace");
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		currentItemBurnTimea = getItemBurnTime(furnaceItemStacks[1]);
-		currentItemBurnTimeb = getItemBurnTime(furnaceItemStacks[3]);
-	}
-
-	@Override
-	public int getCookProgressScaled(int i) {
-		return (furnaceCookTime * i) / 100;
+	static {
+		fuels.put(Item.sugar.itemID, 20);
+		fuels.put(Item.gunpowder.itemID, 100);
+		fuels.put(Item.glowstone.itemID, 3200);
 	}
 
 	@Override
@@ -39,6 +35,26 @@ public class TileEntityChemFurnace extends TileEntityFurnace {
 			currentItemBurnTimeb = 100;
 		}
 		return (furnaceBurnTime * i) / (currentItemBurnTimea + currentItemBurnTimeb);
+	}
+
+	@Override
+	public int getCookProgressScaled(int i) {
+		return (furnaceCookTime * i) / 100;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
+		if (par1 == 3)
+			return isItemFuel(par2ItemStack);
+		else
+			return super.isItemValidForSlot(par1, par2ItemStack);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		currentItemBurnTimea = getItemBurnTime(furnaceItemStacks[1]);
+		currentItemBurnTimeb = getItemBurnTime(furnaceItemStacks[3]);
 	}
 
 	@Override
@@ -81,26 +97,11 @@ public class TileEntityChemFurnace extends TileEntityFurnace {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, Steamcraft.chemOvenActive.blockID, Steamcraft.chemOvenIdle.blockID, false);
+				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, BlockChemFurnace.getActive(), BlockChemFurnace.getIdle(), false);
 			}
 		}
 		if (flag1) {
 			this.onInventoryChanged();
 		}
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
-		if (par1 == 3)
-			return isItemFuel(par2ItemStack);
-		else
-			return super.isItemValidForSlot(par1, par2ItemStack);
-	}
-
-	public static Map<Integer, Integer> fuels = new HashMap();
-	static {
-		fuels.put(Item.sugar.itemID, 20);
-		fuels.put(Item.gunpowder.itemID, 100);
-		fuels.put(Item.glowstone.itemID, 3200);
 	}
 }

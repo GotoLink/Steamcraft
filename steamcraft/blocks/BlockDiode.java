@@ -7,7 +7,8 @@ import net.minecraft.block.BlockRedstoneRepeater;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.BlockHandler;
+import steamcraft.HandlerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,34 +36,14 @@ public class BlockDiode extends BlockRedstoneRepeater {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		super.registerIcons(par1IconRegister);
-		iconInverterIdle = par1IconRegister.registerIcon("steamcraft:inverteridle");
-		iconInverterActive = par1IconRegister.registerIcon("steamcraft:inverteractive");
-		iconDiodeIdle = par1IconRegister.registerIcon("steamcraft:diodeidle");
-		iconDiodeActive = par1IconRegister.registerIcon("steamcraft:diodeactive");
-	}
-
-	@Override
-	protected BlockRedstoneLogic func_94485_e() {
-		return (BlockRedstoneLogic) Steamcraft.redstoneRepeaterActive;
-	}
-
-	@Override
-	protected BlockRedstoneLogic func_94484_i() {
-		return (BlockRedstoneLogic) Steamcraft.redstoneRepeaterIdle;
-	}
-
-	@Override
 	public int idDropped(int par1, Random par2Random, int par3) {
-		return Steamcraft.redstoneRepeaterIdle.blockID;
+		return getIdle().getID();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.redstoneRepeaterIdle.blockID;
+		return getIdle().getID();
 	}
 
 	@Override
@@ -108,5 +89,33 @@ public class BlockDiode extends BlockRedstoneRepeater {
 			}
 		}
 		world.spawnParticle("reddust", d + d3, d1, d2 + d4, -1.0D, 0.7D, 1.0D);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister) {
+		super.registerIcons(par1IconRegister);
+		iconInverterIdle = par1IconRegister.registerIcon("steamcraft:inverteridle");
+		iconInverterActive = par1IconRegister.registerIcon("steamcraft:inverteractive");
+		iconDiodeIdle = par1IconRegister.registerIcon("steamcraft:diodeidle");
+		iconDiodeActive = par1IconRegister.registerIcon("steamcraft:diodeactive");
+	}
+
+	@Override
+	protected BlockRedstoneLogic func_94484_i() {
+		return (BlockRedstoneLogic) getIdle().get();
+	}
+
+	@Override
+	protected BlockRedstoneLogic func_94485_e() {
+		return (BlockRedstoneLogic) getActive().get();
+	}
+
+	private static BlockHandler getActive() {
+		return HandlerRegistry.getBlock("steamcraft:diodeactive");
+	}
+
+	private static BlockHandler getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:diodeidle");
 	}
 }

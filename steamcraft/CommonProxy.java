@@ -12,6 +12,7 @@ import steamcraft.inventories.ContainerSteamFurnace;
 import steamcraft.inventories.GuiChemFurnace;
 import steamcraft.inventories.GuiNukeFurnace;
 import steamcraft.inventories.GuiSteamFurnace;
+import steamcraft.items.ItemSCArmor;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -88,10 +89,10 @@ public class CommonProxy implements IGuiHandler, ITickHandler {
 	protected void onPlayerTick(EntityPlayer entityPlayer) {
 		ItemStack chestSlot = entityPlayer.inventory.armorItemInSlot(2);
 		ItemStack bootSlot = entityPlayer.inventory.armorItemInSlot(0);
-		if (chestSlot == null || chestSlot.itemID != Steamcraft.aqualung.itemID) {
+		if (chestSlot == null || chestSlot.itemID != ItemSCArmor.getAqualung()) {
 			entityPlayer.getEntityData().setShort("Aqualung", (short) 0);
 		}
-		if ((bootSlot == null || bootSlot.itemID != Steamcraft.rollerSkates.itemID) && entityPlayer.stepHeight == 0.0F) {
+		if ((bootSlot == null || bootSlot.itemID != ItemSCArmor.getSkates()) && entityPlayer.stepHeight == 0.0F) {
 			entityPlayer.stepHeight = 0.5F;
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 import steamcraft.TileEntitySteamFurnace;
 import cpw.mods.fml.relauncher.Side;
@@ -16,8 +17,30 @@ public class BlockSteamFurnace extends BlockMainFurnace {
 	}
 
 	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return new TileEntitySteamFurnace();
+	}
+
+	@Override
 	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.steamOvenIdle.blockID;
+		return getIdle();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int idPicked(World par1World, int par2, int par3, int par4) {
+		return getIdle();
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
+		if (world.isRemote) {
+			return true;
+		}
+		if (world.getBlockTileEntity(i, j, k) instanceof TileEntitySteamFurnace) {
+			entityplayer.openGui(Steamcraft.instance, 0, world, i, j, k);
+		}
+		return true;
 	}
 
 	@Override
@@ -51,29 +74,15 @@ public class BlockSteamFurnace extends BlockMainFurnace {
 		}
 	}
 
+	public static int getActive() {
+		return HandlerRegistry.getBlock("steamcraft:steamFurnaceOn").getID();
+	}
+
+	public static int getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:steamFurnace").getID();
+	}
+
 	public static void playSound(World world, int i, int j, int k, String s) {
 		world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, s, 0.5F, 2.6F * 0.8F);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
-		if (world.isRemote) {
-			return true;
-		}
-		if (world.getBlockTileEntity(i, j, k) instanceof TileEntitySteamFurnace) {
-			entityplayer.openGui(Steamcraft.instance, 0, world, i, j, k);
-		}
-		return true;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntitySteamFurnace();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.steamOvenIdle.blockID;
 	}
 }

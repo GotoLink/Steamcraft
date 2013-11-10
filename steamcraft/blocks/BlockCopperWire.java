@@ -6,7 +6,6 @@ import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -36,13 +35,13 @@ public class BlockCopperWire extends BlockRedstoneWire {
 
 	@Override
 	public int idDropped(int par1, Random par2Random, int par3) {
-		return Steamcraft.copperWire.blockID;
+		return blockID;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.copperWire.blockID;
+		return blockID;
 	}
 
 	@Override

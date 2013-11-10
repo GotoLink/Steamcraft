@@ -5,11 +5,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLamp extends Block {
+	private boolean isPowered;
+
 	public BlockLamp(int i, boolean flag) {
 		super(i, Material.wood);
 		isPowered = flag;
@@ -21,20 +23,24 @@ public class BlockLamp extends Block {
 	}
 
 	@Override
+	public int idDropped(int i, Random random, int j) {
+		return getIdle();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int idPicked(World par1World, int par2, int par3, int par4) {
+		return getIdle();
+	}
+
+	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		if (!world.isRemote) {
 			if (this.isPowered && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
 				world.scheduleBlockUpdate(i, j, k, this.blockID, 4);
 			} else if (!this.isPowered && world.isBlockIndirectlyGettingPowered(i, j, k)) {
-				world.setBlock(i, j, k, Steamcraft.lamp.blockID, 0, 2);
+				world.setBlock(i, j, k, getActive(), 0, 2);
 			}
-		}
-	}
-
-	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-		if (!world.isRemote && this.isPowered && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
-			world.setBlock(i, j, k, Steamcraft.lampoff.blockID, 0, 2);
 		}
 	}
 
@@ -44,15 +50,17 @@ public class BlockLamp extends Block {
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.lampoff.blockID;
+	public void updateTick(World world, int i, int j, int k, Random random) {
+		if (!world.isRemote && this.isPowered && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
+			world.setBlock(i, j, k, getIdle(), 0, 2);
+		}
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.lampoff.blockID;
+	public static int getActive() {
+		return HandlerRegistry.getBlock("steamcraft:lampOn").getID();
 	}
 
-	private boolean isPowered;
+	public static int getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:lamp").getID();
+	}
 }

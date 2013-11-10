@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 import steamcraft.TileEntityNukeFurnace;
 import cpw.mods.fml.relauncher.Side;
@@ -17,13 +18,36 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 	}
 
 	@Override
-	public int tickRate(World world) {
-		return 40;
+	public TileEntity createNewTileEntity(World world) {
+		return new TileEntityNukeFurnace();
 	}
 
 	@Override
 	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.nukeOvenIdle.blockID;
+		return getIdle();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int idPicked(World par1World, int par2, int par3, int par4) {
+		return getIdle();
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
+		if (world.isRemote) {
+			return true;
+		}
+		if (world.getBlockTileEntity(i, j, k) instanceof TileEntityNukeFurnace) {
+			entityplayer.openGui(Steamcraft.instance, 2, world, i, j, k);
+		}
+		return true;
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 
 	@Override
@@ -51,32 +75,16 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 
-	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
-		if (world.isRemote) {
-			return true;
-		}
-		if (world.getBlockTileEntity(i, j, k) instanceof TileEntityNukeFurnace) {
-			entityplayer.openGui(Steamcraft.instance, 2, world, i, j, k);
-		}
-		return true;
-	}
-
-	public static void meltdown(World world, int i, int j, int k) {
-		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
-		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.achs[5]);
-		world.createExplosion(null, i, j, k, 25F, world.getGameRules().getGameRuleBooleanValue("mobGriefing"));
-		double d = i + 0.5F + (0.5F) * 2.0000000000000001D;
-		double d1 = j + 0.7F + (0.5F) * 2.0000000000000001D;
-		double d2 = k + 0.5F + (0.5F) * 2.0000000000000001D;
-		world.spawnParticle("reddust", d, d1, d2, -1.0D, 1.0D, 0.0D);
-	}
-
 	public void spawnSmoke(World world, int i, int j, int k, Random random) {
 		double d = (double) (i + 0.5F) + (double) (random.nextFloat() - 0.5F);
 		double d1 = (double) (j + 0.7F) + (double) (random.nextFloat() - 0.3F);
 		double d2 = (double) (k + 0.5F) + (double) (random.nextFloat() - 0.5F);
 		world.spawnParticle("smoke", d, d1, d2, 0.0D, 0.0D, 0.0D);
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 40;
 	}
 
 	@Override
@@ -124,20 +132,21 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 		}
 	}
 
-	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
-		super.onNeighborBlockChange(world, i, j, k, l);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	public static int getActive() {
+		return HandlerRegistry.getBlock("steamcraft:nukeFurnaceOn").getID();
 	}
 
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityNukeFurnace();
+	public static int getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:nukeFurnace").getID();
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.nukeOvenIdle.blockID;
+	public static void meltdown(World world, int i, int j, int k) {
+		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
+		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.achs.get("ruinedeverything"));
+		world.createExplosion(null, i, j, k, 25F, world.getGameRules().getGameRuleBooleanValue("mobGriefing"));
+		double d = i + 0.5F + (0.5F) * 2.0000000000000001D;
+		double d1 = j + 0.7F + (0.5F) * 2.0000000000000001D;
+		double d2 = k + 0.5F + (0.5F) * 2.0000000000000001D;
+		world.spawnParticle("reddust", d, d1, d2, -1.0D, 1.0D, 0.0D);
 	}
 }

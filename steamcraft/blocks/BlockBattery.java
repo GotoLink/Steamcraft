@@ -22,8 +22,20 @@ public class BlockBattery extends Block {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return side != ForgeDirection.DOWN && side != ForgeDirection.UP;
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6) {
+		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
+		world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
+		world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
+		world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
+		world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
+		world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
+		world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
+		super.breakBlock(world, i, j, k, par6, par6);
+	}
+
+	@Override
+	public boolean canProvidePower() {
+		return true;
 	}
 
 	@Override
@@ -40,15 +52,8 @@ public class BlockBattery extends Block {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		blockIcon = par1IconRegister.registerIcon(getTextureName() + "top");
-		blockSide = par1IconRegister.registerIcon(getTextureName() + "side");
-	}
-
-	@Override
-	public int tickRate(World world) {
-		return 1;
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		return side != ForgeDirection.DOWN && side != ForgeDirection.UP;
 	}
 
 	@Override
@@ -57,41 +62,10 @@ public class BlockBattery extends Block {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-		world.setBlockMetadataWithNotify(i, j, k, 1, 3);
-		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-		world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-		world.markBlockForUpdate(i, j, k);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
-	}
-
-	@Override
-	public void breakBlock(World world, int i, int j, int k, int par5, int par6) {
-		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-		world.notifyBlocksOfNeighborChange(i + 1, j, k, blockID);
-		world.notifyBlocksOfNeighborChange(i - 1, j, k, blockID);
-		world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
-		world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
-		world.notifyBlocksOfNeighborChange(i, j + 1, k, blockID);
-		world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
-		super.breakBlock(world, i, j, k, par6, par6);
-	}
-
-	@Override
 	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
 		if (par1IBlockAccess.getBlockMetadata(i, j, k) <= 0 && l == 1)
 			return 15;
 		return 0;
-	}
-
-	@Override
-	public boolean canProvidePower() {
-		return true;
 	}
 
 	@Override
@@ -108,13 +82,15 @@ public class BlockBattery extends Block {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
-		return 1;
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister) {
+		blockIcon = par1IconRegister.registerIcon(getTextureName() + "top");
+		blockSide = par1IconRegister.registerIcon(getTextureName() + "side");
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.battery.blockID;
+	public boolean renderAsNormalBlock() {
+		return false;
 	}
 
 	@Override
@@ -131,5 +107,19 @@ public class BlockBattery extends Block {
 		} else {
 			return iblockaccess.getBlockId(i, j, k) != blockID;
 		}
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 1;
+	}
+
+	@Override
+	public void updateTick(World world, int i, int j, int k, Random random) {
+		world.setBlockMetadataWithNotify(i, j, k, 1, 3);
+		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
+		world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
+		world.markBlockForUpdate(i, j, k);
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 }

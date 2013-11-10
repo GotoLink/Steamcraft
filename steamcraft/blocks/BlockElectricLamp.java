@@ -9,7 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.BlockHandler;
+import steamcraft.HandlerRegistry;
 
 public class BlockElectricLamp extends BlockRedstoneTorch {
 	public boolean torchActive;
@@ -26,24 +27,8 @@ public class BlockElectricLamp extends BlockRedstoneTorch {
 	}
 
 	@Override
-	public int tickRate(World world) {
-		return 1;
-	}
-
-	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-		setBlockBoundsBasedOnState(world, i, j, k);
-		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
-	}
-
-	@Override
-	public int getRenderType() {
-		return -1;
-	}
-
-	@Override
-	public boolean hasTileEntity(int meta) {
-		return true;
+	public boolean canProvidePower() {
+		return false;
 	}
 
 	@Override
@@ -56,53 +41,24 @@ public class BlockElectricLamp extends BlockRedstoneTorch {
 	}
 
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-		boolean flag = this.isIndirectlyPowered(world, i, j, k);
-		List list = (List) BlockInverter.getRedstoneUpdateList().get(world);
-		while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo) list.get(0)).updateTime > 60L) {
-			list.remove(0);
-		}
-		if (!torchActive) {
-			if (flag) {
-				world.setBlock(i, j, k, getActiveBlock(), world.getBlockMetadata(i, j, k), 2);
-				if (this.checkForBurnout(world, i, j, k, true)) {
-					world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F,
-							2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-					for (int l = 0; l < 5; ++l) {
-						double d0 = i + random.nextDouble() * 0.6D + 0.2D;
-						double d1 = j + random.nextDouble() * 0.6D + 0.2D;
-						double d2 = k + random.nextDouble() * 0.6D + 0.2D;
-						world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-					}
-				}
-			}
-		} else if (!flag) {
-			world.setBlock(i, j, k, getIdleBlock(), world.getBlockMetadata(i, j, k), 2);
-		}
-	}
-
-	protected int getActiveBlock() {
-		return Steamcraft.torchElectricActive.blockID;
-	}
-
-	protected int getIdleBlock() {
-		return Steamcraft.torchElectricIdle.blockID;
+	public int getRenderType() {
+		return -1;
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
-		super.onNeighborBlockChange(world, i, j, k, l);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
+		setBlockBoundsBasedOnState(world, i, j, k);
+		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
+	}
+
+	@Override
+	public boolean hasTileEntity(int meta) {
+		return true;
 	}
 
 	@Override
 	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.electricLamp.itemID;
-	}
-
-	@Override
-	public boolean canProvidePower() {
-		return false;
+		return HandlerRegistry.getItem("steamcraft:electricLamp").getID();
 	}
 
 	@Override
@@ -111,6 +67,12 @@ public class BlockElectricLamp extends BlockRedstoneTorch {
 			return 0;
 		}
 		return 15;
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 
 	@Override
@@ -135,5 +97,43 @@ public class BlockElectricLamp extends BlockRedstoneTorch {
 		} else {
 			world.spawnParticle("reddust", d, d1, d2, -1.0D, 0.7D, 1.0D);
 		}
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 1;
+	}
+
+	@Override
+	public void updateTick(World world, int i, int j, int k, Random random) {
+		boolean flag = this.isIndirectlyPowered(world, i, j, k);
+		List list = (List) BlockInverter.getRedstoneUpdateList().get(world);
+		while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo) list.get(0)).updateTime > 60L) {
+			list.remove(0);
+		}
+		if (!torchActive) {
+			if (flag) {
+				world.setBlock(i, j, k, getActive().getID(), world.getBlockMetadata(i, j, k), 2);
+				if (this.checkForBurnout(world, i, j, k, true)) {
+					world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					for (int l = 0; l < 5; ++l) {
+						double d0 = i + random.nextDouble() * 0.6D + 0.2D;
+						double d1 = j + random.nextDouble() * 0.6D + 0.2D;
+						double d2 = k + random.nextDouble() * 0.6D + 0.2D;
+						world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+					}
+				}
+			}
+		} else if (!flag) {
+			world.setBlock(i, j, k, getIdle().getID(), world.getBlockMetadata(i, j, k), 2);
+		}
+	}
+
+	protected BlockHandler getActive() {
+		return HandlerRegistry.getBlock("steamcraft:electricLampOn");
+	}
+
+	protected BlockHandler getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:electricLamp");
 	}
 }

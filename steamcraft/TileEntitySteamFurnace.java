@@ -16,20 +16,20 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		waterLevel = nbttagcompound.getShort("WaterLevel");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("WaterLevel", (short) waterLevel);
+	public int getBurnTimeRemainingScaled(int i) {
+		if (currentItemBurnTime == 0) {
+			currentItemBurnTime = 600;
+		}
+		return (furnaceBurnTime * i) / currentItemBurnTime;
 	}
 
 	@Override
 	public int getCookProgressScaled(int i) {
 		return (furnaceCookTime * i) / 600;
+	}
+
+	public int getWater() {
+		return waterLevel;
 	}
 
 	public int getWaterScaled(int i) {
@@ -41,15 +41,17 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 	}
 
 	@Override
-	public int getBurnTimeRemainingScaled(int i) {
-		if (currentItemBurnTime == 0) {
-			currentItemBurnTime = 600;
-		}
-		return (furnaceBurnTime * i) / currentItemBurnTime;
+	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
+		if (par1 == 3)
+			return (par2ItemStack.itemID == Item.bucketWater.itemID);
+		else
+			return super.isItemValidForSlot(par1, par2ItemStack);
 	}
 
-	public int getWater() {
-		return waterLevel;
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		waterLevel = nbttagcompound.getShort("WaterLevel");
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, Steamcraft.steamOvenActive.blockID, Steamcraft.steamOvenIdle.blockID, false);
+				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, BlockSteamFurnace.getActive(), BlockSteamFurnace.getIdle(), false);
 			}
 		}
 		if (flag1) {
@@ -116,10 +118,8 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
-		if (par1 == 3)
-			return (par2ItemStack.itemID == Item.bucketWater.itemID);
-		else
-			return super.isItemValidForSlot(par1, par2ItemStack);
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setShort("WaterLevel", (short) waterLevel);
 	}
 }

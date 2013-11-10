@@ -45,23 +45,23 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				for (int j3 = k - i1 - 1; j3 <= k + i1 + 1; j3++) {
 					if (l1 == i - l - 1 || k2 == j - 1 || j3 == k - i1 - 1 || l1 == i + l + 1 || k2 == j + byte0 + 1 || j3 == k + i1 + 1) {
 						if (k2 >= 0 && !world.getBlockMaterial(l1, k2 - 1, j3).isSolid()) {
-							world.setBlockToAir(l1, k2, j3);
+							setBlock(world, l1, k2, j3, 0);
 							continue;
 						}
 						if (!world.getBlockMaterial(l1, k2, j3).isSolid()) {
 							continue;
 						}
 						if (k2 != j - 1 && random.nextInt(4) == 0) {
-							world.setBlock(l1, k2, j3, Block.thinGlass.blockID);
+							setBlock(world, l1, k2, j3, Block.thinGlass.blockID);
 						} else {
 							int randomBlockType = random.nextInt(6);
 							if (randomBlockType > 3) {
 								randomBlockType = 0;
 							}
-							world.setBlock(l1, k2, j3, Block.stoneBrick.blockID, randomBlockType, 3);
+							setBlockAndMetadata(world, l1, k2, j3, Block.stoneBrick.blockID, randomBlockType);
 						}
 					} else {
-						world.setBlockToAir(l1, k2, j3);
+						setBlock(world, l1, k2, j3, 0);
 					}
 				}
 			}
@@ -90,7 +90,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				if (j4 != 1) {
 					continue;
 				}
-				world.setBlock(k3, l3, i4, Block.chest.blockID);
+				setBlock(world, k3, l3, i4, Block.chest.blockID);
 				TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(k3, l3, i4);
 				int k4 = 0;
 				do {
@@ -105,7 +105,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				} while (true);
 			}
 		}
-		world.setBlock(i, j, k, Block.mobSpawner.blockID);
+		setBlock(world, i, j, k, Block.mobSpawner.blockID);
 		TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.getBlockTileEntity(i, j, k);
 		tileentitymobspawner.getSpawnerLogic().setMobID(pickMobSpawner(random));
 		return true;

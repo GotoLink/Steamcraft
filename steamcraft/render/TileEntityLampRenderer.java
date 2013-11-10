@@ -7,16 +7,23 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 import steamcraft.TileEntityLamp;
 
 public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	public static final ResourceLocation lampOn = new ResourceLocation("steamcraft", "item/lampon.png");
 	public static final ResourceLocation lampOff = new ResourceLocation("steamcraft", "item/lampoff.png");
+	private ModelLampUp lampModelUp;
+	private ModelLampSide lampModelSide;
 
 	public TileEntityLampRenderer() {
 		lampModelUp = new ModelLampUp();
 		lampModelSide = new ModelLampSide();
+	}
+
+	@Override
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
+		renderTileEntityLampAt((TileEntityLamp) tileentity, d, d1, d2, f);
 	}
 
 	public void renderTileEntityLampAt(TileEntityLamp tileentitylamp, double d, double d1, double d2, float f) {
@@ -44,22 +51,22 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 			GL11.glRotatef(f2, 0.0F, 0.0F, 1.0F);
 		}
 		GL11.glTranslatef(0.0F, -0.3125F, -0.4375F);
-		if (block == Steamcraft.torchElectricActive || block == Steamcraft.torchElectricIdle) {
+		if (block == getTorchElectricActive() || block == getTorchElectricIdle()) {
 			lampModelUp.BracketWide.showModel = false;
 			lampModelUp.CrossbarLeft.showModel = false;
 			lampModelUp.CrossbarRight.showModel = false;
 			lampModelSide.CrossbarLeft.showModel = false;
 			lampModelSide.CrossbarRight.showModel = false;
-		} else if (block == Steamcraft.wirelessLampActive || block == Steamcraft.wirelessLampIdle) {
+		} else if (block == getWirelessLampActive() || block == getWirelessLampIdle()) {
 			lampModelUp.BracketWide.showModel = true;
 			lampModelUp.CrossbarLeft.showModel = true;
 			lampModelUp.CrossbarRight.showModel = true;
 			lampModelSide.CrossbarLeft.showModel = true;
 			lampModelSide.CrossbarRight.showModel = true;
 		}
-		if (block == Steamcraft.torchElectricActive || block == Steamcraft.wirelessLampActive) {
+		if (block == getTorchElectricActive() || block == getWirelessLampActive()) {
 			bindTexture(lampOn);
-		} else if (block == Steamcraft.torchElectricIdle || block == Steamcraft.wirelessLampIdle) {
+		} else if (block == getTorchElectricIdle() || block == getWirelessLampIdle()) {
 			bindTexture(lampOff);
 		}
 		GL11.glPushMatrix();
@@ -80,11 +87,19 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		renderTileEntityLampAt((TileEntityLamp) tileentity, d, d1, d2, f);
+	private static Block getTorchElectricActive() {
+		return HandlerRegistry.getBlock("steamcraft:electricLampOn").get();
 	}
 
-	private ModelLampUp lampModelUp;
-	private ModelLampSide lampModelSide;
+	private static Block getTorchElectricIdle() {
+		return HandlerRegistry.getBlock("steamcraft:electricLamp").get();
+	}
+
+	private static Block getWirelessLampActive() {
+		return HandlerRegistry.getBlock("steamcraft:wirelessLampOn").get();
+	}
+
+	private static Block getWirelessLampIdle() {
+		return HandlerRegistry.getBlock("steamcraft:wirelessLamp").get();
+	}
 }

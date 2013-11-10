@@ -17,12 +17,15 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSCArmor extends ItemArmor {
 	public final static ResourceLocation goggles = new ResourceLocation("steamcraft", "misc/goggles.png");
+	private static int goggle = 0;
+
 	public ItemSCArmor(int i, EnumArmorMaterial j, int k, int l) {
 		super(i, j, k, l);
 	}
@@ -36,20 +39,20 @@ public class ItemSCArmor extends ItemArmor {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
-		if (itemStack.itemID == Steamcraft.legBraces.itemID) {
+		if (itemStack.itemID == getBraces()) {
 			if (player.fallDistance > 0.0F) {
 				player.fallDistance -= 0.5F;
 			}
 			return;
 		}
-		if (itemStack.itemID == Steamcraft.rollerSkates.itemID) {
+		if (itemStack.itemID == getSkates()) {
 			if (!player.isInsideOfMaterial(Material.water) && !player.isInWater() && player.onGround) {
 				player.moveEntityWithHeading(player.moveStrafing, player.moveForward * 0.8F);
 				player.stepHeight = 0.0F;
 			}
 			return;
 		}
-		if (itemStack.itemID == Steamcraft.aqualung.itemID)  {
+		if (itemStack.itemID == getAqualung()) {
 			if (!player.isInsideOfMaterial(Material.water)) {
 				player.getEntityData().setShort("Aqualung", (short) 600);
 			} else if (player.getAir() == 0) {
@@ -63,11 +66,10 @@ public class ItemSCArmor extends ItemArmor {
 		}
 	}
 
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks, boolean hasScreen, int mouseX, int mouseY) {
-		if (stack.itemID == Steamcraft.brassGoggles.itemID && !hasScreen) {//if the player is wearing a helmet, perform the following actions
+		if (stack.itemID == getGoggle() && !hasScreen) {//if the player is wearing goggles, perform the following actions
 			GL11.glEnable(3042 /* GL_BLEND */);
 			GL11.glClearDepth(1.0);
 			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
@@ -91,8 +93,26 @@ public class ItemSCArmor extends ItemArmor {
 		}
 	}
 
+	public static int getAqualung() {
+		return HandlerRegistry.getItem("steamcraft:aqualung").getID();
+	}
+
+	public static int getBraces() {
+		return HandlerRegistry.getItem("steamcraft:legBraces").getID();
+	}
+
+	public static int getSkates() {
+		return HandlerRegistry.getItem("steamcraft:rollerSkates").getID();
+	}
+
 	protected static int decreaseAirSupply(EntityPlayer entityPlayer, int par1) {
 		int j = EnchantmentHelper.getRespiration(entityPlayer);
 		return j > 0 && new Random().nextInt(j + 1) > 0 ? par1 : par1 - 1;
+	}
+
+	private static int getGoggle() {
+		if (goggle == 0)
+			goggle = HandlerRegistry.getItem("steamcraft:brassGoggles").getID();
+		return goggle;
 	}
 }

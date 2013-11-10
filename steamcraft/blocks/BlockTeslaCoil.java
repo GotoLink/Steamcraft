@@ -6,7 +6,7 @@ import java.util.Random;
 import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 
 public class BlockTeslaCoil extends BlockRedstoneTorch {
 	private boolean torchActive;
@@ -14,18 +14,6 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 	public BlockTeslaCoil(int i, boolean flag) {
 		super(i, flag);
 		torchActive = flag;
-	}
-
-	@Override
-	public int tickRate(World world) {
-		return 1;
-	}
-
-	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
-		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 
 	@Override
@@ -61,7 +49,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 			int t1 = (i + f * nn);
 			int t2 = (k + f1 * nn);
 			int t3 = (j + f2 * nn);
-			if ((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+			if ((world.getBlockId(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.getBlockId(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
 				world.setBlockMetadataWithNotify(t1, t3, t2, 1, 2);
 				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
@@ -71,7 +59,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 				world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
-			if ((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+			if ((world.getBlockId(t1, t3, t2) == getWirelessLampIdle() || world.getBlockId(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
 				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
@@ -89,6 +77,34 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 			world.notifyBlocksOfNeighborChange(i, j, k - 1, blockID);
 			world.notifyBlocksOfNeighborChange(i, j, k + 1, blockID);
 		}
+	}
+
+	@Override
+	public boolean canProvidePower() {
+		return false;
+	}
+
+	@Override
+	public int idDropped(int i, Random random, int j) {
+		return getTeslaIdle();
+	}
+
+	@Override
+	public void onBlockAdded(World world, int i, int j, int k) {
+		super.onBlockAdded(world, i, j, k);
+		world.notifyBlocksOfNeighborChange(i, j, k, blockID);
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 1;
 	}
 
 	@Override
@@ -135,7 +151,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 			int t1 = (i + f * nn);
 			int t2 = (k + f1 * nn);
 			int t3 = (j + f2 * nn);
-			if ((world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiver.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.teslaReceiverActive.blockID) && nn >= 1) {
+			if ((world.getBlockId(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.getBlockId(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
 				world.setBlockMetadataWithNotify(t1, t3, t2, nnum, 2);
 				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
@@ -145,7 +161,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 				world.notifyBlocksOfNeighborChange(t1, t3 - 1, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1, t3 + 1, t2, blockID);
 			}
-			if ((world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampIdle.blockID || world.getBlockId(t1, t3, t2) == Steamcraft.wirelessLampActive.blockID) && nn >= 1) {
+			if ((world.getBlockId(t1, t3, t2) == getWirelessLampIdle() || world.getBlockId(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
 				world.notifyBlocksOfNeighborChange(t1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 - 1, t3, t2, blockID);
 				world.notifyBlocksOfNeighborChange(t1 + 1, t3, t2, blockID);
@@ -157,27 +173,27 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 		}
 		if (!torchActive) {
 			if (flag) {
-				world.setBlock(i, j, k, Steamcraft.torchTeslaActive.blockID, world.getBlockMetadata(i, j, k), 2);
+				world.setBlock(i, j, k, getTeslaActive(), world.getBlockMetadata(i, j, k), 2);
 			}
 		} else if (!flag && !checkForBurnout(world, i, j, k, false)) {
-			world.setBlock(i, j, k, Steamcraft.torchTeslaIdle.blockID, world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, getTeslaIdle(), world.getBlockMetadata(i, j, k), 2);
 		}
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
 	}
 
-	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
-		super.onNeighborBlockChange(world, i, j, k, l);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	public static int getTeslaActive() {
+		return HandlerRegistry.getBlock("steamcraft:teslaCoilOn").getID();
 	}
 
-	@Override
-	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.torchTeslaIdle.blockID;
+	public static int getTeslaIdle() {
+		return HandlerRegistry.getBlock("steamcraft:teslaCoil").getID();
 	}
 
-	@Override
-	public boolean canProvidePower() {
-		return false;
+	public static int getWirelessLampActive() {
+		return HandlerRegistry.getBlock("steamcraft:wirelessLampOn").getID();
+	}
+
+	public static int getWirelessLampIdle() {
+		return HandlerRegistry.getBlock("steamcraft:wirelessLamp").getID();
 	}
 }

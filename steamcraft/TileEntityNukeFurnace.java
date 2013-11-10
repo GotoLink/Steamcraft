@@ -13,25 +13,8 @@ public class TileEntityNukeFurnace extends TileEntityFurnace {
 		setGuiDisplayName("Nuclear Reactor");
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		furnaceHeat = nbttagcompound.getShort("Heat");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("Heat", (short) furnaceHeat);
-	}
-
-	@Override
-	public int getCookProgressScaled(int i) {
-		return (furnaceCookTime * i) / 20;
-	}
-
-	public int getHeatScaled(int i) {
-		return (furnaceHeat * i) / 2560;
+	public void addHeat(int i) {
+		furnaceHeat += i;
 	}
 
 	@Override
@@ -42,12 +25,31 @@ public class TileEntityNukeFurnace extends TileEntityFurnace {
 		return (furnaceBurnTime * i) / currentItemBurnTime;
 	}
 
-	public void addHeat(int i) {
-		furnaceHeat += i;
+	@Override
+	public int getCookProgressScaled(int i) {
+		return (furnaceCookTime * i) / 20;
 	}
 
 	public int getHeat() {
 		return furnaceHeat;
+	}
+
+	public int getHeatScaled(int i) {
+		return (furnaceHeat * i) / 2560;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
+		if (par1 == 1)
+			return par2ItemStack.isItemEqual(new ItemStack(Steamcraft.material, 1, 9));
+		else
+			return super.isItemValidForSlot(par1, par2ItemStack);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		furnaceHeat = nbttagcompound.getShort("Heat");
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class TileEntityNukeFurnace extends TileEntityFurnace {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, Steamcraft.nukeOvenActive.blockID, Steamcraft.nukeOvenIdle.blockID, true);
+				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, BlockNukeFurnace.getActive(), BlockNukeFurnace.getIdle(), true);
 			}
 			if (furnaceHeat >= 2560) {
 				BlockNukeFurnace.meltdown(worldObj, xCoord, yCoord, zCoord);
@@ -103,10 +105,8 @@ public class TileEntityNukeFurnace extends TileEntityFurnace {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
-		if (par1 == 1)
-			return par2ItemStack.isItemEqual(new ItemStack(Steamcraft.material, 1, 9));
-		else
-			return super.isItemValidForSlot(par1, par2ItemStack);
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setShort("Heat", (short) furnaceHeat);
 	}
 }

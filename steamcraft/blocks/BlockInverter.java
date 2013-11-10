@@ -10,7 +10,8 @@ import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
+import steamcraft.BlockHandler;
+import steamcraft.HandlerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,18 +31,18 @@ public class BlockInverter extends BlockRedstoneTorch {
 
 	@Override
 	public int idDropped(int par1, Random par2Random, int par3) {
-		return Steamcraft.torchRedstoneActive.blockID;
+		return getActive().getID();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return Steamcraft.torchRedstoneActive.blockID;
+		return getActive().getID();
 	}
 
 	@Override
 	public boolean isAssociatedBlockID(int par1) {
-		return par1 == Steamcraft.torchRedstoneIdle.blockID || par1 == Steamcraft.torchRedstoneActive.blockID;
+		return par1 == getIdle().getID() || par1 == getActive().getID();
 	}
 
 	@Override
@@ -83,10 +84,9 @@ public class BlockInverter extends BlockRedstoneTorch {
 		}
 		if (this.torchActive) {
 			if (flag) {
-				par1World.setBlock(par2, par3, par4, Steamcraft.torchRedstoneIdle.blockID, par1World.getBlockMetadata(par2, par3, par4), 3);
+				par1World.setBlock(par2, par3, par4, getIdle().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
 				if (this.checkForBurnout(par1World, par2, par3, par4, true)) {
-					par1World.playSoundEffect(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "random.fizz", 0.5F,
-							2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+					par1World.playSoundEffect(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
 						double d0 = par2 + par5Random.nextDouble() * 0.6D + 0.2D;
 						double d1 = par3 + par5Random.nextDouble() * 0.6D + 0.2D;
@@ -96,7 +96,7 @@ public class BlockInverter extends BlockRedstoneTorch {
 				}
 			}
 		} else if (!flag && !this.checkForBurnout(par1World, par2, par3, par4, false)) {
-			par1World.setBlock(par2, par3, par4, Steamcraft.torchRedstoneActive.blockID, par1World.getBlockMetadata(par2, par3, par4), 3);
+			par1World.setBlock(par2, par3, par4, getActive().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
 		}
 	}
 
@@ -116,5 +116,13 @@ public class BlockInverter extends BlockRedstoneTorch {
 			e.printStackTrace();
 		}
 		return Map.class.cast(obj);
+	}
+
+	private static BlockHandler getActive() {
+		return HandlerRegistry.getBlock("steamcraft:inverteractive");
+	}
+
+	private static BlockHandler getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:inverteridle");
 	}
 }

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 
 public class BlockNetherLeaves extends Block {
 	public BlockNetherLeaves(int id, Material mat) {
@@ -38,7 +38,7 @@ public class BlockNetherLeaves extends Block {
 				}
 			}
 			if (par1World.rand.nextInt(j1) == 0) {
-				this.dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(Steamcraft.netherSapling));
+				this.dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(HandlerRegistry.getBlock("steamcraft.nethersapling").getID(), 1, 0));
 			}
 		}
 	}

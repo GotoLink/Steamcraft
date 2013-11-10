@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
-import steamcraft.Steamcraft;
+import steamcraft.HandlerRegistry;
 
 public class RenderCopperWire extends RenderBlocks {
 	public RenderCopperWire() {
@@ -125,7 +125,7 @@ public class RenderCopperWire extends RenderBlocks {
 			tessellator.addVertexWithUV(f5, j + 0.015625D, f8, icon3.getMaxU(), icon3.getMinV());
 		}
 		if (!iblockaccess.isBlockNormalCube(i, j + 1, k)) {
-			if (iblockaccess.isBlockNormalCube(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == Steamcraft.copperWire.blockID) {
+			if (iblockaccess.isBlockNormalCube(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 0.015625D, j + 1 + 0.021875F, k + 1, icon1.getMaxU(), icon1.getMinV());
 				tessellator.addVertexWithUV(i + 0.015625D, j + 0, k + 1, icon1.getMinU(), icon1.getMinV());
@@ -137,7 +137,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 0.015625D, j + 0, k + 0, icon3.getMinU(), icon3.getMaxV());
 				tessellator.addVertexWithUV(i + 0.015625D, j + 1 + 0.021875F, k + 0, icon3.getMaxU(), icon3.getMaxV());
 			}
-			if (iblockaccess.isBlockNormalCube(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == Steamcraft.copperWire.blockID) {
+			if (iblockaccess.isBlockNormalCube(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 0, k + 1, icon1.getMinU(), icon1.getMaxV());
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 1 + 0.021875F, k + 1, icon1.getMaxU(), icon1.getMaxV());
@@ -149,7 +149,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 1 + 0.021875F, k + 0, icon3.getMaxU(), icon3.getMinV());
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 0, k + 0, icon3.getMinU(), icon3.getMinV());
 			}
-			if (iblockaccess.isBlockNormalCube(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == Steamcraft.copperWire.blockID) {
+			if (iblockaccess.isBlockNormalCube(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1, j + 0, k + 0.015625D, icon1.getMinU(), icon1.getMaxV());
 				tessellator.addVertexWithUV(i + 1, j + 1 + 0.021875F, k + 0.015625D, icon1.getMaxU(), icon1.getMaxV());
@@ -161,7 +161,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 0, j + 1 + 0.021875F, k + 0.015625D, icon3.getMaxU(), icon3.getMinV());
 				tessellator.addVertexWithUV(i + 0, j + 0, k + 0.015625D, icon3.getMinU(), icon3.getMinV());
 			}
-			if (iblockaccess.isBlockNormalCube(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == Steamcraft.copperWire.blockID) {
+			if (iblockaccess.isBlockNormalCube(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1, j + 1 + 0.021875F, k + 1 - 0.015625D, icon1.getMaxU(), icon1.getMinV());
 				tessellator.addVertexWithUV(i + 1, j + 0, k + 1 - 0.015625D, icon1.getMinU(), icon1.getMinV());
@@ -175,5 +175,9 @@ public class RenderCopperWire extends RenderBlocks {
 			}
 		}
 		return true;
+	}
+
+	private static int getCopperId() {
+		return HandlerRegistry.getBlock("copperwire").getID();
 	}
 }

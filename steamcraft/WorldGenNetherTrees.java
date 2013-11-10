@@ -29,7 +29,7 @@ public class WorldGenNetherTrees extends WorldGenerator {
 				for (int l2 = k - byte0; l2 <= k + byte0 && flag; l2++) {
 					if (i1 >= 0 && i1 < 128) {
 						int j3 = world.getBlockId(i2, i1, l2);
-						if (j3 != 0 && j3 != Steamcraft.leavesLamp.blockID) {
+						if (j3 != 0 && j3 != getLeavesId()) {
 							flag = false;
 						}
 					} else {
@@ -54,17 +54,25 @@ public class WorldGenNetherTrees extends WorldGenerator {
 				for (int i4 = k - i3; i4 <= k + i3; i4++) {
 					int j4 = i4 - k;
 					if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && j2 != 0) && !Block.opaqueCubeLookup[world.getBlockId(k3, k1, i4)]) {
-						world.setBlock(k3, k1, i4, Steamcraft.leavesLamp.blockID);
+						setBlock(world, k3, k1, i4, getLeavesId());
 					}
 				}
 			}
 		}
 		for (int l1 = 0; l1 < l; l1++) {
 			int k2 = world.getBlockId(i, j + l1, k);
-			if (k2 == 0 || k2 == Steamcraft.leavesLamp.blockID) {
-				world.setBlock(i, j + l1, k, Steamcraft.woodBrass.blockID);
+			if (k2 == 0 || k2 == getLeavesId()) {
+				setBlock(world, i, j + l1, k, getLogId());
 			}
 		}
 		return true;
+	}
+
+	private static int getLeavesId() {
+		return HandlerRegistry.getBlock("steamcraft:leavesLamp").getID();
+	}
+
+	private static int getLogId() {
+		return HandlerRegistry.getBlock("steamcraft:logBrass").getID();
 	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -17,14 +16,10 @@ public class BlockUraniteOre extends Block {
 		setTickRandomly(true);
 	}
 
-	/*
-	 * @Override public void onBlockAdded(World world, int i, int j, int k) {
-	 * if(blockID == Steamcraft.oreUranite.blockID){
-	 * System.out.println("Uranite at "+i+","+j+","+k); } }
-	 */
 	@Override
-	public int tickRate(World world) {
-		return 30;
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float a, float b, float c) {
+		func_319_i(world, i, j, k);
+		return super.onBlockActivated(world, i, j, k, entityplayer, l, a, b, c);
 	}
 
 	@Override
@@ -40,29 +35,14 @@ public class BlockUraniteOre extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float a, float b, float c) {
-		func_319_i(world, i, j, k);
-		return super.onBlockActivated(world, i, j, k, entityplayer, l, a, b, c);
-	}
-
-	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-	}
-
-	@Override
-	public int idDropped(int i, Random random, int j) {
-		return Steamcraft.oreUranite.blockID;
-	}
-
-	@Override
-	public int quantityDropped(Random random) {
-		return 1;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		func_319_i(world, i, j, k);
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 30;
 	}
 
 	private void func_319_i(World world, int i, int j, int k) {
