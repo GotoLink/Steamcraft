@@ -11,7 +11,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class DataHandler {
-	private ItemStack output = new ItemStack(getID(), 1, 0);
+	protected ItemStack output = new ItemStack(getID(), 1, 0);
 
 	public DataHandler addAchievement(String name, int j, int k, Achievement parent) {
 		Steamcraft.achs.put(name, new Achievement(AchievementList.achievementList.size(), name, j, k, output.copy(), parent).registerAchievement());

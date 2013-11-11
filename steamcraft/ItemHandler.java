@@ -2,6 +2,7 @@ package steamcraft;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -11,6 +12,7 @@ public class ItemHandler extends DataHandler {
 	public ItemHandler(Item it, String... names) {
 		this.item = it;
 		if (item != null) {
+			this.output = new ItemStack(item.itemID, 1, 0);
 			item.setUnlocalizedName(names[0]).setTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the item
 			GameRegistry.registerItem(item, names[0]);
 			if (names.length > 2) {

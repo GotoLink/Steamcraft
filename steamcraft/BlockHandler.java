@@ -2,6 +2,7 @@ package steamcraft;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -12,6 +13,7 @@ public class BlockHandler extends DataHandler {
 	public BlockHandler(Block bloc, Class<? extends ItemBlock> itemclass, String... names) {
 		this.block = bloc;
 		if (block != null) {
+			this.output = new ItemStack(bloc.blockID, 1, 0);
 			block.setUnlocalizedName(names[0]).setTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
 			if (itemclass != null) {
 				GameRegistry.registerBlock(block, itemclass, names[0]);

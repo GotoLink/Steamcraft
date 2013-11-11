@@ -18,7 +18,7 @@ public class ItemCoreDrill extends Item {
 		double d = i + 0.5F + (0.5F) * 2D;
 		double d1 = j + 0.7F + (0.5F) * 2D;
 		double d2 = k + 0.5F + (0.5F) * 2D;
-		world.spawnParticle("smoke", d, d1, d2, 0.0D, 10.0D, 0.0D);
+		world.spawnParticle("smoke", d, d1, d2, 0.0D, 1.0D, 0.0D);
 		itemstack.damageItem(1, entityplayer);
 		return true;
 	}
