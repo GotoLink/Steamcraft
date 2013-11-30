@@ -134,7 +134,7 @@ public class EntityMusketBall extends Entity {
 			vec3d1 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
 		}
 		Entity entity = null;
-		List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
+		List<?> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
 		double d = 0.0D;
 		for (int l = 0; l < list.size(); l++) {
 			Entity entity1 = (Entity) list.get(l);

@@ -13,7 +13,7 @@ import steamcraft.blocks.BlockMainFurnace;
 public class TileEntityChemFurnace extends TileEntityFurnace {
 	public int currentItemBurnTimea;
 	public int currentItemBurnTimeb;
-	public static Map<Integer, Integer> fuels = new HashMap();
+	public static Map<Integer, Integer> fuels = new HashMap<Integer, Integer>();
 
 	public TileEntityChemFurnace() {
 		furnaceItemStacks = new ItemStack[4];

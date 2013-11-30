@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class HandlerRegistry {
-	public static Map<String, DataHandler> handlers = new HashMap();
-	public static List drills = new ArrayList();
+	public static Map<String, DataHandler> handlers = new HashMap<String, DataHandler>();
+	public static List<Integer> drills = new ArrayList<Integer>();
 
 	public static void addDrill(int id) {
 		drills.add(id);

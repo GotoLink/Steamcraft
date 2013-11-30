@@ -58,8 +58,8 @@ public class EntityHighwayman extends EntityMob {
 			double d = entity.posX - posX;
 			double d1 = entity.posZ - posZ;
 			if (attackTime == 0) {
-				EntityMusketBall entityarrow = new EntityMusketBall(worldObj, this, ((ItemFirearm) defaultHeldItem.getItem()).getFirePower(defaultHeldItem),
-						((ItemFirearm) defaultHeldItem.getItem()).isRifled(defaultHeldItem));
+				EntityMusketBall entityarrow = new EntityMusketBall(worldObj, this, ItemFirearm.getFirePower(defaultHeldItem),
+						ItemFirearm.isRifled(defaultHeldItem));
 				entityarrow.posY += 1.3999999761581421D;
 				double d2 = (entity.posY + entity.getEyeHeight()) - 0.20000000298023224D - entityarrow.posY;
 				float f1 = MathHelper.sqrt_double(d * d + d1 * d1) * 0.2F;

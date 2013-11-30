@@ -63,14 +63,14 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static Steamcraft instance;
 	@SidedProxy(clientSide = "steamcraft.ClientProxy", serverSide = "steamcraft.CommonProxy")
 	public static CommonProxy proxy;
-	public static Map<String, Achievement> achs = new HashMap();
+	public static Map<String, Achievement> achs = new HashMap<String, Achievement>();
 	public static final int[] REDUCTION_AMOUNTS = new int[] { 3, 8, 6, 3 };
 	public static final EnumArmorMaterial ARMORBRASS = EnumHelper.addArmorMaterial("BRASS", 5, REDUCTION_AMOUNTS, 0);
 	public static final EnumArmorMaterial ARMORETHERIUM = EnumHelper.addArmorMaterial("ETHERIUM", -1, REDUCTION_AMOUNTS, 5);
 	public static final EnumArmorMaterial ARMOROBSIDIAN = EnumHelper.addArmorMaterial("OBSIDIAN", 20, REDUCTION_AMOUNTS, 10);
 	public static final String[] ARMOR_NAMES = { "etherium", "brass", "obsidian" };
 	public static int[] armorIndexes = new int[ARMOR_NAMES.length];
-	public static Map armorMap = new HashMap();
+	public static Map<Integer, String> armorMap = new HashMap<Integer, String>();
 	//harvestLevel, maxUses,efficiencyOnProperMaterial,damageVsEntity,enchantability;
 	public static final EnumToolMaterial TOOLETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
 	public static final EnumToolMaterial TOOLOBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
@@ -87,13 +87,12 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 			return HandlerRegistry.getItem("steamcraft:coreDrill").get();
 		}
 	};
-	public static Map<Object, Object[]> data = new HashMap();
+	public static Map<Object, Object[]> data = new HashMap<Object, Object[]>();
 	public static ItemStack flintlockMusket, matchlockMusket, percussionCapMusket;
 	public static ItemStack flintlockRifle, matchlockRifle, percussionCapRifle;
 	public static Item spanner;
 	public static Item firearm, part;
 	public static Item material;
-	private Object[][] DrillRecipeItems, SpannerRecipeItems;
 	private static final WorldGenerator netherGen = new WorldGenNetherTrees();
 	private static final WorldGenerator hideoutGen = new WorldGenHighwaymanHideout();
 	private static WorldGenerator brimstoneGen, zincGen, bornGen, phosphGen, uranGen, volucGen;
