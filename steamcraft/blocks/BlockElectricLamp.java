@@ -1,10 +1,9 @@
 package steamcraft.blocks;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockRedstoneTorch;
-import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -12,11 +11,11 @@ import net.minecraft.world.World;
 import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
 
-public class BlockElectricLamp extends BlockRedstoneTorch {
+public class BlockElectricLamp extends BlockRedstoneAccess {
 	public boolean torchActive;
-	private Class EntityClass;
+	private Class<?> EntityClass;
 
-	public BlockElectricLamp(int i, Class class1, boolean flag) {
+	public BlockElectricLamp(int i, Class<?> class1, boolean flag) {
 		super(i, flag);
 		EntityClass = class1;
 		torchActive = flag;
@@ -106,15 +105,25 @@ public class BlockElectricLamp extends BlockRedstoneTorch {
 
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random) {
-		boolean flag = this.isIndirectlyPowered(world, i, j, k);
-		List list = (List) BlockInverter.getRedstoneUpdateList().get(world);
-		while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo) list.get(0)).updateTime > 60L) {
-			list.remove(0);
+		boolean flag = this.hasIndirectPower(world, i, j, k);
+		List<?> list = (List<?>) getRedstoneUpdateList().get(world);
+		if(list!=null && !list.isEmpty()){
+			Field f = list.get(0).getClass().getDeclaredFields()[3];
+			f.setAccessible(true);
+			try {
+				while (list != null && !list.isEmpty() && world.getTotalWorldTime() - (long)f.get(list.get(0)) > 60L) {
+					list.remove(0);
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 		if (!torchActive) {
 			if (flag) {
 				world.setBlock(i, j, k, getActive().getID(), world.getBlockMetadata(i, j, k), 2);
-				if (this.checkForBurnout(world, i, j, k, true)) {
+				if (this.checkBurnout(world, i, j, k, true)) {
 					world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
 						double d0 = i + random.nextDouble() * 0.6D + 0.2D;

@@ -6,17 +6,16 @@ import java.util.Map;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.blocks.BlockChemFurnace;
 import steamcraft.blocks.BlockMainFurnace;
 
-public class TileEntityChemFurnace extends TileEntityFurnace {
+public class TileEntityChemFurnace extends FurnaceAccess {
 	public int currentItemBurnTimea;
 	public int currentItemBurnTimeb;
 	public static Map<Integer, Integer> fuels = new HashMap<Integer, Integer>();
 
 	public TileEntityChemFurnace() {
-		furnaceItemStacks = new ItemStack[4];
+		super(4);
 		setGuiDisplayName("Chemical Furnace");
 	}
 
@@ -53,8 +52,8 @@ public class TileEntityChemFurnace extends TileEntityFurnace {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		currentItemBurnTimea = getItemBurnTime(furnaceItemStacks[1]);
-		currentItemBurnTimeb = getItemBurnTime(furnaceItemStacks[3]);
+		currentItemBurnTimea = getItemBurnTime(getStackInSlot(1));
+		currentItemBurnTimeb = getItemBurnTime(getStackInSlot(3));
 	}
 
 	@Override
@@ -65,27 +64,29 @@ public class TileEntityChemFurnace extends TileEntityFurnace {
 			furnaceBurnTime--;
 		}
 		if (!worldObj.isRemote) {
-			if (furnaceBurnTime == 0 && canSmelt()) {
-				if (furnaceItemStacks[1] != null && furnaceItemStacks[3] != null) {
-					if (!furnaceItemStacks[1].isItemEqual(furnaceItemStacks[3])) {
-						currentItemBurnTimea = getItemBurnTime(furnaceItemStacks[1]);
-						currentItemBurnTimeb = getItemBurnTime(furnaceItemStacks[3]);
+			if (furnaceBurnTime == 0 && isSmeltable()) {
+				ItemStack stack1 = getStackInSlot(1).copy();
+				ItemStack stack3 = getStackInSlot(3).copy();
+				if (stack1 != null && stack3 != null) {
+					if (!stack1.isItemEqual(stack3)) {
+						currentItemBurnTimea = getItemBurnTime(stack1);
+						currentItemBurnTimeb = getItemBurnTime(stack3);
 						if (currentItemBurnTimea > 0 && currentItemBurnTimeb > 0) {
 							furnaceBurnTime = currentItemBurnTimea + currentItemBurnTimeb;
 							flag1 = true;
-							furnaceItemStacks[1].stackSize--;
-							furnaceItemStacks[3].stackSize--;
-							if (furnaceItemStacks[1].stackSize == 0) {
-								furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
+							decrStackSize(1,1);
+							decrStackSize(3,1);
+							if (getStackInSlot(1) == null) {
+								setInventorySlotContents(1, stack1.getItem().getContainerItemStack(stack1));
 							}
-							if (furnaceItemStacks[3].stackSize == 0) {
-								furnaceItemStacks[3] = furnaceItemStacks[3].getItem().getContainerItemStack(furnaceItemStacks[3]);
+							if (getStackInSlot(3) == null) {
+								setInventorySlotContents(3, stack3.getItem().getContainerItemStack(stack3));
 							}
 						}
 					}
 				}
 			}
-			if (isBurning() && canSmelt()) {
+			if (isBurning() && isSmeltable()) {
 				furnaceCookTime++;
 				if (furnaceCookTime >= 100) {
 					furnaceCookTime = 0;

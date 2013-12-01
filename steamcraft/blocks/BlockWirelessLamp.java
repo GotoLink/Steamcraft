@@ -7,7 +7,7 @@ import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
 
 public class BlockWirelessLamp extends BlockElectricLamp {
-	public BlockWirelessLamp(int i, Class class1, boolean flag) {
+	public BlockWirelessLamp(int i, Class<?> class1, boolean flag) {
 		super(i, class1, flag);
 	}
 
@@ -32,17 +32,17 @@ public class BlockWirelessLamp extends BlockElectricLamp {
 	}
 
 	@Override
-	protected boolean isIndirectlyPowered(World par1World, int i, int j, int k) {
+	protected boolean hasIndirectPower(World par1World, int i, int j, int k) {
 		for (int l = 0; l < 9; l++) {
-			if (super.isIndirectlyPowered(par1World, i + l, j, k))
+			if (super.hasIndirectPower(par1World, i + l, j, k))
 				return true;
-			if (super.isIndirectlyPowered(par1World, i - l, j, k))
+			if (super.hasIndirectPower(par1World, i - l, j, k))
 				return true;
-			if (super.isIndirectlyPowered(par1World, i, j - l, k))
+			if (super.hasIndirectPower(par1World, i, j - l, k))
 				return true;
-			if (super.isIndirectlyPowered(par1World, i, j, k + l))
+			if (super.hasIndirectPower(par1World, i, j, k + l))
 				return true;
-			if (super.isIndirectlyPowered(par1World, i, j, k - l))
+			if (super.hasIndirectPower(par1World, i, j, k - l))
 				return true;
 		}
 		return false;

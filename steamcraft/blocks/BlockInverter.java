@@ -2,12 +2,9 @@ package steamcraft.blocks;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneTorch;
-import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import steamcraft.BlockHandler;
@@ -15,7 +12,7 @@ import steamcraft.HandlerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockInverter extends BlockRedstoneTorch {
+public class BlockInverter extends BlockRedstoneAccess {
 	private boolean torchActive;
 
 	public BlockInverter(int i, boolean flag) {
@@ -77,15 +74,25 @@ public class BlockInverter extends BlockRedstoneTorch {
 
 	@Override
 	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-		boolean flag = this.isIndirectlyPowered(par1World, par2, par3, par4);
-		List list = (List) getRedstoneUpdateList().get(par1World);
-		while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - ((RedstoneUpdateInfo) list.get(0)).updateTime > 60L) {
-			list.remove(0);
+		boolean flag = this.hasIndirectPower(par1World, par2, par3, par4);
+		List<?> list = (List<?>) getRedstoneUpdateList().get(par1World);
+		if(list!=null && !list.isEmpty()){
+			Field f = list.get(0).getClass().getDeclaredFields()[3];
+			f.setAccessible(true);
+			try {
+				while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - (long)f.get(list.get(0)) > 60L) {
+					list.remove(0);
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 		if (this.torchActive) {
 			if (flag) {
 				par1World.setBlock(par2, par3, par4, getIdle().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
-				if (this.checkForBurnout(par1World, par2, par3, par4, true)) {
+				if (this.checkBurnout(par1World, par2, par3, par4, true)) {
 					par1World.playSoundEffect(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
 						double d0 = par2 + par5Random.nextDouble() * 0.6D + 0.2D;
@@ -95,27 +102,9 @@ public class BlockInverter extends BlockRedstoneTorch {
 					}
 				}
 			}
-		} else if (!flag && !this.checkForBurnout(par1World, par2, par3, par4, false)) {
+		} else if (!flag && !this.checkBurnout(par1World, par2, par3, par4, false)) {
 			par1World.setBlock(par2, par3, par4, getActive().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
 		}
-	}
-
-	public static Map getRedstoneUpdateList() {
-		Field f;
-		Object obj = null;
-		try {
-			f = BlockRedstoneTorch.class.getDeclaredFields()[1];//redstoneUpdateInfoCache
-			if (!f.isAccessible())
-				f.setAccessible(true);
-			obj = f.get(null);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		}
-		return Map.class.cast(obj);
 	}
 
 	private static BlockHandler getActive() {

@@ -3,15 +3,14 @@ package steamcraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.blocks.BlockMainFurnace;
 import steamcraft.blocks.BlockSteamFurnace;
 
-public class TileEntitySteamFurnace extends TileEntityFurnace {
+public class TileEntitySteamFurnace extends FurnaceAccess {
 	public int waterLevel;
 
 	public TileEntitySteamFurnace() {
-		furnaceItemStacks = new ItemStack[4];
+		super(4);
 		setGuiDisplayName("Steam Furnace");
 	}
 
@@ -62,14 +61,15 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 			furnaceBurnTime--;
 		}
 		if (!worldObj.isRemote) {
-			if (this.furnaceBurnTime == 0 && this.canSmelt()) {
-				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
+			if (this.furnaceBurnTime == 0 && this.isSmeltable()) {
+				ItemStack stack1 = getStackInSlot(1).copy();
+				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(stack1);
 				if (this.furnaceBurnTime > 0) {
 					flag1 = true;
-					if (this.furnaceItemStacks[1] != null) {
-						--this.furnaceItemStacks[1].stackSize;
-						if (this.furnaceItemStacks[1].stackSize == 0) {
-							this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItemStack(furnaceItemStacks[1]);
+					if (stack1 != null) {
+						decrStackSize(1,1);
+						if (this.getStackInSlot(1) == null) {
+							setInventorySlotContents(1, stack1.getItem().getContainerItemStack(stack1));
 						}
 					}
 				}
@@ -80,7 +80,7 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 				}
 				waterLevel--;
 			}
-			if (isBurning() && canSmelt()) {
+			if (isBurning() && isSmeltable()) {
 				if (waterLevel > 0) {
 					furnaceCookTime += 4;
 				} else {
@@ -92,9 +92,9 @@ public class TileEntitySteamFurnace extends TileEntityFurnace {
 				if (waterLevel < 0) {
 					waterLevel = 0;
 				}
-				if (furnaceItemStacks[3] != null) {
-					if (waterLevel <= 0 && furnaceItemStacks[3].itemID == Item.bucketWater.itemID) {
-						furnaceItemStacks[3] = new ItemStack(Item.bucketEmpty);
+				if (getStackInSlot(3) != null) {
+					if (waterLevel <= 0 && getStackInSlot(3).itemID == Item.bucketWater.itemID) {
+						setInventorySlotContents(3, new ItemStack(Item.bucketEmpty));
 						waterLevel = 4096;
 						BlockSteamFurnace.playSound(worldObj, xCoord, yCoord, zCoord, "random.fizz");
 					}

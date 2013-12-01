@@ -1,14 +1,13 @@
 package steamcraft.blocks;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockRedstoneTorch;
-import net.minecraft.block.RedstoneUpdateInfo;
 import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
 
-public class BlockTeslaCoil extends BlockRedstoneTorch {
+public class BlockTeslaCoil extends BlockRedstoneAccess {
 	private boolean torchActive;
 
 	public BlockTeslaCoil(int i, boolean flag) {
@@ -109,10 +108,20 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random) {
-		boolean flag = this.isIndirectlyPowered(world, i, j, k);
-		List list = (List) BlockInverter.getRedstoneUpdateList().get(world);
-		while (list != null && !list.isEmpty() && world.getTotalWorldTime() - ((RedstoneUpdateInfo) list.get(0)).updateTime > 60L) {
-			list.remove(0);
+		boolean flag = this.hasIndirectPower(world, i, j, k);
+		List<?> list = (List<?>) getRedstoneUpdateList().get(world);
+		if(list!=null && !list.isEmpty()){
+			Field f = list.get(0).getClass().getDeclaredFields()[3];
+			f.setAccessible(true);
+			try {
+				while (list != null && !list.isEmpty() && world.getTotalWorldTime() - (long)f.get(list.get(0)) > 60L) {
+					list.remove(0);
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 		byte nnum = 1;
 		if (torchActive) {
@@ -175,7 +184,7 @@ public class BlockTeslaCoil extends BlockRedstoneTorch {
 			if (flag) {
 				world.setBlock(i, j, k, getTeslaActive(), world.getBlockMetadata(i, j, k), 2);
 			}
-		} else if (!flag && !checkForBurnout(world, i, j, k, false)) {
+		} else if (!flag && !checkBurnout(world, i, j, k, false)) {
 			world.setBlock(i, j, k, getTeslaIdle(), world.getBlockMetadata(i, j, k), 2);
 		}
 		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
