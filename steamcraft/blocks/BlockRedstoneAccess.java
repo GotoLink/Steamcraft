@@ -18,7 +18,7 @@ public class BlockRedstoneAccess extends BlockRedstoneTorch{
 		Method isPower = BlockRedstoneTorch.class.getDeclaredMethods()[5];
 		isPower.setAccessible(true);
 		try {
-			return (boolean) isPower.invoke(this, world, i, j, k);
+			return Boolean.class.cast(isPower.invoke(this, world, i, j, k)).booleanValue();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -33,7 +33,7 @@ public class BlockRedstoneAccess extends BlockRedstoneTorch{
 		Method burnout = BlockRedstoneTorch.class.getDeclaredMethods()[0];
 		burnout.setAccessible(true);
 		try {
-			return (boolean) burnout.invoke(this, world, i, j, k, is);
+			return Boolean.class.cast(burnout.invoke(this, world, i, j, k, is)).booleanValue();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
