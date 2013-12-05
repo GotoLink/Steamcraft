@@ -76,11 +76,11 @@ public class BlockInverter extends BlockRedstoneAccess {
 	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		boolean flag = this.hasIndirectPower(par1World, par2, par3, par4);
 		List<?> list = (List<?>) getRedstoneUpdateList().get(par1World);
-		if(list!=null && !list.isEmpty()){
+		if (list != null && !list.isEmpty()) {
 			Field f = list.get(0).getClass().getDeclaredFields()[3];
 			f.setAccessible(true);
 			try {
-				while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - (long)f.get(list.get(0)) > 60L) {
+				while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - Long.class.cast(f.get(list.get(0))).longValue() > 60L) {
 					list.remove(0);
 				}
 			} catch (IllegalArgumentException e) {

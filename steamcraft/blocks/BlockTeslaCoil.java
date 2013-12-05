@@ -110,11 +110,11 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 	public void updateTick(World world, int i, int j, int k, Random random) {
 		boolean flag = this.hasIndirectPower(world, i, j, k);
 		List<?> list = (List<?>) getRedstoneUpdateList().get(world);
-		if(list!=null && !list.isEmpty()){
+		if (list != null && !list.isEmpty()) {
 			Field f = list.get(0).getClass().getDeclaredFields()[3];
 			f.setAccessible(true);
 			try {
-				while (list != null && !list.isEmpty() && world.getTotalWorldTime() - (long)f.get(list.get(0)) > 60L) {
+				while (list != null && !list.isEmpty() && world.getTotalWorldTime() - Long.class.cast(f.get(list.get(0))).longValue() > 60L) {
 					list.remove(0);
 				}
 			} catch (IllegalArgumentException e) {
