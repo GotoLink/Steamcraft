@@ -33,7 +33,7 @@ public class ItemSCArmor extends ItemArmor {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		ItemSCArmor item = (ItemSCArmor) stack.getItem();
-		String s1 = String.format("steamcraft:textures/models/armor/%s_layer_%d.png", Steamcraft.armorMap.get(item.renderIndex), (slot == 2 ? 2 : 1));
+		String s1 = String.format("steamcraft:textures/models/armor/%s_layer_%d.png", Steamcraft.ARMOR_NAMES[item.renderIndex], (slot == 2 ? 2 : 1));
 		return s1;
 	}
 

@@ -33,11 +33,6 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	}
 
 	@Override
-	public int registerArmor(String string) {
-		return RenderingRegistry.addNewArmourRendererPrefix(string);
-	}
-
-	@Override
 	public void registerRenderers() {
 		BlockCopperWire.modelID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(BlockCopperWire.modelID, this);

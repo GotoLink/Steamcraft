@@ -69,8 +69,6 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 	public static final EnumArmorMaterial ARMORETHERIUM = EnumHelper.addArmorMaterial("ETHERIUM", -1, REDUCTION_AMOUNTS, 5);
 	public static final EnumArmorMaterial ARMOROBSIDIAN = EnumHelper.addArmorMaterial("OBSIDIAN", 20, REDUCTION_AMOUNTS, 10);
 	public static final String[] ARMOR_NAMES = { "etherium", "brass", "obsidian" };
-	public static int[] armorIndexes = new int[ARMOR_NAMES.length];
-	public static Map<Integer, String> armorMap = new HashMap<Integer, String>();
 	//harvestLevel, maxUses,efficiencyOnProperMaterial,damageVsEntity,enchantability;
 	public static final EnumToolMaterial TOOLETHERIUM = EnumHelper.addToolMaterial("ETHERIUM", 6, -1, 8F, 3, 8);
 	public static final EnumToolMaterial TOOLOBSIDIAN = EnumHelper.addToolMaterial("OBSIDIAN", 5, 210, 7F, 4, 5);
@@ -198,10 +196,6 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent event) {
-		for (int i = 0; i < ARMOR_NAMES.length; i++) {
-			armorIndexes[i] = proxy.registerArmor(ARMOR_NAMES[i]);
-			armorMap.put(armorIndexes[i], ARMOR_NAMES[i]);
-		}
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		config.addCustomCategoryComment("Generation", "TPC:Tries per chunk");
@@ -213,7 +207,7 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		genPhos = config.get("Generation", "PhosphateOre_TPC", genPhos).getInt();
 		genUr = config.get("Generation", "Uranite_TPC", genUr).getInt();
 		genVol = config.get("Generation", "Volucite_TPC", genVol).getInt();
-		material = new MultiItem(config.getItem("Materials", 25010).getInt(), MATERIALS).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:");
+		material = new ItemHandler(new MultiItem(config.getItem("Materials", 25010).getInt(), MATERIALS), "steamcraft:mat", "steamcraft:").get();
 		new ItemHandler(new Item(config.getItem("Chisel", 25049).getInt()).setFull3D().setMaxDamage(64).setMaxStackSize(1), "steamcraft:chisel", "steamcraft:tools/chisel").addRecipe(true, "#", "#",
 				"X", Character.valueOf('#'), Item.ingotIron, Character.valueOf('X'), "ingotBrass").register();
 		new BlockHandler(new BlockCopperWire(config.getBlock("CopperWire", 2493).getInt()).setStepSound(Block.soundPowderFootstep), "copperwire", "redstone_dust", "wireCopper").setValues(0.0F)
@@ -335,22 +329,22 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		new ItemHandler(new ItemSCSword(config.getItem("ObsidianSword", 25017).getInt(), TOOLOBSIDIAN), "steamcraft:swordObsidian", "steamcraft:tools/obsidiansword").addSword("slateObsidian");
 		new ItemHandler(new ItemSCDrill(config.getItem("ObsidianDrill", 25018).getInt(), TOOLOBSIDIAN), "steamcraft:drillObsidian", "steamcraft:tools/obsidiandrill", "drillObsidian").setTool("drill",
 				5).addDrill("slateObsidian");
-		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianHelmet", 25019).getInt(), ARMOROBSIDIAN, armorIndexes[2], 0), "steamcraft:helmetObsidian", "steamcraft:armour/obsidianhelmet")
+		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianHelmet", 25019).getInt(), ARMOROBSIDIAN, 2, 0), "steamcraft:helmetObsidian", "steamcraft:armour/obsidianhelmet")
 				.addHelmet("slateObsidian");
-		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianPlate", 25020).getInt(), ARMOROBSIDIAN, armorIndexes[2], 1), "steamcraft:chestplateObsidian", "steamcraft:armour/obsidianplate")
+		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianPlate", 25020).getInt(), ARMOROBSIDIAN, 2, 1), "steamcraft:chestplateObsidian", "steamcraft:armour/obsidianplate")
 				.addPlate("slateObsidian");
-		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianLegs", 25021).getInt(), ARMOROBSIDIAN, armorIndexes[2], 2), "steamcraft:leggingsObsidian", "steamcraft:armour/obsidianlegs")
+		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianLegs", 25021).getInt(), ARMOROBSIDIAN, 2, 2), "steamcraft:leggingsObsidian", "steamcraft:armour/obsidianlegs")
 				.addLegs("slateObsidian");
-		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianBoots", 25022).getInt(), ARMOROBSIDIAN, armorIndexes[2], 3), "steamcraft:bootsObsidian", "steamcraft:armour/obsidianboots")
+		new ItemHandler(new ItemSCArmor(config.getItem("ObsidianBoots", 25022).getInt(), ARMOROBSIDIAN, 2, 3), "steamcraft:bootsObsidian", "steamcraft:armour/obsidianboots")
 				.addBoots("slateObsidian");
-		new ItemHandler(new ItemSCArmor(config.getItem("BrassGoggles", 25023).getInt(), ARMORBRASS, armorIndexes[1], 0), "steamcraft:brassGoggles", "steamcraft:armour/brassgoggles").addRecipe(true,
+		new ItemHandler(new ItemSCArmor(config.getItem("BrassGoggles", 25023).getInt(), ARMORBRASS, 1, 0), "steamcraft:brassGoggles", "steamcraft:armour/brassgoggles").addRecipe(true,
 				"X#X", "# #", Character.valueOf('X'), Block.glass, Character.valueOf('#'), "ingotBrass").register();
-		new ItemHandler(new ItemSCArmor(config.getItem("Aqualung", 25024).getInt(), ARMORBRASS, armorIndexes[1], 1), "steamcraft:aqualung", "steamcraft:armour/aqualung")
+		new ItemHandler(new ItemSCArmor(config.getItem("Aqualung", 25024).getInt(), ARMORBRASS, 1, 1), "steamcraft:aqualung", "steamcraft:armour/aqualung")
 				.addRecipe(true, "XTX", "X X", "X#X", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase, Character.valueOf('T'), Block.glass)
 				.addAchievement("jethrotull", 0, 3, AchievementList.acquireIron).register();
-		new ItemHandler(new ItemSCArmor(config.getItem("RollerSkates", 25025).getInt(), ARMORBRASS, armorIndexes[1], 3), "steamcraft:rollerSkates", "steamcraft:armour/rollerskates").addRecipe(true,
+		new ItemHandler(new ItemSCArmor(config.getItem("RollerSkates", 25025).getInt(), ARMORBRASS, 1, 3), "steamcraft:rollerSkates", "steamcraft:armour/rollerskates").addRecipe(true,
 				"X X", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Item.ingotIron).register();
-		new ItemHandler(new ItemSCArmor(config.getItem("PneumaticBraces", 25026).getInt(), ARMORBRASS, armorIndexes[1], 2), "steamcraft:legBraces", "steamcraft:armour/pneumaticbraces").addRecipe(
+		new ItemHandler(new ItemSCArmor(config.getItem("PneumaticBraces", 25026).getInt(), ARMORBRASS, 1, 2), "steamcraft:legBraces", "steamcraft:armour/pneumaticbraces").addRecipe(
 				true, "XXX", "X X", "# #", Character.valueOf('X'), "ingotBrass", Character.valueOf('#'), Block.pistonBase).register();
 		new ItemHandler(new ItemSCPickaxe(config.getItem("EtheriumPick", 25027).getInt(), TOOLETHERIUM), "steamcraft:pickaxeEtherium", "steamcraft:tools/etheriumpick").setTool("pickaxe", 6).addPick(
 				"gemEtherium");
@@ -362,13 +356,13 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 		new ItemHandler(new ItemSCSword(config.getItem("EtheriumSword", 25031).getInt(), TOOLETHERIUM), "steamcraft:swordEtherium", "steamcraft:tools/etheriumsword").addSword("gemEtherium");
 		new ItemHandler(new ItemSCDrill(config.getItem("EtheriumDrill", 25032).getInt(), TOOLETHERIUM), "steamcraft:drillEtherium", "steamcraft:tools/etheriumdrill", "drillEtherium").setTool("drill",
 				6).addDrill("gemEtherium");
-		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumHelmet", 25033).getInt(), ARMORETHERIUM, armorIndexes[0], 0), "steamcraft:helmetEtherium", "steamcraft:armour/etheriumhelmet")
+		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumHelmet", 25033).getInt(), ARMORETHERIUM, 0, 0), "steamcraft:helmetEtherium", "steamcraft:armour/etheriumhelmet")
 				.addHelmet("gemEtherium");
-		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumPlate", 25034).getInt(), ARMORETHERIUM, armorIndexes[0], 1), "steamcraft:chestplateEtherium", "steamcraft:armour/etheriumplate")
+		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumPlate", 25034).getInt(), ARMORETHERIUM, 0, 1), "steamcraft:chestplateEtherium", "steamcraft:armour/etheriumplate")
 				.addPlate("gemEtherium");
-		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumLegs", 25036).getInt(), ARMORETHERIUM, armorIndexes[0], 2), "steamcraft:leggingsEtherium", "steamcraft:armour/etheriumlegs")
+		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumLegs", 25036).getInt(), ARMORETHERIUM, 0, 2), "steamcraft:leggingsEtherium", "steamcraft:armour/etheriumlegs")
 				.addLegs("gemEtherium");
-		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumBoots", 25037).getInt(), ARMORETHERIUM, armorIndexes[0], 3), "steamcraft:bootsEtherium", "steamcraft:armour/etheriumboots")
+		new ItemHandler(new ItemSCArmor(config.getItem("EtheriumBoots", 25037).getInt(), ARMORETHERIUM, 0, 3), "steamcraft:bootsEtherium", "steamcraft:armour/etheriumboots")
 				.addBoots("gemEtherium");
 		new ItemHandler(new ItemSCPickaxe(config.getItem("SteamPick", 25038).getInt(), TOOLSTEAM), "steamcraft:pickaxeSteam", "steamcraft:tools/steampick").setTool("pickaxe", 7).addRecipe(true,
 				"XIX", " # ", " # ", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "ingotBrass", Character.valueOf('I'), "furnaceSteam");
@@ -392,11 +386,12 @@ public class Steamcraft implements ICraftingHandler, IPickupNotifier, IWorldGene
 				"drill", 3).addDrill(Item.diamond);
 		new ItemHandler(new ItemSCDrill(config.getItem("GoldenDrill", 25048).getInt(), EnumToolMaterial.GOLD), "steamcraft:drillGold", "steamcraft:tools/golddrill", "drillGold").setTool("drill", 0)
 				.addDrill(Item.ingotGold);
-		spanner = new Item(config.getItem("Spanner", 25050).getInt()).setFull3D().setMaxDamage(3).setMaxStackSize(1).setUnlocalizedName("steamcraft:spanner")
-				.setTextureName("steamcraft:tools/spanner");
-		part = new MultiItem(config.getItem("FirearmParts", 25056).getInt(), FIREARM_PARTS).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:");
-		firearm = new ItemFirearm(config.getItem("Firearm", 25057).getInt()).setUnlocalizedName("steamcraft:").setTextureName("steamcraft:tools/");
-		flintlockMusket = new ItemStack(firearm, 1, 0);
+		spanner = new ItemHandler(new Item(config.getItem("Spanner", 25050).getInt()).setFull3D().setMaxDamage(3).setMaxStackSize(1), "steamcraft:spanner"
+				, "steamcraft:tools/spanner").get();
+		part = new ItemHandler(new MultiItem(config.getItem("FirearmParts", 25056).getInt(), FIREARM_PARTS), "steamcraft:part", "steamcraft:").get();
+		firearm = new ItemHandler(new ItemFirearm(config.getItem("Firearm", 25057).getInt()), "steamcraft:firearm", "steamcraft:tools/").get();
+
+        flintlockMusket = new ItemStack(firearm, 1, 0);
 		ItemFirearm.setFirePower(flintlockMusket, 8);
 		ItemFirearm.setMaxDamage(flintlockMusket, 100);
 		matchlockMusket = new ItemStack(firearm, 1, 0);
