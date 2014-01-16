@@ -65,10 +65,6 @@ public class CommonProxy implements IGuiHandler, ITickHandler {
 		return null;
 	}
 
-	public int registerArmor(String string) {
-		return 0;
-	}
-
 	public void registerRenderers() {
 	}
 
