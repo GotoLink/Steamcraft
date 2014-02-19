@@ -1,45 +1,53 @@
 package steamcraft;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 public class FurnaceAccess extends TileEntityFurnace {
-	protected Field stacks;
-	private Method canSmelt = null;
-
 	public FurnaceAccess(int size) {
 		super();
 		if (size != 3) {
-			stacks = TileEntityFurnace.class.getDeclaredFields()[3];
-			stacks.setAccessible(true);
-			try {
-				stacks.set(this, new ItemStack[size]);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
+            field_145957_n = new ItemStack[size];
+        }
 	}
 
 	public boolean isSmeltable() {
-		if (canSmelt == null) {
-			canSmelt = TileEntityFurnace.class.getDeclaredMethods()[15];
-		}
-		canSmelt.setAccessible(true);
-		try {
-			return Boolean.class.cast(canSmelt.invoke(this)).booleanValue();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return false;
+        return func_145948_k();
 	}
+
+    public boolean isBurning(){
+        return func_145950_i();
+    }
+
+    public int getCookTime(){
+        return field_145961_j;
+    }
+
+    public void setCookTime(int i){
+        field_145961_j = i;
+    }
+
+    public int getBurnTime(){
+        return field_145956_a;
+    }
+
+    public void setBurnTime(int i){
+        field_145956_a = i;
+    }
+
+    public int getItemBurnTime(){
+        return field_145963_i;
+    }
+
+    public void setItemBurnTime(int i){
+        field_145963_i = i;
+    }
+
+    public int getBurnTimeLeftScaled(int scaleFactor){
+        return func_145955_e(scaleFactor);
+    }
+
+    public int getCookProgressScaled(int scaleFactor){
+        return func_145953_d(scaleFactor);
+    }
 }

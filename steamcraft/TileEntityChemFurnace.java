@@ -3,6 +3,7 @@ package steamcraft;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,93 +13,93 @@ import steamcraft.blocks.BlockMainFurnace;
 public class TileEntityChemFurnace extends FurnaceAccess {
 	public int currentItemBurnTimea;
 	public int currentItemBurnTimeb;
-	public static Map<Integer, Integer> fuels = new HashMap<Integer, Integer>();
+	public static Map<Item, Integer> fuels = new HashMap<Item, Integer>();
 
 	public TileEntityChemFurnace() {
 		super(4);
-		setGuiDisplayName("Chemical Furnace");
+        func_145951_a("Chemical Furnace");
 	}
 
 	static {
-		fuels.put(Item.sugar.itemID, 20);
-		fuels.put(Item.gunpowder.itemID, 100);
-		fuels.put(Item.glowstone.itemID, 3200);
+		fuels.put(Items.sugar, 20);
+		fuels.put(Items.gunpowder, 100);
+		fuels.put(Items.glowstone_dust, 3200);
 	}
 
 	@Override
-	public int getBurnTimeRemainingScaled(int i) {
+	public int func_145955_e(int i) {
 		if (currentItemBurnTimea == 0) {
 			currentItemBurnTimea = 100;
 		}
 		if (currentItemBurnTimeb == 0) {
 			currentItemBurnTimeb = 100;
 		}
-		return (furnaceBurnTime * i) / (currentItemBurnTimea + currentItemBurnTimeb);
+		return (field_145956_a * i) / (currentItemBurnTimea + currentItemBurnTimeb);
 	}
 
 	@Override
-	public int getCookProgressScaled(int i) {
-		return (furnaceCookTime * i) / 100;
+	public int func_145953_d(int i) {
+		return (field_145956_a * i) / 100;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
 		if (par1 == 3)
-			return isItemFuel(par2ItemStack);
+			return func_145954_b(par2ItemStack);
 		else
 			return super.isItemValidForSlot(par1, par2ItemStack);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		currentItemBurnTimea = getItemBurnTime(getStackInSlot(1));
-		currentItemBurnTimeb = getItemBurnTime(getStackInSlot(3));
+	public void func_145839_a(NBTTagCompound nbttagcompound) {
+		super.func_145839_a(nbttagcompound);
+		currentItemBurnTimea = func_145952_a(getStackInSlot(1));
+		currentItemBurnTimeb = func_145952_a(getStackInSlot(3));
 	}
 
 	@Override
-	public void updateEntity() {
-		boolean flag = furnaceBurnTime > 0;
+	public void func_145845_h() {
+		boolean flag = field_145956_a > 0;
 		boolean flag1 = false;
-		if (furnaceBurnTime > 0) {
-			furnaceBurnTime--;
+		if (field_145956_a > 0) {
+            field_145956_a--;
 		}
-		if (!worldObj.isRemote) {
-			if (furnaceBurnTime == 0 && isSmeltable()) {
+		if (!field_145850_b.isRemote) {
+			if (field_145956_a == 0 && isSmeltable()) {
 				ItemStack stack1 = getStackInSlot(1).copy();
 				ItemStack stack3 = getStackInSlot(3).copy();
 				if (stack1 != null && stack3 != null) {
 					if (!stack1.isItemEqual(stack3)) {
-						currentItemBurnTimea = getItemBurnTime(stack1);
-						currentItemBurnTimeb = getItemBurnTime(stack3);
+						currentItemBurnTimea = func_145952_a(stack1);
+						currentItemBurnTimeb = func_145952_a(stack3);
 						if (currentItemBurnTimea > 0 && currentItemBurnTimeb > 0) {
-							furnaceBurnTime = currentItemBurnTimea + currentItemBurnTimeb;
+                            field_145956_a = currentItemBurnTimea + currentItemBurnTimeb;
 							flag1 = true;
 							decrStackSize(1,1);
 							decrStackSize(3,1);
 							if (getStackInSlot(1) == null) {
-								setInventorySlotContents(1, stack1.getItem().getContainerItemStack(stack1));
+								setInventorySlotContents(1, stack1.getItem().getContainerItem(stack1));
 							}
 							if (getStackInSlot(3) == null) {
-								setInventorySlotContents(3, stack3.getItem().getContainerItemStack(stack3));
+								setInventorySlotContents(3, stack3.getItem().getContainerItem(stack3));
 							}
 						}
 					}
 				}
 			}
 			if (isBurning() && isSmeltable()) {
-				furnaceCookTime++;
-				if (furnaceCookTime >= 100) {
-					furnaceCookTime = 0;
-					smeltItem();
+                field_145961_j++;
+				if (field_145961_j >= 100) {
+                    field_145961_j = 0;
+                    func_145949_j();
 					flag1 = true;
 				}
 			} else {
-				furnaceCookTime = 0;
+                field_145961_j = 0;
 			}
-			if (flag != (furnaceBurnTime > 0)) {
+			if (flag != (field_145956_a > 0)) {
 				flag1 = true;
-				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, BlockChemFurnace.getActive(), BlockChemFurnace.getIdle(), false);
+				BlockMainFurnace.updateFurnaceBlockState(field_145956_a > 0, field_145850_b, field_145851_c, field_145848_d, field_145849_e, BlockChemFurnace.getActive(), BlockChemFurnace.getIdle(), false);
 			}
 		}
 		if (flag1) {

@@ -2,21 +2,21 @@ package steamcraft.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import steamcraft.Steamcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class MultiItem extends Item {
 	public String[] names;
-	private Icon[] icons;
+	private IIcon[] icons;
 
-	public MultiItem(int par1, String[] names) {
-		super(par1);
+	public MultiItem(String[] names) {
+		super();
 		setHasSubtypes(true);
 		this.names = names;
 		setCreativeTab(Steamcraft.steamTab);
@@ -29,14 +29,14 @@ public class MultiItem extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int par1) {
+	public IIcon getIconFromDamage(int par1) {
 		return icons[par1];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		icons = new Icon[names.length];
+	public void registerIcons(IIconRegister par1IconRegister) {
+		icons = new IIcon[names.length];
 		for (int index = 0; index < names.length; index++) {
 			icons[index] = par1IconRegister.registerIcon(getIconString() + names[index]);
 		}
@@ -44,9 +44,9 @@ public class MultiItem extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int index = 0; index < names.length; index++) {
-			par3List.add(new ItemStack(this, 1, index));
+			par3List.add(new ItemStack(par1, 1, index));
 		}
 	}
 }

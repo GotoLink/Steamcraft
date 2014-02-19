@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemCoreDrill extends Item {
-	public ItemCoreDrill(int i) {
-		super(i);
+	public ItemCoreDrill() {
+		super();
 		maxStackSize = 1;
 		setMaxDamage(256);
 	}

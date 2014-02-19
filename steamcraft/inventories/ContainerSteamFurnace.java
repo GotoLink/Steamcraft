@@ -2,11 +2,11 @@ package steamcraft.inventories;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -40,17 +40,17 @@ public class ContainerSteamFurnace extends Container {
 		super.detectAndSendChanges();
 		for (int i = 0; i < crafters.size(); i++) {
 			ICrafting icrafting = (ICrafting) crafters.get(i);
-			if (cookTime != furnace.furnaceCookTime) {
-				icrafting.sendProgressBarUpdate(this, 0, furnace.furnaceCookTime);
-				cookTime = furnace.furnaceCookTime;
+			if (cookTime != furnace.getCookTime()) {
+				icrafting.sendProgressBarUpdate(this, 0, furnace.getCookTime());
+				cookTime = furnace.getCookTime();
 			}
-			if (burnTime != furnace.furnaceBurnTime) {
-				icrafting.sendProgressBarUpdate(this, 1, furnace.furnaceBurnTime);
-				burnTime = furnace.furnaceBurnTime;
+			if (burnTime != furnace.getBurnTime()) {
+				icrafting.sendProgressBarUpdate(this, 1, furnace.getBurnTime());
+				burnTime = furnace.getBurnTime();
 			}
-			if (itemBurnTime != furnace.currentItemBurnTime) {
-				icrafting.sendProgressBarUpdate(this, 2, furnace.currentItemBurnTime);
-				itemBurnTime = furnace.currentItemBurnTime;
+			if (itemBurnTime != furnace.getItemBurnTime()) {
+				icrafting.sendProgressBarUpdate(this, 2, furnace.getItemBurnTime());
+				itemBurnTime = furnace.getItemBurnTime();
 			}
 			if (waterLevel != furnace.getWater()) {
 				icrafting.sendProgressBarUpdate(this, 3, furnace.getWater());
@@ -63,13 +63,13 @@ public class ContainerSteamFurnace extends Container {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int i, int j) {
 		if (i == 0) {
-			furnace.furnaceCookTime = j;
+			furnace.setCookTime(j);
 		}
 		if (i == 1) {
-			furnace.furnaceBurnTime = j;
+			furnace.setBurnTime(j);
 		}
 		if (i == 2) {
-			furnace.currentItemBurnTime = j;
+			furnace.setItemBurnTime(j);
 		}
 		if (i == 3) {
 			furnace.waterLevel = j;
@@ -93,15 +93,15 @@ public class ContainerSteamFurnace extends Container {
 					return null;
 				}
 				slot.onSlotChange(itemstack1, itemstack);
-			} else if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
+			} else if (FurnaceRecipes.smelting().func_151395_a(itemstack1) != null) {
 				if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
 					return null;
 				}
-			} else if (TileEntityFurnace.isItemFuel(itemstack1)) {
+			} else if (TileEntityFurnace.func_145954_b(itemstack1)) {
 				if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
 					return null;
 				}
-			} else if (itemstack1.itemID == Item.bucketWater.itemID) {
+			} else if (itemstack1.getItem() == Items.water_bucket) {
 				if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
 					return null;
 				}

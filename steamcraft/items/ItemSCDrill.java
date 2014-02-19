@@ -1,15 +1,16 @@
 package steamcraft.items;
 
+import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
-import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.init.Blocks;
 
-import com.google.common.collect.ObjectArrays;
+import java.util.Set;
 
 public class ItemSCDrill extends ItemSCTool {
-	public static Block[] xblocksEffectiveAgainst = ObjectArrays.concat(ItemSCPickaxe.xblocksEffectiveAgainst, new Block[] { Block.dirt, Block.sand, Block.gravel, Block.grass }, Block.class);
-
-	public ItemSCDrill(int i, EnumToolMaterial enumtoolmaterial) {
-		super(i, 3, enumtoolmaterial, xblocksEffectiveAgainst);
+    public static Set<Block> blockEffectiveAdded = Sets.newHashSet(Blocks.dirt, Blocks.sand, Blocks.gravel, Blocks.grass);
+    static{blockEffectiveAdded.addAll(ItemSCPickaxe.blockEffectiveAdded);}
+	public ItemSCDrill(ToolMaterial enumtoolmaterial) {
+		super(3, enumtoolmaterial, blockEffectiveAdded);
 		efficiencyOnProperMaterial = enumtoolmaterial.getEfficiencyOnProperMaterial() * 1.5F;
 	}
 }

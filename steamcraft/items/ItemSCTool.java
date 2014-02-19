@@ -1,29 +1,30 @@
 package steamcraft.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import steamcraft.Steamcraft;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public class ItemSCTool extends ItemTool {
-	public Block[] blocksEffectiveAgainst;
+	public Set<Block> blocksEffectiveAgainst;
 	public float baseDamage;
 
-	protected ItemSCTool(int i, float j, EnumToolMaterial enumtoolmaterial, Block ablock[]) {
-		super(i, j, enumtoolmaterial, ablock);
-		this.blocksEffectiveAgainst = ablock;
+	protected ItemSCTool(float j, ToolMaterial enumtoolmaterial, Set<Block> blocks) {
+		super(j, enumtoolmaterial, blocks);
+		this.blocksEffectiveAgainst = blocks;
 		this.baseDamage = j + enumtoolmaterial.getDamageVsEntity();
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack itemstack, Block block, int meta) {
+	public float getDigSpeed(ItemStack itemstack, Block block, int meta) {
 		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-			for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-				if (blocksEffectiveAgainst[i] == block) {
+            Iterator itr = blocksEffectiveAgainst.iterator();
+			while (itr.hasNext()) {
+				if (itr.next() == block) {
 					return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
 				}
 			}
@@ -31,22 +32,6 @@ public class ItemSCTool extends ItemTool {
 				return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
 			}
 		}
-		return super.getStrVsBlock(itemstack, block, meta);
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2) {
-		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-			damageVsEntity = baseDamage - (float) stack.getItemDamage() * 10 / 320;
-		}
-		return super.hitEntity(stack, livingBase1, livingBase2);
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-			damageVsEntity = baseDamage - (float) stack.getItemDamage() * 10 / 320;
-		}
-		return super.onBlockDestroyed(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);
+		return super.getDigSpeed(itemstack, block, meta);
 	}
 }

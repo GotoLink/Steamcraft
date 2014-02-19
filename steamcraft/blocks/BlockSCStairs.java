@@ -6,80 +6,81 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSCStairs extends BlockStairs {
 	private Block modelBlock;
-	private int blockDrop;
+	private Item blockDrop;
 	private int dropQuantity;
 
-	public BlockSCStairs(int i, Block block, int meta, int blockdrop, int quantity) {
-		super(i, block, meta);
-		setLightOpacity(0);
+	public BlockSCStairs(Block block, int meta, Item blockdrop, int quantity) {
+		super(block, meta);
+        func_149713_g(0);
 		modelBlock = block;
 		blockDrop = blockdrop;
 		dropQuantity = quantity;
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return side != ForgeDirection.DOWN && side != ForgeDirection.UP;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k) {
-		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+	public void func_149719_a(IBlockAccess iblockaccess, int i, int j, int k) {
+        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List arraylist, Entity ent) {
+	public void func_149743_a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List arraylist, Entity ent) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l == 0) {
-			setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
-			setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 1) {
-			setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
-			setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.5F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 2) {
-			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.5F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
-			setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.5F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 3) {
-			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
-			setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            func_149676_a(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
+			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
 		}
-		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		if (blockDrop == -1) {
-			blockDrop = modelBlock.idDropped(i, random, j);
+	public Item func_149650_a(int i, Random random, int j) {
+		if (blockDrop == null) {
+			blockDrop = modelBlock.func_149650_a(i, random, j);
 		}
 		return blockDrop;
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int func_149745_a(Random random) {
 		if (dropQuantity == -1) {
-			dropQuantity = modelBlock.quantityDropped(random);
+			dropQuantity = modelBlock.func_149745_a(random);
 		}
 		return dropQuantity;
 	}
 
 	@Override
-	public Icon getIcon(int i, int j) {
-		return modelBlock.getIcon(i, 0);
+	public IIcon func_149691_a(int i, int j) {
+		return modelBlock.func_149691_a(i, 0);
 	}
 }

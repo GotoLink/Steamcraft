@@ -22,15 +22,15 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
+	public void func_147500_a(TileEntity tileentity, double d, double d1, double d2, float f) {
 		renderTileEntityLampAt((TileEntityLamp) tileentity, d, d1, d2, f);
 	}
 
 	public void renderTileEntityLampAt(TileEntityLamp tileentitylamp, double d, double d1, double d2, float f) {
-		Block block = tileentitylamp.getBlockType();
+		Block block = tileentitylamp.func_145838_q();
 		GL11.glPushMatrix();
 		float f1 = 0.6666667F;
-		int i = tileentitylamp.getBlockMetadata();
+		int i = tileentitylamp.func_145832_p();
 		float f3 = 0.0F;
 		float f2 = 1.0F;
 		if (i == 2) {
@@ -65,9 +65,9 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 			lampModelSide.CrossbarRight.showModel = true;
 		}
 		if (block == getTorchElectricActive() || block == getWirelessLampActive()) {
-			bindTexture(lampOn);
+            func_147499_a(lampOn);
 		} else if (block == getTorchElectricIdle() || block == getWirelessLampIdle()) {
-			bindTexture(lampOff);
+            func_147499_a(lampOff);
 		}
 		GL11.glPushMatrix();
 		GL11.glScalef(f1, -f1, -f1);

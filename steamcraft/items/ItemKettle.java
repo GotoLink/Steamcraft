@@ -9,15 +9,15 @@ import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 
 public class ItemKettle extends Item {
-	public ItemKettle(int i) {
-		super(i);
+	public ItemKettle() {
+		super();
 		setMaxStackSize(1);
 		setMaxDamage(300);
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (itemstack.getItem().itemID == getHot() && itemstack.getItemDamage() < itemstack.getMaxDamage() - 5) {
+		if (itemstack.getItem() == getHot() && itemstack.getItemDamage() < itemstack.getMaxDamage() - 5) {
 			if (getStackPosition(entityplayer.inventory, ItemTeacup.getEmpty()) > -1) {
 				entityplayer.triggerAchievement(Steamcraft.achs.get("timeforacuppa"));
 				entityplayer.inventory.setInventorySlotContents(getStackPosition(entityplayer.inventory, ItemTeacup.getEmpty()), new ItemStack(ItemTeacup.getFull(), 1));
@@ -30,17 +30,17 @@ public class ItemKettle extends Item {
 		return itemstack;
 	}
 
-	public static int getEmpty() {
-		return HandlerRegistry.getItem("steamcraft:kettleempty").getID();
+	public static Item getEmpty() {
+		return HandlerRegistry.getItem("steamcraft:kettleempty").get();
 	}
 
-	public static int getHot() {
-		return HandlerRegistry.getItem("steamcraft:kettleHot").getID();
+	public static Item getHot() {
+		return HandlerRegistry.getItem("steamcraft:kettleHot").get();
 	}
 
 	public static int getStackPosition(InventoryPlayer inventory, Item item) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) != null && item.itemID == inventory.getStackInSlot(i).getItem().itemID) {
+			if (inventory.getStackInSlot(i) != null && item == inventory.getStackInSlot(i).getItem()) {
 				return i;
 			}
 		}

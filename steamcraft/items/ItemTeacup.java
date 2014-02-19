@@ -8,8 +8,8 @@ import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
 
 public class ItemTeacup extends ItemFood {
-	public ItemTeacup(int i, int j) {
-		super(i, j, 0.0F, false);
+	public ItemTeacup(int j) {
+		super(j, 0.0F, false);
 		setMaxStackSize(1);
 	}
 

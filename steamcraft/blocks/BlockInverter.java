@@ -1,11 +1,11 @@
 package steamcraft.blocks;
 
-import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.Icon;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
@@ -15,41 +15,41 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockInverter extends BlockRedstoneAccess {
 	private boolean torchActive;
 
-	public BlockInverter(int i, boolean flag) {
-		super(i, flag);
+	public BlockInverter(boolean flag) {
+		super(flag);
 		torchActive = flag;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int par1, int par2) {
-		return par1 == 0 ? (this.torchActive ? BlockDiode.iconInverterActive : BlockDiode.iconInverterIdle) : (par1 == 1 ? this.blockIcon : Block.stoneDoubleSlab.getBlockTextureFromSide(1));
+	public IIcon func_149691_a(int par1, int par2) {
+		return par1 == 0 ? (this.torchActive ? BlockDiode.iconInverterActive : BlockDiode.iconInverterIdle) : (par1 == 1 ? this.field_149761_L : Blocks.double_stone_slab.func_149733_h(1));
 	}
 
 	@Override
-	public int idDropped(int par1, Random par2Random, int par3) {
-		return getActive().getID();
+	public Item func_149650_a(int par1, Random par2Random, int par3) {
+		return Item.func_150898_a(getActive().get());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return getActive().getID();
+	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
+		return Item.func_150898_a(getActive().get());
 	}
 
 	@Override
-	public boolean isAssociatedBlockID(int par1) {
-		return par1 == getIdle().getID() || par1 == getActive().getID();
+	public boolean func_149667_c(Block par1) {
+		return par1 == getIdle().get() || par1 == getActive().get();
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
-		super.onNeighborBlockChange(world, i, j, k, l);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	public void func_149695_a(World world, int i, int j, int k, Block l) {
+		super.func_149695_a(world, i, j, k, l);
+		world.func_147464_a(i, j, k, this, func_149738_a(world));
 	}
 
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+	public void func_149734_b(World world, int i, int j, int k, Random random) {
 		if (!torchActive) {
 			return;
 		}
@@ -73,25 +73,12 @@ public class BlockInverter extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
+	public void func_149674_a(World par1World, int par2, int par3, int par4, Random par5Random) {
 		boolean flag = this.hasIndirectPower(par1World, par2, par3, par4);
-		List<?> list = (List<?>) getRedstoneUpdateList().get(par1World);
-		if (list != null && !list.isEmpty()) {
-			Field f = list.get(0).getClass().getDeclaredFields()[3];
-			f.setAccessible(true);
-			try {
-				while (list != null && !list.isEmpty() && par1World.getTotalWorldTime() - Long.class.cast(f.get(list.get(0))).longValue() > 60L) {
-					list.remove(0);
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
+        updateToggleTimes(par1World);
 		if (this.torchActive) {
 			if (flag) {
-				par1World.setBlock(par2, par3, par4, getIdle().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
+				par1World.func_147465_d(par2, par3, par4, getIdle().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
 				if (this.checkBurnout(par1World, par2, par3, par4, true)) {
 					par1World.playSoundEffect(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
@@ -103,7 +90,7 @@ public class BlockInverter extends BlockRedstoneAccess {
 				}
 			}
 		} else if (!flag && !this.checkBurnout(par1World, par2, par3, par4, false)) {
-			par1World.setBlock(par2, par3, par4, getActive().getID(), par1World.getBlockMetadata(par2, par3, par4), 3);
+			par1World.func_147465_d(par2, par3, par4, getActive().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
 		}
 	}
 

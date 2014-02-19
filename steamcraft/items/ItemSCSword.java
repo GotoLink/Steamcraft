@@ -1,9 +1,9 @@
 package steamcraft.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
@@ -13,11 +13,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public class ItemSCSword extends ItemSword {
-	private EnumToolMaterial toolMaterial;
+	private ToolMaterial toolMaterial;
 	private double damage;
 
-	public ItemSCSword(int i, EnumToolMaterial enumtoolmaterial) {
-		super(i, enumtoolmaterial);
+	public ItemSCSword(ToolMaterial enumtoolmaterial) {
+		super(enumtoolmaterial);
 		this.toolMaterial = enumtoolmaterial;
 		damage = 4 + enumtoolmaterial.getDamageVsEntity() * 2;
 	}
@@ -32,7 +32,7 @@ public class ItemSCSword extends ItemSword {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase livingBase1, EntityLivingBase livingBase2) {
 		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-			damage = 4 + func_82803_g() * 2 - (double) stack.getItemDamage() * 10 / 320;
+			damage = 4 + func_150931_i() * 2 - (double) stack.getItemDamage() * 10 / 320;
 		}
 		return super.hitEntity(stack, livingBase1, livingBase2);
 	}
@@ -43,10 +43,10 @@ public class ItemSCSword extends ItemSword {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
+	public boolean func_150894_a(ItemStack stack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
 		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-			damage = 4 + func_82803_g() * 2 - (float) stack.getItemDamage() * 10 / 320;
+			damage = 4 + func_150931_i() * 2 - (float) stack.getItemDamage() * 10 / 320;
 		}
-		return super.onBlockDestroyed(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);
+		return super.func_150894_a(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);
 	}
 }

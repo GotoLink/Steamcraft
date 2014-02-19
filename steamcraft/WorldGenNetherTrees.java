@@ -3,6 +3,7 @@ package steamcraft;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -28,8 +29,8 @@ public class WorldGenNetherTrees extends WorldGenerator {
 			for (int i2 = i - byte0; i2 <= i + byte0 && flag; i2++) {
 				for (int l2 = k - byte0; l2 <= k + byte0 && flag; l2++) {
 					if (i1 >= 0 && i1 < 128) {
-						int j3 = world.getBlockId(i2, i1, l2);
-						if (j3 != 0 && j3 != getLeavesId()) {
+						Block j3 = world.func_147439_a(i2, i1, l2);
+						if (j3 != Blocks.air && j3 != getLeavesId()) {
 							flag = false;
 						}
 					} else {
@@ -41,11 +42,11 @@ public class WorldGenNetherTrees extends WorldGenerator {
 		if (!flag) {
 			return false;
 		}
-		int j1 = world.getBlockId(i, j - 1, k);
-		if (j1 != Block.netherrack.blockID || j >= 128 - l - 1) {
+		Block j1 = world.func_147439_a(i, j - 1, k);
+		if (j1 != Blocks.netherrack || j >= 128 - l - 1) {
 			return false;
 		}
-		world.setBlock(i, j - 1, k, Block.netherrack.blockID);
+        func_150515_a(world, i, j - 1, k, Blocks.netherrack);
 		for (int k1 = (j - 3) + l; k1 <= j + l; k1++) {
 			int j2 = k1 - (j + l);
 			int i3 = 1 - j2 / 2;
@@ -53,26 +54,26 @@ public class WorldGenNetherTrees extends WorldGenerator {
 				int l3 = k3 - i;
 				for (int i4 = k - i3; i4 <= k + i3; i4++) {
 					int j4 = i4 - k;
-					if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && j2 != 0) && !Block.opaqueCubeLookup[world.getBlockId(k3, k1, i4)]) {
-						setBlock(world, k3, k1, i4, getLeavesId());
+					if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && j2 != 0) && !world.func_147439_a(k3, k1, i4).func_149686_d()) {
+                        func_150515_a(world, k3, k1, i4, getLeavesId());
 					}
 				}
 			}
 		}
 		for (int l1 = 0; l1 < l; l1++) {
-			int k2 = world.getBlockId(i, j + l1, k);
-			if (k2 == 0 || k2 == getLeavesId()) {
-				setBlock(world, i, j + l1, k, getLogId());
+			Block k2 = world.func_147439_a(i, j + l1, k);
+			if (k2 == Blocks.air || k2 == getLeavesId()) {
+                func_150515_a(world, i, j + l1, k, getLogId());
 			}
 		}
 		return true;
 	}
 
-	private static int getLeavesId() {
-		return HandlerRegistry.getBlock("steamcraft:leavesLamp").getID();
+	private static Block getLeavesId() {
+		return HandlerRegistry.getBlock("steamcraft:leavesLamp").get();
 	}
 
-	private static int getLogId() {
-		return HandlerRegistry.getBlock("steamcraft:logBrass").getID();
+	private static Block getLogId() {
+		return HandlerRegistry.getBlock("steamcraft:logBrass").get();
 	}
 }

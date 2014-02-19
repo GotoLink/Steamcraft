@@ -2,22 +2,23 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
 
 public class BlockWirelessLamp extends BlockElectricLamp {
-	public BlockWirelessLamp(int i, Class<?> class1, boolean flag) {
-		super(i, class1, flag);
+	public BlockWirelessLamp(Class<?> class1, boolean flag) {
+		super(class1, flag);
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return HandlerRegistry.getItem("steamcraft:wirelessLamp").getID();
+	public Item func_149650_a(int i, Random random, int j) {
+		return HandlerRegistry.getItem("steamcraft:wirelessLamp").get();
 	}
 
 	@Override
-	public int tickRate(World world) {
+	public int func_149738_a(World world) {
 		return 2;
 	}
 

@@ -13,9 +13,9 @@ public class RenderTeaPlant extends RenderBlocks {
 
 	public boolean renderBlockTeaPlant(Block block, int i, int j, int k, IBlockAccess blockaccess) {
 		Tessellator tessellator = Tessellator.instance;
-		tessellator.setBrightness(block.getMixedBrightnessForBlock(blockaccess, i, j, k));
+		tessellator.setBrightness(block.func_149677_c(blockaccess, i, j, k));
 		float f = 1.0F;
-		int l = block.colorMultiplier(blockaccess, i, j, k);
+		int l = block.func_149720_d(blockaccess, i, j, k);
 		float f1 = (l >> 16 & 0xff) / 255F;
 		float f2 = (l >> 8 & 0xff) / 255F;
 		float f3 = (l & 0xff) / 255F;
@@ -31,13 +31,11 @@ public class RenderTeaPlant extends RenderBlocks {
 		double d = i;
 		double d1 = j;
 		double d2 = k;
-		long l1 = i * 0x2fc20f ^ k * 0x6ebfff5L ^ j;
-		l1 = l1 * l1 * 0x285b825L + l1 * 11L;
 		float growth = blockaccess.getBlockMetadata(i, j, k);
 		if (growth != 0 && growth != 7) {
 			d1 -= (-1 * growth / 15) + 0.4;
 		}
-		drawCrossedSquares(block, blockaccess.getBlockMetadata(i, j, k), d, d1, d2, 1.0F);
+        func_147730_a(block, blockaccess.getBlockMetadata(i, j, k), d, d1, d2, 1.0F);
 		return true;
 	}
 }

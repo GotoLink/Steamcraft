@@ -2,25 +2,27 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.item.Item;
 import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 
 public class BlockSCOre extends BlockOre {
-	public BlockSCOre(int i) {
-		super(i);
+	public BlockSCOre() {
+		super();
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		if (blockID == getVoluciteId()) {
-			return Steamcraft.material.itemID;
+	public Item func_149650_a(int i, Random random, int j) {
+		if (this == getVoluciteId()) {
+			return Steamcraft.material;
 		} else {
-			return super.idDropped(i, random, j);
+			return super.func_149650_a(i, random, j);
 		}
 	}
 
-	private static int getVoluciteId() {
-		return HandlerRegistry.getBlock("steamcraft:oreVolucite").getID();
+	private static Block getVoluciteId() {
+		return HandlerRegistry.getBlock("steamcraft:oreVolucite").get();
 	}
 }

@@ -1,7 +1,7 @@
 package steamcraft;
 
-import java.util.EnumSet;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -22,10 +22,11 @@ import steamcraft.render.TileEntityLampRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.TickType;
 
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
 	public static Minecraft minecraft = Minecraft.getMinecraft();
+    public static RenderCopperWire copperRender = new RenderCopperWire();
+    public static RenderTeaPlant teaRender = new RenderTeaPlant();
 
 	@Override
 	public int getRenderId() {
@@ -50,30 +51,23 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		if (modelId == BlockCopperWire.modelID) {
-			return new RenderCopperWire().renderBlockCopperWire(block, x, y, z, world);
+			return copperRender.renderBlockCopperWire(block, x, y, z, world);
 		}
 		if (modelId == BlockTeaPlant.modelID) {
-			return new RenderTeaPlant().renderBlockTeaPlant(block, x, y, z, world);
+			return teaRender.renderBlockTeaPlant(block, x, y, z, world);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean shouldRender3DInInventory() {
+	public boolean shouldRender3DInInventory(int i) {
 		return false;
 	}
 
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if (type.contains(TickType.PLAYER))
-			onPlayerTick((EntityPlayer) tickData[0]);
-		if (type.contains(TickType.RENDER))
+	@SubscribeEvent
+	public void tickRender(TickEvent.RenderTickEvent event) {
+		if (event.phase == TickEvent.Phase.END)
 			onRenderTick();
-	}
-
-	@Override
-	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.PLAYER, TickType.RENDER);
 	}
 
 	public static void drawTexturedModalRect(int i, int j, int k, int l, int i1, int j1) {
@@ -89,7 +83,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 
 	public static void onRenderTick() {
 		if (minecraft.thePlayer != null && minecraft.theWorld != null) {
-			if (minecraft.thePlayer.getEntityData().getShort("Aqualung") > 0 && minecraft.thePlayer.isInsideOfMaterial(Material.water) && minecraft.thePlayer.isEntityAlive()) {
+			if (minecraft.thePlayer.getEntityData().getShort("Aqualung") > 0 && minecraft.thePlayer.isInsideOfMaterial(Material.field_151586_h) && minecraft.thePlayer.isEntityAlive()) {
 				renderThings(minecraft.thePlayer);
 			}
 		}

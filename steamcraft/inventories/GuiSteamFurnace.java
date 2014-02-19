@@ -15,24 +15,24 @@ public class GuiSteamFurnace extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		fontRenderer.drawString("Steam Furnace", 60, 6, 0x404040);
-		fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+	protected void func_146979_b(int i, int j) {
+        field_146289_q.drawString("Steam Furnace", 60, 6, 0x404040);
+        field_146289_q.drawString("Inventory", 8, (field_147000_g - 96) + 2, 0x404040);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		mc.renderEngine.bindTexture(gui);
+	protected void func_146976_a(float f, int i, int j) {
+        field_146297_k.renderEngine.bindTexture(gui);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		drawTexturedModalRect(field_147003_i, field_147009_r, 0, 0, field_146999_f, field_147000_g);
 		if (furnaceInventory.isBurning()) {
-			int l = furnaceInventory.getBurnTimeRemainingScaled(12);
-			drawTexturedModalRect(guiLeft + 56, (guiTop + 36 + 12) - l, 176, 12 - l, 14, l + 2);
+			int l = furnaceInventory.getBurnTimeLeftScaled(12);
+			drawTexturedModalRect(field_147003_i + 56, (field_147009_r + 36 + 12) - l, 176, 12 - l, 14, l + 2);
 		}
 		int i1 = furnaceInventory.getCookProgressScaled(24);
-		drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 14, i1 + 1, 16);
+		drawTexturedModalRect(field_147003_i + 79, field_147009_r + 34, 176, 14, i1 + 1, 16);
 		int i2 = furnaceInventory.getWaterScaled(31);
-		drawTexturedModalRect(guiLeft + 32, (guiTop + 16 + 31) - i2, 176, (31 + 31 - i2), 8, i2 + 2);
+		drawTexturedModalRect(field_147003_i + 32, (field_147009_r + 16 + 31) - i2, 176, (31 + 31 - i2), 8, i2 + 2);
 	}
 
 	private TileEntitySteamFurnace furnaceInventory;

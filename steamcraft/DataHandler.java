@@ -1,20 +1,18 @@
 package steamcraft;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public abstract class DataHandler {
-	protected ItemStack output = new ItemStack(getID(), 1, 0);
+public abstract class DataHandler<e> {
+	protected ItemStack output;
 
 	public DataHandler addAchievement(String name, int j, int k, Achievement parent) {
-		Steamcraft.achs.put(name, new Achievement(AchievementList.achievementList.size(), name, j, k, output.copy(), parent).registerAchievement());
+		Steamcraft.achs.put(name, new Achievement(name, name, j, k, output.copy(), parent).registerStat());
 		return this;
 	}
 
@@ -79,22 +77,16 @@ public abstract class DataHandler {
 		return this;
 	}
 
-	public DataHandler addSmelt(ItemStack stack, float xp) {
-		GameRegistry.addSmelting(getID(), stack, xp);
-		return this;
-	}
+	public abstract DataHandler addSmelt(ItemStack stack, float xp);
 
-	public DataHandler addSmelt(ItemStack stack, int meta, float xp) {
-		FurnaceRecipes.smelting().addSmelting(getID(), meta, stack, xp);
-		return this;
-	}
+	public abstract DataHandler addSmelt(ItemStack stack, int meta, float xp);
 
 	public DataHandler addSword(String input) {
 		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "X", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
 		return this;
 	}
 
-	public abstract int getID();
+	public abstract e get();
 
 	public abstract String getName();
 
@@ -102,8 +94,5 @@ public abstract class DataHandler {
 		HandlerRegistry.register(this);
 	}
 
-	public DataHandler setOutput(int size, int damage) {
-		output = new ItemStack(getID(), size, damage);
-		return this;
-	}
+	public abstract DataHandler setOutput(int size, int damage);
 }

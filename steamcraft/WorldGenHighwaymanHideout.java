@@ -2,9 +2,9 @@ package steamcraft;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -24,14 +24,14 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 		for (int k1 = i - l - 1; k1 <= i + l + 1; k1++) {
 			for (int j2 = j - 1; j2 <= j + byte0 + 1; j2++) {
 				for (int i3 = k - i1 - 1; i3 <= k + i1 + 1; i3++) {
-					Material material = world.getBlockMaterial(k1, j2, i3);
+					Material material = world.func_147439_a(k1, j2, i3).func_149688_o();
 					if (j2 == j - 1 && !material.isSolid()) {
 						return false;
 					}
 					if (j2 == j + byte0 + 1 && !material.isSolid()) {
 						return false;
 					}
-					if ((k1 == i - l - 1 || k1 == i + l + 1 || i3 == k - i1 - 1 || i3 == k + i1 + 1) && j2 == j && world.isAirBlock(k1, j2, i3) && world.isAirBlock(k1, j2 + 1, i3)) {
+					if ((k1 == i - l - 1 || k1 == i + l + 1 || i3 == k - i1 - 1 || i3 == k + i1 + 1) && j2 == j && world.func_147437_c(k1, j2, i3) && world.func_147437_c(k1, j2 + 1, i3)) {
 						j1++;
 					}
 				}
@@ -44,24 +44,24 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 			for (int k2 = j + byte0; k2 >= j - 1; k2--) {
 				for (int j3 = k - i1 - 1; j3 <= k + i1 + 1; j3++) {
 					if (l1 == i - l - 1 || k2 == j - 1 || j3 == k - i1 - 1 || l1 == i + l + 1 || k2 == j + byte0 + 1 || j3 == k + i1 + 1) {
-						if (k2 >= 0 && !world.getBlockMaterial(l1, k2 - 1, j3).isSolid()) {
-							setBlock(world, l1, k2, j3, 0);
+						if (k2 >= 0 && !world.func_147439_a(l1, k2 - 1, j3).func_149688_o().isSolid()) {
+                            func_150515_a(world, l1, k2, j3, Blocks.air);
 							continue;
 						}
-						if (!world.getBlockMaterial(l1, k2, j3).isSolid()) {
+						if (!world.func_147439_a(l1, k2, j3).func_149688_o().isSolid()) {
 							continue;
 						}
 						if (k2 != j - 1 && random.nextInt(4) == 0) {
-							setBlock(world, l1, k2, j3, Block.thinGlass.blockID);
+                            func_150515_a(world, l1, k2, j3, Blocks.glass_pane);
 						} else {
 							int randomBlockType = random.nextInt(6);
 							if (randomBlockType > 3) {
 								randomBlockType = 0;
 							}
-							setBlockAndMetadata(world, l1, k2, j3, Block.stoneBrick.blockID, randomBlockType);
+                            func_150516_a(world, l1, k2, j3, Blocks.stonebrick, randomBlockType);
 						}
 					} else {
-						setBlock(world, l1, k2, j3, 0);
+                        func_150515_a(world, l1, k2, j3, Blocks.air);
 					}
 				}
 			}
@@ -71,27 +71,27 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				int k3 = (i + random.nextInt(l * 2 + 1)) - l;
 				int l3 = j;
 				int i4 = (k + random.nextInt(i1 * 2 + 1)) - i1;
-				if (!world.isAirBlock(k3, l3, i4)) {
+				if (!world.func_147437_c(k3, l3, i4)) {
 					continue;
 				}
 				int j4 = 0;
-				if (world.getBlockMaterial(k3 - 1, l3, i4).isSolid()) {
+				if (world.func_147439_a(k3 - 1, l3, i4).func_149688_o().isSolid()) {
 					j4++;
 				}
-				if (world.getBlockMaterial(k3 + 1, l3, i4).isSolid()) {
+				if (world.func_147439_a(k3 + 1, l3, i4).func_149688_o().isSolid()) {
 					j4++;
 				}
-				if (world.getBlockMaterial(k3, l3, i4 - 1).isSolid()) {
+				if (world.func_147439_a(k3, l3, i4 - 1).func_149688_o().isSolid()) {
 					j4++;
 				}
-				if (world.getBlockMaterial(k3, l3, i4 + 1).isSolid()) {
+				if (world.func_147439_a(k3, l3, i4 + 1).func_149688_o().isSolid()) {
 					j4++;
 				}
 				if (j4 != 1) {
 					continue;
 				}
-				setBlock(world, k3, l3, i4, Block.chest.blockID);
-				TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(k3, l3, i4);
+                func_150515_a(world, k3, l3, i4, Blocks.chest);
+				TileEntityChest tileentitychest = (TileEntityChest) world.func_147438_o(k3, l3, i4);
 				int k4 = 0;
 				do {
 					if (k4 >= 8) {
@@ -105,46 +105,46 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				} while (true);
 			}
 		}
-		setBlock(world, i, j, k, Block.mobSpawner.blockID);
-		TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.getBlockTileEntity(i, j, k);
-		tileentitymobspawner.getSpawnerLogic().setMobID(pickMobSpawner(random));
+        func_150515_a(world, i, j, k, Blocks.mob_spawner);
+		TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.func_147438_o(i, j, k);
+		tileentitymobspawner.func_145881_a().setMobID(pickMobSpawner(random));
 		return true;
 	}
 
 	private ItemStack pickCheckLootItem(Random random) {
 		int i = random.nextInt(19);
 		if (i == 0) {
-			return new ItemStack(Item.saddle);
+			return new ItemStack(Items.saddle);
 		}
 		if (i == 1) {
-			return new ItemStack(Item.ingotGold, random.nextInt(4) + 1);
+			return new ItemStack(Items.gold_ingot, random.nextInt(4) + 1);
 		}
 		if (i == 2) {
-			return new ItemStack(Item.bread);
+			return new ItemStack(Items.bread);
 		}
 		if (i == 3) {
-			return new ItemStack(Item.wheat, random.nextInt(4) + 1);
+			return new ItemStack(Items.wheat, random.nextInt(4) + 1);
 		}
 		if (i == 4) {
-			return new ItemStack(Item.gunpowder, random.nextInt(4) + 1);
+			return new ItemStack(Items.gunpowder, random.nextInt(4) + 1);
 		}
 		if (i == 5) {
-			return new ItemStack(Item.silk, random.nextInt(4) + 1);
+			return new ItemStack(Items.string, random.nextInt(4) + 1);
 		}
 		if (i == 6) {
 			return new ItemStack(Steamcraft.part, random.nextInt(8) + 1, 0);
 		}
 		if (i == 7 && random.nextInt(100) == 0) {
-			return new ItemStack(Item.appleGold);
+			return new ItemStack(Items.golden_apple);
 		}
 		if (i == 8 && random.nextInt(2) == 0) {
-			return new ItemStack(Item.redstone, random.nextInt(8) + 1);
+			return new ItemStack(Items.redstone, random.nextInt(8) + 1);
 		}
 		if (i == 9 && random.nextInt(10) == 0) {
-			return new ItemStack(Item.itemsList[Item.record13.itemID + random.nextInt(2)]);
+			return new ItemStack(random.nextInt(2)==0?Items.record_13:Items.record_cat);
 		}
 		if (i == 10) {
-			return new ItemStack(Item.dyePowder, 1, 3);
+			return new ItemStack(Items.dye, 1, 3);
 		}
 		if (i == 11) {
 			return new ItemStack(Steamcraft.part, random.nextInt(8) + 1, 1);
@@ -168,7 +168,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 			return Steamcraft.percussionCapRifle;
 		}
 		if (i == 18 && random.nextInt(16) == 0) {
-			return new ItemStack(Item.diamond, random.nextInt(3) + 1);
+			return new ItemStack(Items.diamond, random.nextInt(3) + 1);
 		} else {
 			return null;
 		}

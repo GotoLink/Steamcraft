@@ -2,10 +2,12 @@ package steamcraft;
 
 import java.util.List;
 
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -20,7 +22,7 @@ public class EntityMusketBall extends Entity {
 		xTile = -1;
 		yTile = -1;
 		zTile = -1;
-		inTile = 0;
+		inTile = Blocks.air;
 		damagePower = 4;
 		inData = 0;
 		doesArrowBelongToPlayer = false;
@@ -40,7 +42,7 @@ public class EntityMusketBall extends Entity {
 		xTile = -1;
 		yTile = -1;
 		zTile = -1;
-		inTile = 0;
+		inTile = Blocks.air;
 		damagePower = power;
 		inData = 0;
 		doesArrowBelongToPlayer = false;
@@ -113,10 +115,10 @@ public class EntityMusketBall extends Entity {
 			prevRotationYaw = rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
 			prevRotationPitch = rotationPitch = (float) ((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D);
 		}
-		int i = worldObj.getBlockId(xTile, yTile, zTile);
-		if (i > 0) {
-			Block.blocksList[i].setBlockBoundsBasedOnState(worldObj, xTile, yTile, zTile);
-			AxisAlignedBB axisalignedbb = Block.blocksList[i].getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
+		Block i = worldObj.func_147439_a(xTile, yTile, zTile);
+		if (i != Blocks.air) {
+			i.func_149719_a(worldObj, xTile, yTile, zTile);
+			AxisAlignedBB axisalignedbb = i.func_149668_a(worldObj, xTile, yTile, zTile);
 			if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ))) {
 				setDead();
 			}
@@ -127,7 +129,7 @@ public class EntityMusketBall extends Entity {
 		ticksInAir++;
 		Vec3 vec3d = Vec3.createVectorHelper(posX, posY, posZ);
 		Vec3 vec3d1 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-		MovingObjectPosition movingobjectposition = worldObj.rayTraceBlocks_do_do(vec3d, vec3d1, false, true);
+		MovingObjectPosition movingobjectposition = worldObj.func_147447_a(vec3d, vec3d1, false, true, true);
 		vec3d = Vec3.createVectorHelper(posX, posY, posZ);
 		vec3d1 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
 		if (movingobjectposition != null) {
@@ -172,7 +174,7 @@ public class EntityMusketBall extends Entity {
 				xTile = movingobjectposition.blockX;
 				yTile = movingobjectposition.blockY;
 				zTile = movingobjectposition.blockZ;
-				inTile = worldObj.getBlockId(xTile, yTile, zTile);
+				inTile = worldObj.func_147439_a(xTile, yTile, zTile);
 				inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
 				motionX = (float) (movingobjectposition.hitVec.xCoord - posX);
 				motionY = (float) (movingobjectposition.hitVec.yCoord - posY);
@@ -226,7 +228,7 @@ public class EntityMusketBall extends Entity {
 		nbttagcompound.setShort("xTile", (short) xTile);
 		nbttagcompound.setShort("yTile", (short) yTile);
 		nbttagcompound.setShort("zTile", (short) zTile);
-		nbttagcompound.setByte("inTile", (byte) inTile);
+		nbttagcompound.setInteger("inTile", GameData.blockRegistry.getId(inTile));
 		nbttagcompound.setByte("inData", (byte) inData);
 		nbttagcompound.setByte("shake", (byte) arrowShake);
 		nbttagcompound.setBoolean("player", doesArrowBelongToPlayer);
@@ -237,7 +239,7 @@ public class EntityMusketBall extends Entity {
 		xTile = nbttagcompound.getShort("xTile");
 		yTile = nbttagcompound.getShort("yTile");
 		zTile = nbttagcompound.getShort("zTile");
-		inTile = nbttagcompound.getByte("inTile") & 0xff;
+		inTile = GameData.blockRegistry.get(nbttagcompound.getInteger("inTile"));
 		inData = nbttagcompound.getByte("inData") & 0xff;
 		arrowShake = nbttagcompound.getByte("shake") & 0xff;
 		doesArrowBelongToPlayer = nbttagcompound.getBoolean("player");
@@ -253,7 +255,7 @@ public class EntityMusketBall extends Entity {
 	private int zTile;
 	private double muzzleX;
 	private double muzzleZ;
-	private int inTile;
+	private Block inTile;
 	private int inData;
 	public boolean doesArrowBelongToPlayer;
 	public boolean isRifled;

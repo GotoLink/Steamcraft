@@ -2,21 +2,22 @@ package steamcraft.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemElectricLamp extends Item {
-	private int spawnID;
+	private Block spawnID;
 
-	public ItemElectricLamp(int i, int spawn) {
-		super(i);
+	public ItemElectricLamp(Block spawn) {
+		super();
 		spawnID = spawn;
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10) {
-		if (world.getBlockId(i, j, k) != Block.snow.blockID) {
+		if (world.func_147439_a(i, j, k) != Blocks.snow) {
 			if (l == 0) {
 				j--;
 			}
@@ -35,7 +36,7 @@ public class ItemElectricLamp extends Item {
 			if (l == 5) {
 				i++;
 			}
-			if (!world.isAirBlock(i, j, k)) {
+			if (!world.func_147437_c(i, j, k)) {
 				return false;
 			}
 		}
@@ -45,14 +46,14 @@ public class ItemElectricLamp extends Item {
 		if (itemstack.stackSize == 0) {
 			return false;
 		}
-		Block block = Block.blocksList[spawnID];
-		if (block.canPlaceBlockAt(world, i, j, k)) {
-			if (world.setBlock(i, j, k, spawnID)) {
-				if (world.getBlockId(i, j, k) == spawnID) {
-					Block.blocksList[spawnID].onBlockPlaced(world, i, j, k, l, par8, par9, par10, 0);
-					Block.blocksList[spawnID].onBlockPlacedBy(world, i, j, k, entityplayer, itemstack);
+		if (world.func_147472_a(spawnID, i, j, k, false, l, null, itemstack)) {
+            int meta = spawnID.func_149660_a(world, i, j, k, l, par8, par9, par10, 0);
+			if (world.func_147465_d(i, j, k, spawnID, meta, 3)) {
+				if (world.func_147439_a(i, j, k) == spawnID) {
+					spawnID.func_149689_a(world, i, j, k, entityplayer, itemstack);
+                    spawnID.func_149714_e(world, i, j, k, meta);
 				}
-				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, spawnID.field_149762_H.func_150496_b(), (spawnID.field_149762_H.func_150497_c() + 1.0F) / 2.0F, spawnID.field_149762_H.func_150494_d() * 0.8F);
 				itemstack.stackSize--;
 			}
 		}

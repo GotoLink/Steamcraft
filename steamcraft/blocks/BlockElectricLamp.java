@@ -1,9 +1,9 @@
 package steamcraft.blocks;
 
-import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -15,18 +15,18 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	public boolean torchActive;
 	private Class<?> EntityClass;
 
-	public BlockElectricLamp(int i, Class<?> class1, boolean flag) {
-		super(i, flag);
+	public BlockElectricLamp(Class<?> class1, boolean flag) {
+		super(flag);
 		EntityClass = class1;
 		torchActive = flag;
 		float f = 0.25F;
 		float f1 = 1.0F;
-		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
-		disableStats();
+        func_149676_a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
+        func_149649_H();
 	}
 
 	@Override
-	public boolean canProvidePower() {
+	public boolean func_149744_f() {
 		return false;
 	}
 
@@ -40,14 +40,14 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public int getRenderType() {
+	public int func_149645_b() {
 		return -1;
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-		setBlockBoundsBasedOnState(world, i, j, k);
-		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
+	public AxisAlignedBB func_149633_g(World world, int i, int j, int k) {
+        func_149719_a(world, i, j, k);
+		return super.func_149633_g(world, i, j, k);
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return HandlerRegistry.getItem("steamcraft:electricLamp").getID();
+	public Item func_149650_a(int i, Random random, int j) {
+		return HandlerRegistry.getItem("steamcraft:electricLamp").get();
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
+	public int func_149709_b(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
 		if (!torchActive) {
 			return 0;
 		}
@@ -69,13 +69,13 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int l) {
-		super.onNeighborBlockChange(world, i, j, k, l);
-		world.scheduleBlockUpdate(i, j, k, blockID, tickRate(world));
+	public void func_149695_a(World world, int i, int j, int k, Block l) {
+		super.func_149695_a(world, i, j, k, l);
+		world.func_147464_a(i, j, k, this, func_149738_a(world));
 	}
 
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+	public void func_149734_b(World world, int i, int j, int k, Random random) {
 		if (!torchActive) {
 			return;
 		}
@@ -99,30 +99,17 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public int tickRate(World world) {
+	public int func_149738_a(World world) {
 		return 1;
 	}
 
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
+	public void func_149674_a(World world, int i, int j, int k, Random random) {
 		boolean flag = this.hasIndirectPower(world, i, j, k);
-		List<?> list = (List<?>) getRedstoneUpdateList().get(world);
-		if (list != null && !list.isEmpty()) {
-			Field f = list.get(0).getClass().getDeclaredFields()[3];
-			f.setAccessible(true);
-			try {
-				while (list != null && !list.isEmpty() && world.getTotalWorldTime() - Long.class.cast(f.get(list.get(0))).longValue() > 60L) {
-					list.remove(0);
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
+        updateToggleTimes(world);
 		if (!torchActive) {
 			if (flag) {
-				world.setBlock(i, j, k, getActive().getID(), world.getBlockMetadata(i, j, k), 2);
+				world.func_147465_d(i, j, k, getActive().get(), world.getBlockMetadata(i, j, k), 2);
 				if (this.checkBurnout(world, i, j, k, true)) {
 					world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
@@ -134,7 +121,7 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 				}
 			}
 		} else if (!flag) {
-			world.setBlock(i, j, k, getIdle().getID(), world.getBlockMetadata(i, j, k), 2);
+			world.func_147465_d(i, j, k, getIdle().get(), world.getBlockMetadata(i, j, k), 2);
 		}
 	}
 

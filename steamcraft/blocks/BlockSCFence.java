@@ -3,13 +3,14 @@ package steamcraft.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSCFence extends BlockFence {
-	public BlockSCFence(int i, Material material, Block blockgate, boolean flag) {
-		super(i, "steamcraft:castironblock", material);
+	public BlockSCFence(Material material, Block blockgate, boolean flag) {
+		super("steamcraft:castironblock", material);
 		blockGate = blockgate;
 		doesJoinBlocks = flag;
 	}
@@ -20,44 +21,29 @@ public class BlockSCFence extends BlockFence {
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World world, int i, int j, int k) {
-		if (world.getBlockId(i, j - 1, k) == blockID) {
+	public boolean func_149742_c(World world, int i, int j, int k) {
+		if (world.func_147439_a(i, j - 1, k) == this) {
 			return true;
 		}
-		if (!world.getBlockMaterial(i, j - 1, k).isSolid()) {
+		if (!world.func_147439_a(i, j - 1, k).func_149688_o().isSolid()) {
 			return false;
 		} else {
-			return super.canPlaceBlockAt(world, i, j, k);
+			return super.func_149742_c(world, i, j, k);
 		}
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-		return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + 1.5F, k + 1);
+	public AxisAlignedBB func_149668_a(World world, int i, int j, int k) {
+		return AxisAlignedBB.getAABBPool().getAABB(i, j, k, i + 1, j + 1.5F, k + 1);
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return 11;
-	}
-
-	@Override
-	public boolean canConnectFenceTo(IBlockAccess iblockaccess, int i, int j, int k) {
-		int l = iblockaccess.getBlockId(i, j, k);
-		if (doesJoinBlocks && Block.blocksList[l] != null) {
-			return Block.blocksList[l].isOpaqueCube() || l == blockID || l == blockGate.blockID;
+	public boolean func_149826_e(IBlockAccess iblockaccess, int i, int j, int k) {
+		Block l = iblockaccess.func_147439_a(i, j, k);
+		if (doesJoinBlocks && l != Blocks.air) {
+			return l.func_149688_o().isOpaque() || l == this || l == blockGate;
 		}
-		return l == blockID || l == blockGate.blockID;
+		return l == this || l == blockGate;
 	}
 
 	public Block blockGate;

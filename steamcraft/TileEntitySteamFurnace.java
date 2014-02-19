@@ -1,5 +1,6 @@
 package steamcraft;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,20 +12,20 @@ public class TileEntitySteamFurnace extends FurnaceAccess {
 
 	public TileEntitySteamFurnace() {
 		super(4);
-		setGuiDisplayName("Steam Furnace");
+        func_145951_a("Steam Furnace");
 	}
 
 	@Override
-	public int getBurnTimeRemainingScaled(int i) {
-		if (currentItemBurnTime == 0) {
-			currentItemBurnTime = 600;
+	public int func_145955_e(int i) {
+		if (field_145963_i == 0) {
+            field_145963_i = 600;
 		}
-		return (furnaceBurnTime * i) / currentItemBurnTime;
+		return (field_145956_a * i) / field_145963_i;
 	}
 
 	@Override
-	public int getCookProgressScaled(int i) {
-		return (furnaceCookTime * i) / 600;
+	public int func_145953_d(int i) {
+		return (field_145961_j * i) / 600;
 	}
 
 	public int getWater() {
@@ -42,49 +43,49 @@ public class TileEntitySteamFurnace extends FurnaceAccess {
 	@Override
 	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
 		if (par1 == 3)
-			return (par2ItemStack.itemID == Item.bucketWater.itemID);
+			return (par2ItemStack.getItem() == Items.water_bucket);
 		else
 			return super.isItemValidForSlot(par1, par2ItemStack);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void func_145839_a(NBTTagCompound nbttagcompound) {
+		super.func_145839_a(nbttagcompound);
 		waterLevel = nbttagcompound.getShort("WaterLevel");
 	}
 
 	@Override
-	public void updateEntity() {
-		boolean flag = furnaceBurnTime > 0;
+	public void func_145845_h() {
+		boolean flag = field_145956_a > 0;
 		boolean flag1 = false;
-		if (furnaceBurnTime > 0) {
-			furnaceBurnTime--;
+		if (field_145956_a > 0) {
+            field_145956_a--;
 		}
-		if (!worldObj.isRemote) {
-			if (this.furnaceBurnTime == 0 && this.isSmeltable()) {
+		if (!field_145850_b.isRemote) {
+			if (this.field_145956_a == 0 && this.isSmeltable()) {
 				ItemStack stack1 = getStackInSlot(1).copy();
-				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(stack1);
-				if (this.furnaceBurnTime > 0) {
+				this.field_145963_i = this.field_145956_a = func_145952_a(stack1);
+				if (this.field_145956_a > 0) {
 					flag1 = true;
 					if (stack1 != null) {
 						decrStackSize(1,1);
 						if (this.getStackInSlot(1) == null) {
-							setInventorySlotContents(1, stack1.getItem().getContainerItemStack(stack1));
+							setInventorySlotContents(1, stack1.getItem().getContainerItem(stack1));
 						}
 					}
 				}
 			}
 			if (isBurning()) {
 				if (waterLevel == 1) {
-					BlockSteamFurnace.playSound(worldObj, xCoord, yCoord, zCoord, "random.fizz");
+					BlockSteamFurnace.playSound(field_145850_b, field_145851_c, field_145848_d, field_145849_e, "random.fizz");
 				}
 				waterLevel--;
 			}
 			if (isBurning() && isSmeltable()) {
 				if (waterLevel > 0) {
-					furnaceCookTime += 4;
+                    field_145961_j += 4;
 				} else {
-					furnaceCookTime += 3;
+                    field_145961_j += 3;
 				}
 				if (waterLevel > 4096) {
 					waterLevel = 4096;
@@ -93,23 +94,23 @@ public class TileEntitySteamFurnace extends FurnaceAccess {
 					waterLevel = 0;
 				}
 				if (getStackInSlot(3) != null) {
-					if (waterLevel <= 0 && getStackInSlot(3).itemID == Item.bucketWater.itemID) {
-						setInventorySlotContents(3, new ItemStack(Item.bucketEmpty));
+					if (waterLevel <= 0 && getStackInSlot(3).getItem() == Items.water_bucket) {
+						setInventorySlotContents(3, new ItemStack(Items.bucket));
 						waterLevel = 4096;
-						BlockSteamFurnace.playSound(worldObj, xCoord, yCoord, zCoord, "random.fizz");
+						BlockSteamFurnace.playSound(field_145850_b, field_145851_c, field_145848_d, field_145849_e, "random.fizz");
 					}
 				}
-				if (furnaceCookTime >= 600) {
-					furnaceCookTime = 0;
-					smeltItem();
+				if (field_145961_j >= 600) {
+                    field_145961_j = 0;
+                    func_145949_j();
 					flag1 = true;
 				}
 			} else {
-				furnaceCookTime = 0;
+                field_145961_j = 0;
 			}
-			if (flag != (furnaceBurnTime > 0)) {
+			if (flag != (field_145956_a > 0)) {
 				flag1 = true;
-				BlockMainFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, BlockSteamFurnace.getActive(), BlockSteamFurnace.getIdle(), false);
+				BlockMainFurnace.updateFurnaceBlockState(field_145956_a > 0, field_145850_b, field_145851_c, field_145848_d, field_145849_e, BlockSteamFurnace.getActive(), BlockSteamFurnace.getIdle(), false);
 			}
 		}
 		if (flag1) {
@@ -118,8 +119,8 @@ public class TileEntitySteamFurnace extends FurnaceAccess {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public void func_145841_b(NBTTagCompound nbttagcompound) {
+		super.func_145841_b(nbttagcompound);
 		nbttagcompound.setShort("WaterLevel", (short) waterLevel);
 	}
 }

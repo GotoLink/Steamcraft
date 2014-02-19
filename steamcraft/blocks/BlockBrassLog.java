@@ -2,38 +2,38 @@ package steamcraft.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockBrassLog extends Block {
-	private Icon blockSide;
+	private IIcon blockSide;
 
-	public BlockBrassLog(int i) {
-		super(i, Material.iron);
+	public BlockBrassLog() {
+		super(Material.field_151573_f);
 	}
 
 	@Override
-	public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public IIcon func_149673_e(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1 || l == 0) {
-			return blockIcon;
+			return field_149761_L;
 		} else {
 			return blockSide;
 		}
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		return false;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		blockIcon = par1IconRegister.registerIcon(getTextureName() + "top");
-		blockSide = par1IconRegister.registerIcon(getTextureName() + "side");
+	public void func_149651_a(IIconRegister par1IconRegister) {
+        field_149761_L = par1IconRegister.registerIcon(func_149641_N() + "top");
+		blockSide = par1IconRegister.registerIcon(func_149641_N() + "side");
 	}
 }

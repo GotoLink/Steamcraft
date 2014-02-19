@@ -2,7 +2,9 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
@@ -12,39 +14,39 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockChemFurnace extends BlockMainFurnace {
-	public BlockChemFurnace(int i, boolean flag) {
-		super(i, flag, "chemfurnaceside", "castironblock", "chemfurnace");
+	public BlockChemFurnace(boolean flag) {
+		super(flag, "chemfurnaceside", "castironblock", "chemfurnace");
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity func_149915_a(World world, int i) {
 		return new TileEntityChemFurnace();
 	}
 
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return getIdle();
+	public Item func_149650_a(int i, Random random, int j) {
+		return Item.func_150898_a(getIdle());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int idPicked(World par1World, int par2, int par3, int par4) {
-		return getIdle();
+	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
+		return Item.func_150898_a(getIdle());
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
+	public boolean func_149727_a(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
 		if (world.isRemote) {
 			return true;
 		}
-		if (world.getBlockTileEntity(i, j, k) instanceof TileEntityChemFurnace) {
+		if (world.func_147438_o(i, j, k) instanceof TileEntityChemFurnace) {
 			entityplayer.openGui(Steamcraft.instance, 1, world, i, j, k);
 		}
 		return true;
 	}
 
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+	public void func_149734_b(World world, int i, int j, int k, Random random) {
 		if (!isActive) {
 			return;
 		}
@@ -69,11 +71,11 @@ public class BlockChemFurnace extends BlockMainFurnace {
 		}
 	}
 
-	public static int getActive() {
-		return HandlerRegistry.getBlock("steamcraft:chemFurnaceOn").getID();
+	public static Block getActive() {
+		return HandlerRegistry.getBlock("steamcraft:chemFurnaceOn").get();
 	}
 
-	public static int getIdle() {
-		return HandlerRegistry.getBlock("steamcraft:chemFurnace").getID();
+	public static Block getIdle() {
+		return HandlerRegistry.getBlock("steamcraft:chemFurnace").get();
 	}
 }

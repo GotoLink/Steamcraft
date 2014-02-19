@@ -1,21 +1,21 @@
 package steamcraft.blocks;
 
 import net.minecraft.block.BlockRailPowered;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 public class BlockPoweredRail extends BlockRailPowered {
 	private final boolean isPowered;
 
-	public BlockPoweredRail(int i, boolean flag) {
-		super(i);
+	public BlockPoweredRail(boolean flag) {
+		super();
 		isPowered = flag;
 	}
 
 	@Override
-	public Icon getIcon(int i, int j) {
+	public IIcon func_149691_a(int i, int j) {
 		if (isPowered) {
-			return super.getIcon(i, 8);
+			return super.func_149691_a(i, 8);
 		} else
-			return super.getIcon(i, 0);
+			return super.func_149691_a(i, 0);
 	}
 }

@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -24,10 +24,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSCArmor extends ItemArmor {
 	public final static ResourceLocation goggles = new ResourceLocation("steamcraft", "misc/goggles.png");
-	private static int goggle = 0;
+	private static Item goggle = null;
 
-	public ItemSCArmor(int i, EnumArmorMaterial j, int k, int l) {
-		super(i, j, k, l);
+	public ItemSCArmor(ArmorMaterial j, int k, int l) {
+		super(j, k, l);
 	}
 
 	@Override
@@ -38,27 +38,27 @@ public class ItemSCArmor extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
-		if (itemStack.itemID == getBraces()) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		if (itemStack.getItem() == getBraces()) {
 			if (player.fallDistance > 0.0F) {
 				player.fallDistance -= 0.5F;
 			}
 			return;
 		}
-		if (itemStack.itemID == getSkates()) {
-			if (!player.isInsideOfMaterial(Material.water) && !player.isInWater() && player.onGround) {
+		if (itemStack.getItem() == getSkates()) {
+			if (!player.isInsideOfMaterial(Material.field_151586_h) && !player.isInWater() && player.onGround) {
 				player.moveEntityWithHeading(player.moveStrafing, player.moveForward * 0.8F);
 				player.stepHeight = 0.0F;
 			}
 			return;
 		}
-		if (itemStack.itemID == getAqualung()) {
-			if (!player.isInsideOfMaterial(Material.water)) {
+		if (itemStack.getItem() == getAqualung()) {
+			if (!player.isInsideOfMaterial(Material.field_151586_h)) {
 				player.getEntityData().setShort("Aqualung", (short) 600);
 			} else if (player.getAir() == 0) {
 				itemStack.damageItem(1, player);
 			}
-			if (player.getEntityData().getShort("Aqualung") > 0 && player.isInsideOfMaterial(Material.water) && player.isEntityAlive()) {
+			if (player.getEntityData().getShort("Aqualung") > 0 && player.isInsideOfMaterial(Material.field_151586_h) && player.isEntityAlive()) {
 				player.getEntityData().setShort("Aqualung", (short) decreaseAirSupply(player, player.getEntityData().getShort("Aqualung")));
 				player.setAir(300);
 			}
@@ -69,7 +69,7 @@ public class ItemSCArmor extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks, boolean hasScreen, int mouseX, int mouseY) {
-		if (stack.itemID == getGoggle() && !hasScreen) {//if the player is wearing goggles, perform the following actions
+		if (stack.getItem() == getGoggle() && !hasScreen) {//if the player is wearing goggles, perform the following actions
 			GL11.glEnable(3042 /* GL_BLEND */);
 			GL11.glClearDepth(1.0);
 			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
@@ -93,16 +93,16 @@ public class ItemSCArmor extends ItemArmor {
 		}
 	}
 
-	public static int getAqualung() {
-		return HandlerRegistry.getItem("steamcraft:aqualung").getID();
+	public static Item getAqualung() {
+		return HandlerRegistry.getItem("steamcraft:aqualung").get();
 	}
 
-	public static int getBraces() {
-		return HandlerRegistry.getItem("steamcraft:legBraces").getID();
+	public static Item getBraces() {
+		return HandlerRegistry.getItem("steamcraft:legBraces").get();
 	}
 
-	public static int getSkates() {
-		return HandlerRegistry.getItem("steamcraft:rollerSkates").getID();
+	public static Item getSkates() {
+		return HandlerRegistry.getItem("steamcraft:rollerSkates").get();
 	}
 
 	protected static int decreaseAirSupply(EntityPlayer entityPlayer, int par1) {
@@ -110,9 +110,9 @@ public class ItemSCArmor extends ItemArmor {
 		return j > 0 && new Random().nextInt(j + 1) > 0 ? par1 : par1 - 1;
 	}
 
-	private static int getGoggle() {
-		if (goggle == 0)
-			goggle = HandlerRegistry.getItem("steamcraft:brassGoggles").getID();
+	private static Item getGoggle() {
+		if (goggle == null)
+			goggle = HandlerRegistry.getItem("steamcraft:brassGoggles").get();
 		return goggle;
 	}
 }

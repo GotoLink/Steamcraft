@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import steamcraft.blocks.BlockDecor;
 
 public class ItemBlockDecor extends ItemBlockWithMetadata {
-	public ItemBlockDecor(int par1, Block par2Block) {
-		super(par1, par2Block);
+	public ItemBlockDecor(Block par2Block) {
+		super(par2Block, par2Block);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package steamcraft.items;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +11,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import steamcraft.EntityMusketBall;
 import steamcraft.Steamcraft;
@@ -19,10 +19,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFirearm extends Item {
-	private Icon[] icons;
+	private IIcon[] icons;
 
-	public ItemFirearm(int i) {
-		super(i);
+	public ItemFirearm() {
+		super();
 		setMaxStackSize(1);
 		setFull3D();
 		setHasSubtypes(true);
@@ -38,7 +38,7 @@ public class ItemFirearm extends Item {
 	}
 
 	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
+	public IIcon getIcon(ItemStack stack, int pass) {
 		if (isRifled(stack)) {
 			if (getFirePower(stack) > 10)
 				return icons[0];
@@ -71,7 +71,7 @@ public class ItemFirearm extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		par3List.add(Steamcraft.flintlockMusket);
 		par3List.add(Steamcraft.matchlockMusket);
 		par3List.add(Steamcraft.percussionCapMusket);
@@ -82,12 +82,12 @@ public class ItemFirearm extends Item {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return getUnlocalizedName() + getMaxDamage(stack) + getFirePower(stack) + isRifled(stack);
+		return getUnlocalizedName() +"-"+ getMaxDamage(stack) + getFirePower(stack) +"-"+ (isRifled(stack)?"rifle":"musket");
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.water)) {
+		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.field_151586_h)) {
 			spawnBullet(itemstack, world, entityplayer);
 		}
 		return itemstack;
@@ -104,13 +104,13 @@ public class ItemFirearm extends Item {
 				if (itemStack.getItemDamage() == itemStack.getMaxDamage() - 1) {
 					ItemFirearm heldFirearm = (ItemFirearm) itemStack.getItem();
 					if(heldFirearm.getAmmoA(itemStack).isItemEqual(heldFirearm.getAmmoB())){
-						if (entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(itemStack).itemID)) {
+						if (entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoA(itemStack).getItem())) {
 							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
 						}
 					}
 					else if (getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoA(itemStack)) > -1
 							&& getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoB()) > -1) {
-						if (entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoA(itemStack).itemID) && entityPlayer.inventory.consumeInventoryItem(heldFirearm.getAmmoB().itemID)) {
+						if (entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoA(itemStack).getItem()) && entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoB().getItem())) {
 							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
 						}
 					}
@@ -121,8 +121,8 @@ public class ItemFirearm extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		icons = new Icon[6];
+	public void registerIcons(IIconRegister par1IconRegister) {
+		icons = new IIcon[6];
 		icons[0] = par1IconRegister.registerIcon(getIconString() + "percussionrifle");
 		icons[1] = par1IconRegister.registerIcon(getIconString() + "flintlockrifle");
 		icons[2] = par1IconRegister.registerIcon(getIconString() + "matchlockrifle");

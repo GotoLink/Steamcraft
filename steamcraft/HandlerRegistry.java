@@ -1,5 +1,7 @@
 package steamcraft;
 
+import net.minecraft.item.Item;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +9,10 @@ import java.util.Map;
 
 public class HandlerRegistry {
 	public static Map<String, DataHandler> handlers = new HashMap<String, DataHandler>();
-	public static List<Integer> drills = new ArrayList<Integer>();
+	public static List<Item> drills = new ArrayList<Item>();
 
-	public static void addDrill(int id) {
-		drills.add(id);
+	public static void addDrill(Item drill) {
+		drills.add(drill);
 	}
 
 	public static BlockHandler getBlock(String name) {

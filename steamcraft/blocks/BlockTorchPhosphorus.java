@@ -6,12 +6,12 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 
 public class BlockTorchPhosphorus extends BlockTorch {
-	public BlockTorchPhosphorus(int i) {
-		super(i);
+	public BlockTorchPhosphorus() {
+		super();
 	}
 
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+	public void func_149734_b(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		double d = i + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
 		double d1 = j + 0.7F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;

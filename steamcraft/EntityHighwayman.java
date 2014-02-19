@@ -6,9 +6,12 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import steamcraft.items.ItemFirearm;
@@ -42,9 +45,9 @@ public class EntityHighwayman extends EntityMob {
 		EntityPlayer entityplayer = (EntityPlayer) super.findPlayerToAttack();
 		if (entityplayer != null && canEntityBeSeen(entityplayer) && !entityplayer.isDead) {
 			if (rand.nextInt(2) == 0) {
-				entityplayer.addChatMessage("Highwayman: Your money or your life!");
+				entityplayer.func_146105_b(new ChatComponentTranslation("highwayman.dialog1"));
 			} else {
-				entityplayer.addChatMessage("Highwayman: Stand and deliver!");
+				entityplayer.func_146105_b(new ChatComponentTranslation("highwayman.dialog1"));
 			}
 			return entityplayer;
 		} else {
@@ -116,13 +119,13 @@ public class EntityHighwayman extends EntityMob {
 		if (p >= 2 && p < 8) {
 			i = rand.nextInt(4);
 			for (int j = 0; j < i; j++) {
-				dropItem(Item.ingotGold.itemID, 1);
+                func_145779_a(Items.gold_ingot, 1);
 			}
 		}
 		if (p == 8 || p == 1) {
 			i = rand.nextInt(2);
 			for (int j = 0; j < i; j++) {
-				dropItem(Item.diamond.itemID, 1);
+                func_145779_a(Items.diamond, 1);
 			}
 		}
 	}
