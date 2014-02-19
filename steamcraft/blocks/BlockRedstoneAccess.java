@@ -1,8 +1,6 @@
 package steamcraft.blocks;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 
@@ -11,61 +9,21 @@ import net.minecraft.world.World;
 
 public class BlockRedstoneAccess extends BlockRedstoneTorch{
 
-    Method isPower, burnout;
     Field toggleTime;
-    public static Field redstoneMap;
 	protected BlockRedstoneAccess(boolean par2) {
 		super(par2);
 	}
 
 	protected boolean hasIndirectPower(World world, int i, int j, int k){
-        if(isPower==null){
-            for(Method m:BlockRedstoneTorch.class.getDeclaredMethods()){
-                if(m.getParameterTypes().length==4 && Modifier.isPrivate(m.getModifiers())){//func_150110_m
-                    isPower = m;
-                    break;
-                }
-            }
-        }
-		isPower.setAccessible(true);
-		try {
-			return Boolean.class.cast(isPower.invoke(this, world, i, j, k));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+        return func_150110_m(world, i, j, k);
 	}
 	
 	protected boolean checkBurnout(World world, int i, int j, int k, boolean is){
-		if(burnout == null){
-            for(Method m:BlockRedstoneTorch.class.getDeclaredMethods()){
-                if(m.getParameterTypes().length==5 && Modifier.isPrivate(m.getModifiers())){//func_150111_a
-                    burnout = m;
-                    break;
-                }
-            }
-        }
-		burnout.setAccessible(true);
-		try {
-			return Boolean.class.cast(burnout.invoke(this, world, i, j, k, is));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+        return func_150111_a(world, i, j, k, is);
 	}
 
 	public static Map<World, List> getRedstoneUpdateList() {
-		Object obj = null;
-		try {
-            if(redstoneMap==null){
-                redstoneMap = BlockRedstoneTorch.class.getDeclaredFields()[1];//redstoneUpdateInfoCache
-            }
-            redstoneMap.setAccessible(true);
-			obj = redstoneMap.get(null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Map.class.cast(obj);
+		return field_150112_b;
 	}
 
     public void updateToggleTimes(World world){
