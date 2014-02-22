@@ -90,11 +90,11 @@ public class ContainerNukeFurnace extends Container {
 				}
 				slot.onSlotChange(itemstack1, itemstack);
 			} else if (i > 1) {
-				if (FurnaceRecipes.smelting().func_151395_a(itemstack1) != null) {
+				if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
 					if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
 						return null;
 					}
-				} else if (TileEntityFurnace.func_145954_b(itemstack1)) {
+				} else if (TileEntityFurnace.isItemFuel(itemstack1)) {
 					if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
 						return null;
 					}

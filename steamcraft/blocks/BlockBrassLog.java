@@ -13,13 +13,13 @@ public class BlockBrassLog extends Block {
 	private IIcon blockSide;
 
 	public BlockBrassLog() {
-		super(Material.field_151573_f);
+		super(Material.iron);
 	}
 
 	@Override
-	public IIcon func_149673_e(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public IIcon getIcon(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1 || l == 0) {
-			return field_149761_L;
+			return blockIcon;
 		} else {
 			return blockSide;
 		}
@@ -32,8 +32,8 @@ public class BlockBrassLog extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-        field_149761_L = par1IconRegister.registerIcon(func_149641_N() + "top");
-		blockSide = par1IconRegister.registerIcon(func_149641_N() + "side");
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+        blockIcon = par1IconRegister.registerIcon(getTextureName() + "top");
+		blockSide = par1IconRegister.registerIcon(getTextureName() + "side");
 	}
 }

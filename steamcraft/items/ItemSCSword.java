@@ -43,10 +43,10 @@ public class ItemSCSword extends ItemSword {
 	}
 
 	@Override
-	public boolean func_150894_a(ItemStack stack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
+	public boolean onBlockDestroyed(ItemStack stack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
 		if (toolMaterial == Steamcraft.TOOLSTEAM) {
 			damage = 4 + func_150931_i() * 2 - (float) stack.getItemDamage() * 10 / 320;
 		}
-		return super.func_150894_a(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);
+		return super.onBlockDestroyed(stack, par2World, par3, par4, par5, par6, par7EntityLivingBase);
 	}
 }

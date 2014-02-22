@@ -17,29 +17,29 @@ public class BlockBattery extends Block {
 
 	public BlockBattery() {
 		super(Steamcraft.solidcircuit);
-        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-        func_149713_g(0);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+        setLightOpacity(0);
 	}
 
 	@Override
-	public void func_149749_a(World world, int i, int j, int k, Block par5, int par6) {
-		world.func_147459_d(i, j, k, this);
-		super.func_149749_a(world, i, j, k, par5, par6);
+	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		super.breakBlock(world, i, j, k, par5, par6);
 	}
 
 	@Override
-	public boolean func_149744_f() {
+	public boolean canProvidePower() {
 		return true;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149673_e(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public IIcon getIcon(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1) {
-			return field_149761_L;
+			return blockIcon;
 		}
 		if (l == 0) {
-			return field_149761_L;
+			return blockIcon;
 		} else {
 			return blockSide;
 		}
@@ -51,7 +51,7 @@ public class BlockBattery extends Block {
 	}
 
 	@Override
-	public int func_149709_b(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
 		if (par1IBlockAccess.getBlockMetadata(i, j, k) <= 0 && l == 1)
 			return 15;
 		return 0;
@@ -59,7 +59,7 @@ public class BlockBattery extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		double d = i + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
 		double d1 = j + 0.2F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
 		double d2 = k + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
@@ -72,48 +72,48 @@ public class BlockBattery extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-        field_149761_L = par1IconRegister.registerIcon(func_149641_N() + "top");
-		blockSide = par1IconRegister.registerIcon(func_149641_N() + "side");
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+        blockIcon = par1IconRegister.registerIcon(getTextureName() + "top");
+		blockSide = par1IconRegister.registerIcon(getTextureName() + "side");
 	}
 
     @Override
-    public boolean func_149686_d(){
+    public boolean renderAsNormalBlock(){
         return false;
     }
 
     @Override
-    public boolean func_149662_c(){
+    public boolean isOpaqueCube(){
         return false;
     }
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean func_149646_a(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1) {
 			return true;
 		}
-		if (!super.func_149646_a(iblockaccess, i, j, k, l)) {
+		if (!super.shouldSideBeRendered(iblockaccess, i, j, k, l)) {
 			return false;
 		}
 		if (l == 0) {
 			return true;
 		} else {
-			return iblockaccess.func_147439_a(i, j, k) != this;
+			return iblockaccess.getBlock(i, j, k) != this;
 		}
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 1;
 	}
 
 	@Override
-	public void func_149674_a(World world, int i, int j, int k, Random random) {
+	public void updateTick(World world, int i, int j, int k, Random random) {
 		world.setBlockMetadataWithNotify(i, j, k, 1, 3);
-		world.func_147459_d(i, j, k, this);
-		world.func_147459_d(i, j - 1, k, this);
-		world.func_147471_g(i, j, k);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		world.notifyBlocksOfNeighborChange(i, j - 1, k, this);
+		world.markBlockForUpdate(i, j, k);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 }

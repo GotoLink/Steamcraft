@@ -28,8 +28,8 @@ public class BlockNetherSapling extends BlockSapling {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149691_a(int par1, int par2) {
-		return this.field_149761_L;
+	public IIcon getIcon(int par1, int par2) {
+		return this.blockIcon;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class BlockNetherSapling extends BlockSapling {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149666_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		par3List.add(new ItemStack(par1, 1, 0));
 	}
 
@@ -53,9 +53,9 @@ public class BlockNetherSapling extends BlockSapling {
 		 * if (par5Random.nextInt(10) == 0) { object = new
 		 * WorldGenBigTree(true); }
 		 */
-		world.func_147465_d(par2, par3, par4, Blocks.air, 0, 4);
+		world.setBlock(par2, par3, par4, Blocks.air, 0, 4);
 		if (!tree.generate(world, par5Random, par2, par3, par4)) {
-			world.func_147465_d(par2, par3, par4, this, l, 4);
+			world.setBlock(par2, par3, par4, this, l, 4);
 		}
 	}
 
@@ -66,12 +66,12 @@ public class BlockNetherSapling extends BlockSapling {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		this.field_149761_L = par1IconRegister.registerIcon(this.func_149641_N());
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		this.blockIcon = par1IconRegister.registerIcon(this.getTextureName());
 	}
 
 	@Override
-	protected boolean func_149854_a(Block par1) {
-		return par1 == Blocks.netherrack || par1 == Blocks.soul_sand || super.func_149854_a(par1);
+	protected boolean canPlaceBlockOn(Block par1) {
+		return par1 == Blocks.netherrack || par1 == Blocks.soul_sand || super.canPlaceBlockOn(par1);
 	}
 }

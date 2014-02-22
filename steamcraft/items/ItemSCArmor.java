@@ -46,19 +46,19 @@ public class ItemSCArmor extends ItemArmor {
 			return;
 		}
 		if (itemStack.getItem() == getSkates()) {
-			if (!player.isInsideOfMaterial(Material.field_151586_h) && !player.isInWater() && player.onGround) {
+			if (!player.isInsideOfMaterial(Material.water) && !player.isInWater() && player.onGround) {
 				player.moveEntityWithHeading(player.moveStrafing, player.moveForward * 0.8F);
 				player.stepHeight = 0.0F;
 			}
 			return;
 		}
 		if (itemStack.getItem() == getAqualung()) {
-			if (!player.isInsideOfMaterial(Material.field_151586_h)) {
+			if (!player.isInsideOfMaterial(Material.water)) {
 				player.getEntityData().setShort("Aqualung", (short) 600);
 			} else if (player.getAir() == 0) {
 				itemStack.damageItem(1, player);
 			}
-			if (player.getEntityData().getShort("Aqualung") > 0 && player.isInsideOfMaterial(Material.field_151586_h) && player.isEntityAlive()) {
+			if (player.getEntityData().getShort("Aqualung") > 0 && player.isInsideOfMaterial(Material.water) && player.isEntityAlive()) {
 				player.getEntityData().setShort("Aqualung", (short) decreaseAirSupply(player, player.getEntityData().getShort("Aqualung")));
 				player.setAir(300);
 			}

@@ -71,7 +71,7 @@ public class ItemFirearm extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		par3List.add(Steamcraft.flintlockMusket);
 		par3List.add(Steamcraft.matchlockMusket);
 		par3List.add(Steamcraft.percussionCapMusket);
@@ -87,7 +87,7 @@ public class ItemFirearm extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.field_151586_h)) {
+		if (itemstack.getItemDamage() == 0 && !entityplayer.isInsideOfMaterial(Material.water)) {
 			spawnBullet(itemstack, world, entityplayer);
 		}
 		return itemstack;
@@ -104,13 +104,13 @@ public class ItemFirearm extends Item {
 				if (itemStack.getItemDamage() == itemStack.getMaxDamage() - 1) {
 					ItemFirearm heldFirearm = (ItemFirearm) itemStack.getItem();
 					if(heldFirearm.getAmmoA(itemStack).isItemEqual(heldFirearm.getAmmoB())){
-						if (entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoA(itemStack).getItem())) {
+						if (entityPlayer.inventory.hasItem(heldFirearm.getAmmoA(itemStack).getItem())) {
 							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
 						}
 					}
 					else if (getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoA(itemStack)) > -1
 							&& getStackPosition(entityPlayer.inventory, heldFirearm.getAmmoB()) > -1) {
-						if (entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoA(itemStack).getItem()) && entityPlayer.inventory.func_146026_a(heldFirearm.getAmmoB().getItem())) {
+						if (entityPlayer.inventory.hasItem(heldFirearm.getAmmoA(itemStack).getItem()) && entityPlayer.inventory.hasItem(heldFirearm.getAmmoB().getItem())) {
 							itemStack.setItemDamage(itemStack.getItemDamage() - 1);
 						}
 					}

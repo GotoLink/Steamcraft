@@ -16,11 +16,11 @@ public class RenderCopperWire extends RenderBlocks {
 	public boolean renderBlockCopperWire(Block block, int i, int j, int k, IBlockAccess iblockaccess) {
 		Tessellator tessellator = Tessellator.instance;
 		int l = iblockaccess.getBlockMetadata(i, j, k);
-		IIcon icon = BlockRedstoneWire.func_150173_e("cross");
-		IIcon icon1 = BlockRedstoneWire.func_150173_e("line");
-		IIcon icon2 = BlockRedstoneWire.func_150173_e("cross_overlay");
-		IIcon icon3 = BlockRedstoneWire.func_150173_e("line_overlay");
-		tessellator.setBrightness(block.func_149677_c(iblockaccess, i, j, k));
+		IIcon icon = BlockRedstoneWire.getRedstoneWireIcon("cross");
+		IIcon icon1 = BlockRedstoneWire.getRedstoneWireIcon("line");
+		IIcon icon2 = BlockRedstoneWire.getRedstoneWireIcon("cross_overlay");
+		IIcon icon3 = BlockRedstoneWire.getRedstoneWireIcon("line_overlay");
+		tessellator.setBrightness(block.getMixedBrightnessForBlock(iblockaccess, i, j, k));
 		float f = 1.0F;
 		float f1 = l / 15F;
 		float f2 = -f1 * 0.4F + 0.5F;
@@ -32,25 +32,25 @@ public class RenderCopperWire extends RenderBlocks {
 			f4 = 0.14F;
 		}
 		tessellator.setColorOpaque_F(f2, f3, f4);
-		boolean flag = BlockRedstoneWire.func_150176_g(iblockaccess, i - 1, j, k, 1) || !iblockaccess.func_147439_a(i - 1, j, k).func_149637_q()
+		boolean flag = BlockRedstoneWire.func_150176_g(iblockaccess, i - 1, j, k, 1) || !iblockaccess.getBlock(i - 1, j, k).isBlockNormalCube()
 				&& BlockRedstoneWire.func_150176_g(iblockaccess, i - 1, j - 1, k, -1);
-		boolean flag1 = BlockRedstoneWire.func_150176_g(iblockaccess, i + 1, j, k, 3) || !iblockaccess.func_147439_a(i + 1, j, k).func_149637_q()
+		boolean flag1 = BlockRedstoneWire.func_150176_g(iblockaccess, i + 1, j, k, 3) || !iblockaccess.getBlock(i + 1, j, k).isBlockNormalCube()
 				&& BlockRedstoneWire.func_150176_g(iblockaccess, i + 1, j - 1, k, -1);
-		boolean flag2 = BlockRedstoneWire.func_150176_g(iblockaccess, i, j, k - 1, 2) || !iblockaccess.func_147439_a(i, j, k - 1).func_149637_q()
+		boolean flag2 = BlockRedstoneWire.func_150176_g(iblockaccess, i, j, k - 1, 2) || !iblockaccess.getBlock(i, j, k - 1).isBlockNormalCube()
 				&& BlockRedstoneWire.func_150176_g(iblockaccess, i, j - 1, k - 1, -1);
-		boolean flag3 = BlockRedstoneWire.func_150176_g(iblockaccess, i, j, k + 1, 0) || !iblockaccess.func_147439_a(i, j, k + 1).func_149637_q()
+		boolean flag3 = BlockRedstoneWire.func_150176_g(iblockaccess, i, j, k + 1, 0) || !iblockaccess.getBlock(i, j, k + 1).isBlockNormalCube()
 				&& BlockRedstoneWire.func_150176_g(iblockaccess, i, j - 1, k + 1, -1);
-		if (!iblockaccess.func_147439_a(i, j + 1, k).func_149637_q()) {
-			if (iblockaccess.func_147439_a(i - 1, j, k).func_149637_q() && BlockRedstoneWire.func_150176_g(iblockaccess, i - 1, j + 1, k, -1)) {
+		if (!iblockaccess.getBlock(i, j + 1, k).isBlockNormalCube()) {
+			if (iblockaccess.getBlock(i - 1, j, k).isBlockNormalCube() && BlockRedstoneWire.func_150176_g(iblockaccess, i - 1, j + 1, k, -1)) {
 				flag = true;
 			}
-			if (iblockaccess.func_147439_a(i + 1, j, k).func_149637_q() && BlockRedstoneWire.func_150176_g(iblockaccess, i + 1, j + 1, k, -1)) {
+			if (iblockaccess.getBlock(i + 1, j, k).isBlockNormalCube() && BlockRedstoneWire.func_150176_g(iblockaccess, i + 1, j + 1, k, -1)) {
 				flag1 = true;
 			}
-			if (iblockaccess.func_147439_a(i, j, k - 1).func_149637_q() && BlockRedstoneWire.func_150176_g(iblockaccess, i, j + 1, k - 1, -1)) {
+			if (iblockaccess.getBlock(i, j, k - 1).isBlockNormalCube() && BlockRedstoneWire.func_150176_g(iblockaccess, i, j + 1, k - 1, -1)) {
 				flag2 = true;
 			}
-			if (iblockaccess.func_147439_a(i, j, k + 1).func_149637_q() && BlockRedstoneWire.func_150176_g(iblockaccess, i, j + 1, k + 1, -1)) {
+			if (iblockaccess.getBlock(i, j, k + 1).isBlockNormalCube() && BlockRedstoneWire.func_150176_g(iblockaccess, i, j + 1, k + 1, -1)) {
 				flag3 = true;
 			}
 		}
@@ -124,8 +124,8 @@ public class RenderCopperWire extends RenderBlocks {
 			tessellator.addVertexWithUV(f5, j + 0.015625D, f7, icon3.getMinU(), icon3.getMinV());
 			tessellator.addVertexWithUV(f5, j + 0.015625D, f8, icon3.getMaxU(), icon3.getMinV());
 		}
-		if (!iblockaccess.func_147439_a(i, j + 1, k).func_149637_q()) {
-			if (iblockaccess.func_147439_a(i - 1, j, k).func_149637_q() && iblockaccess.func_147439_a(i - 1, j + 1, k) == getCopperId()) {
+		if (!iblockaccess.getBlock(i, j + 1, k).isBlockNormalCube()) {
+			if (iblockaccess.getBlock(i - 1, j, k).isBlockNormalCube() && iblockaccess.getBlock(i - 1, j + 1, k) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 0.015625D, j + 1 + 0.021875F, k + 1, icon1.getMaxU(), icon1.getMinV());
 				tessellator.addVertexWithUV(i + 0.015625D, j + 0, k + 1, icon1.getMinU(), icon1.getMinV());
@@ -137,7 +137,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 0.015625D, j + 0, k + 0, icon3.getMinU(), icon3.getMaxV());
 				tessellator.addVertexWithUV(i + 0.015625D, j + 1 + 0.021875F, k + 0, icon3.getMaxU(), icon3.getMaxV());
 			}
-			if (iblockaccess.func_147439_a(i + 1, j, k).func_149637_q() && iblockaccess.func_147439_a(i + 1, j + 1, k) == getCopperId()) {
+			if (iblockaccess.getBlock(i + 1, j, k).isBlockNormalCube() && iblockaccess.getBlock(i + 1, j + 1, k) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 0, k + 1, icon1.getMinU(), icon1.getMaxV());
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 1 + 0.021875F, k + 1, icon1.getMaxU(), icon1.getMaxV());
@@ -149,7 +149,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 1 + 0.021875F, k + 0, icon3.getMaxU(), icon3.getMinV());
 				tessellator.addVertexWithUV(i + 1 - 0.015625D, j + 0, k + 0, icon3.getMinU(), icon3.getMinV());
 			}
-			if (iblockaccess.func_147439_a(i, j, k - 1).func_149637_q() && iblockaccess.func_147439_a(i, j + 1, k - 1) == getCopperId()) {
+			if (iblockaccess.getBlock(i, j, k - 1).isBlockNormalCube() && iblockaccess.getBlock(i, j + 1, k - 1) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1, j + 0, k + 0.015625D, icon1.getMinU(), icon1.getMaxV());
 				tessellator.addVertexWithUV(i + 1, j + 1 + 0.021875F, k + 0.015625D, icon1.getMaxU(), icon1.getMaxV());
@@ -161,7 +161,7 @@ public class RenderCopperWire extends RenderBlocks {
 				tessellator.addVertexWithUV(i + 0, j + 1 + 0.021875F, k + 0.015625D, icon3.getMaxU(), icon3.getMinV());
 				tessellator.addVertexWithUV(i + 0, j + 0, k + 0.015625D, icon3.getMinU(), icon3.getMinV());
 			}
-			if (iblockaccess.func_147439_a(i, j, k + 1).func_149637_q() && iblockaccess.func_147439_a(i, j + 1, k + 1) == getCopperId()) {
+			if (iblockaccess.getBlock(i, j, k + 1).isBlockNormalCube() && iblockaccess.getBlock(i, j + 1, k + 1) == getCopperId()) {
 				tessellator.setColorOpaque_F(f * f2, f * f3, f * f4);
 				tessellator.addVertexWithUV(i + 1, j + 1 + 0.021875F, k + 1 - 0.015625D, icon1.getMaxU(), icon1.getMinV());
 				tessellator.addVertexWithUV(i + 1, j + 0, k + 1 - 0.015625D, icon1.getMinU(), icon1.getMinV());

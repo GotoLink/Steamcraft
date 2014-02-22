@@ -13,13 +13,13 @@ public class ItemSCAxe extends ItemSCTool {
 
 	@Override
 	public boolean func_150897_b(Block block) {
-		return block != null && (block.func_149688_o() == Material.field_151575_d || block.func_149688_o() == Material.field_151585_k || block.func_149688_o() == Material.field_151582_l);
+		return block != null && (block.getMaterial() == Material.wood || block.getMaterial() == Material.plants || block.getMaterial() == Material.vine);
 	}
 
 	@Override
 	public float getDigSpeed(ItemStack itemstack, Block par2Block, int meta) {
 		if (par2Block != null) {
-			if (par2Block.func_149688_o() == Material.field_151575_d || par2Block.func_149688_o() == Material.field_151585_k || par2Block.func_149688_o() == Material.field_151582_l) {
+			if (par2Block.getMaterial() == Material.wood || par2Block.getMaterial() == Material.plants || par2Block.getMaterial() == Material.vine) {
 				if (toolMaterial == Steamcraft.TOOLSTEAM) {
 					return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
 				} else {

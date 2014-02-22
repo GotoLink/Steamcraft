@@ -115,10 +115,10 @@ public class EntityMusketBall extends Entity {
 			prevRotationYaw = rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
 			prevRotationPitch = rotationPitch = (float) ((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D);
 		}
-		Block i = worldObj.func_147439_a(xTile, yTile, zTile);
+		Block i = worldObj.getBlock(xTile, yTile, zTile);
 		if (i != Blocks.air) {
-			i.func_149719_a(worldObj, xTile, yTile, zTile);
-			AxisAlignedBB axisalignedbb = i.func_149668_a(worldObj, xTile, yTile, zTile);
+			i.setBlockBoundsBasedOnState(worldObj, xTile, yTile, zTile);
+			AxisAlignedBB axisalignedbb = i.getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
 			if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ))) {
 				setDead();
 			}
@@ -174,7 +174,7 @@ public class EntityMusketBall extends Entity {
 				xTile = movingobjectposition.blockX;
 				yTile = movingobjectposition.blockY;
 				zTile = movingobjectposition.blockZ;
-				inTile = worldObj.func_147439_a(xTile, yTile, zTile);
+				inTile = worldObj.getBlock(xTile, yTile, zTile);
 				inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
 				motionX = (float) (movingobjectposition.hitVec.xCoord - posX);
 				motionY = (float) (movingobjectposition.hitVec.yCoord - posY);

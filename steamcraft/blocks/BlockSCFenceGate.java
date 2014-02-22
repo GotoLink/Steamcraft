@@ -13,13 +13,13 @@ public class BlockSCFenceGate extends BlockFenceGate {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149691_a(int par1, int par2) {
-		return field_149761_L;
+	public IIcon getIcon(int par1, int par2) {
+		return blockIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		this.field_149761_L = par1IconRegister.registerIcon(func_149641_N());
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		this.blockIcon = par1IconRegister.registerIcon(getTextureName());
 	}
 }

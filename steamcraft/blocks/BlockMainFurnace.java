@@ -25,21 +25,21 @@ public class BlockMainFurnace extends BlockFurnace {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149691_a(int par1, int par2) {
-		return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.field_149761_L : this.furnaceIconFront));
+	public IIcon getIcon(int par1, int par2) {
+		return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.blockIcon : this.furnaceIconFront));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		this.field_149761_L = par1IconRegister.registerIcon("steamcraft:" + names[0]);
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		this.blockIcon = par1IconRegister.registerIcon("steamcraft:" + names[0]);
 		this.furnaceIconFront = par1IconRegister.registerIcon("steamcraft:" + names[2] + (this.isActive ? "active" : "idle"));
 		this.furnaceIconTop = par1IconRegister.registerIcon("steamcraft:" + names[1]);
 	}
 
 	public static void updateFurnaceBlockState(boolean flag, World world, int i, int j, int k, Block activeID, Block idleID, boolean sounds) {
 		int l = world.getBlockMetadata(i, j, k);
-		TileEntity tileentity = world.func_147438_o(i, j, k);
+		TileEntity tileentity = world.getTileEntity(i, j, k);
 		setKeepInventory(true);
 		if (flag) {
 			if (sounds) {
@@ -47,17 +47,17 @@ public class BlockMainFurnace extends BlockFurnace {
 				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "mob.zombiepig.zpigdeath", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.6F);
 				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "fire.ignite", 1.5F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 			}
-			world.func_147449_b(i, j, k, activeID);
+			world.setBlock(i, j, k, activeID);
 		} else {
 			if (sounds)
 				world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "ambient.cave.cave", 0.1F, 0.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			world.func_147449_b(i, j, k, idleID);
+			world.setBlock(i, j, k, idleID);
 		}
 		setKeepInventory(false);
 		world.setBlockMetadataWithNotify(i, j, k, l, 2);
 		if (tileentity != null) {
-			tileentity.func_145829_t();
-			world.func_147455_a(i, j, k, tileentity);
+			tileentity.validate();
+			world.setTileEntity(i, j, k, tileentity);
 		}
 	}
 

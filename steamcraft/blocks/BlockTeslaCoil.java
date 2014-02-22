@@ -16,7 +16,7 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public boolean func_149696_a(World world, int i, int j, int k, int par5, int par6) {
+	public boolean onBlockEventReceived(World world, int i, int j, int k, int par5, int par6) {
 		int l2 = world.getBlockMetadata(i, j, k);
 		int f = 0;
 		int f1 = 0;
@@ -48,50 +48,50 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 			int t1 = (i + f * nn);
 			int t2 = (k + f1 * nn);
 			int t3 = (j + f2 * nn);
-			if ((world.func_147439_a(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.func_147439_a(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
+			if ((world.getBlock(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.getBlock(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
 				world.setBlockMetadataWithNotify(t1, t3, t2, 1, 2);
-				world.func_147459_d(t1, t3, t2, this);
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, this);
 			}
-			if ((world.func_147439_a(t1, t3, t2) == getWirelessLampIdle() || world.func_147439_a(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
-				world.func_147459_d(t1, t3, t2, this);
+			if ((world.getBlock(t1, t3, t2) == getWirelessLampIdle() || world.getBlock(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, this);
 			}
 		}
 		if (torchActive) {
-            world.func_147459_d(i, j, k, this);
+            world.notifyBlocksOfNeighborChange(i, j, k, this);
 		}
         return true;
 	}
 
 	@Override
-	public boolean func_149744_f() {
+	public boolean canProvidePower() {
 		return false;
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
-		return Item.func_150898_a(getTeslaIdle());
+	public Item getItemDropped(int i, Random random, int j) {
+		return Item.getItemFromBlock(getTeslaIdle());
 	}
 
 	@Override
-	public void func_149726_b(World world, int i, int j, int k) {
-		super.func_149726_b(world, i, j, k);
-		world.func_147459_d(i, j, k, this);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+	public void onBlockAdded(World world, int i, int j, int k) {
+		super.onBlockAdded(world, i, j, k);
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public void func_149695_a(World world, int i, int j, int k, Block l) {
-		super.func_149695_a(world, i, j, k, l);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 1;
 	}
 
 	@Override
-	public void func_149674_a(World world, int i, int j, int k, Random random) {
+	public void updateTick(World world, int i, int j, int k, Random random) {
 		boolean flag = this.hasIndirectPower(world, i, j, k);
         updateToggleTimes(world);
 		byte nnum = 1;
@@ -131,22 +131,22 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 			int t1 = (i + f * nn);
 			int t2 = (k + f1 * nn);
 			int t3 = (j + f2 * nn);
-			if ((world.func_147439_a(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.func_147439_a(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
+			if ((world.getBlock(t1, t3, t2) == BlockTeslaReceiver.getIdle() || world.getBlock(t1, t3, t2) == BlockTeslaReceiver.getActive()) && nn >= 1) {
 				world.setBlockMetadataWithNotify(t1, t3, t2, nnum, 2);
-				world.func_147459_d(t1, t3, t2, this);
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, this);
 			}
-			if ((world.func_147439_a(t1, t3, t2) == getWirelessLampIdle() || world.func_147439_a(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
-				world.func_147459_d(t1, t3, t2, this);
+			if ((world.getBlock(t1, t3, t2) == getWirelessLampIdle() || world.getBlock(t1, t3, t2) == getWirelessLampActive()) && nn >= 1) {
+				world.notifyBlocksOfNeighborChange(t1, t3, t2, this);
 			}
 		}
 		if (!torchActive) {
 			if (flag) {
-				world.func_147465_d(i, j, k, getTeslaActive(), world.getBlockMetadata(i, j, k), 2);
+				world.setBlock(i, j, k, getTeslaActive(), world.getBlockMetadata(i, j, k), 2);
 			}
 		} else if (!flag && !checkBurnout(world, i, j, k, false)) {
-			world.func_147465_d(i, j, k, getTeslaIdle(), world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, getTeslaIdle(), world.getBlockMetadata(i, j, k), 2);
 		}
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	public static Block getTeslaActive() {

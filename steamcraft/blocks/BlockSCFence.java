@@ -21,27 +21,27 @@ public class BlockSCFence extends BlockFence {
 	}
 
 	@Override
-	public boolean func_149742_c(World world, int i, int j, int k) {
-		if (world.func_147439_a(i, j - 1, k) == this) {
+	public boolean canPlaceBlockAt(World world, int i, int j, int k) {
+		if (world.getBlock(i, j - 1, k) == this) {
 			return true;
 		}
-		if (!world.func_147439_a(i, j - 1, k).func_149688_o().isSolid()) {
+		if (!world.getBlock(i, j - 1, k).getMaterial().isSolid()) {
 			return false;
 		} else {
-			return super.func_149742_c(world, i, j, k);
+			return super.canPlaceBlockAt(world, i, j, k);
 		}
 	}
 
 	@Override
-	public AxisAlignedBB func_149668_a(World world, int i, int j, int k) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
 		return AxisAlignedBB.getAABBPool().getAABB(i, j, k, i + 1, j + 1.5F, k + 1);
 	}
 
 	@Override
-	public boolean func_149826_e(IBlockAccess iblockaccess, int i, int j, int k) {
-		Block l = iblockaccess.func_147439_a(i, j, k);
+	public boolean canConnectFenceTo(IBlockAccess iblockaccess, int i, int j, int k) {
+		Block l = iblockaccess.getBlock(i, j, k);
 		if (doesJoinBlocks && l != Blocks.air) {
-			return l.func_149688_o().isOpaque() || l == this || l == blockGate;
+			return l.getMaterial().isOpaque() || l == this || l == blockGate;
 		}
 		return l == this || l == blockGate;
 	}

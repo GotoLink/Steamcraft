@@ -83,7 +83,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 
 	public static void onRenderTick() {
 		if (minecraft.thePlayer != null && minecraft.theWorld != null) {
-			if (minecraft.thePlayer.getEntityData().getShort("Aqualung") > 0 && minecraft.thePlayer.isInsideOfMaterial(Material.field_151586_h) && minecraft.thePlayer.isEntityAlive()) {
+			if (minecraft.thePlayer.getEntityData().getShort("Aqualung") > 0 && minecraft.thePlayer.isInsideOfMaterial(Material.water) && minecraft.thePlayer.isEntityAlive()) {
 				renderThings(minecraft.thePlayer);
 			}
 		}

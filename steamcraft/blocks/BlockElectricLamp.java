@@ -21,12 +21,12 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 		torchActive = flag;
 		float f = 0.25F;
 		float f1 = 1.0F;
-        func_149676_a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
-        func_149649_H();
+        setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
+        disableStats();
 	}
 
 	@Override
-	public boolean func_149744_f() {
+	public boolean canProvidePower() {
 		return false;
 	}
 
@@ -40,14 +40,14 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public int func_149645_b() {
+	public int getRenderType() {
 		return -1;
 	}
 
 	@Override
-	public AxisAlignedBB func_149633_g(World world, int i, int j, int k) {
-        func_149719_a(world, i, j, k);
-		return super.func_149633_g(world, i, j, k);
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
+        setBlockBoundsBasedOnState(world, i, j, k);
+		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
+	public Item getItemDropped(int i, Random random, int j) {
 		return HandlerRegistry.getItem("steamcraft:electricLamp").get();
 	}
 
 	@Override
-	public int func_149709_b(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
 		if (!torchActive) {
 			return 0;
 		}
@@ -69,13 +69,13 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public void func_149695_a(World world, int i, int j, int k, Block l) {
-		super.func_149695_a(world, i, j, k, l);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!torchActive) {
 			return;
 		}
@@ -99,17 +99,17 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 1;
 	}
 
 	@Override
-	public void func_149674_a(World world, int i, int j, int k, Random random) {
+	public void updateTick(World world, int i, int j, int k, Random random) {
 		boolean flag = this.hasIndirectPower(world, i, j, k);
         updateToggleTimes(world);
 		if (!torchActive) {
 			if (flag) {
-				world.func_147465_d(i, j, k, getActive().get(), world.getBlockMetadata(i, j, k), 2);
+				world.setBlock(i, j, k, getActive().get(), world.getBlockMetadata(i, j, k), 2);
 				if (this.checkBurnout(world, i, j, k, true)) {
 					world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
@@ -121,7 +121,7 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 				}
 			}
 		} else if (!flag) {
-			world.func_147465_d(i, j, k, getIdle().get(), world.getBlockMetadata(i, j, k), 2);
+			world.setBlock(i, j, k, getIdle().get(), world.getBlockMetadata(i, j, k), 2);
 		}
 	}
 

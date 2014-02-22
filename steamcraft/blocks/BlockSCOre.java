@@ -14,11 +14,11 @@ public class BlockSCOre extends BlockOre {
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
+	public Item getItemDropped(int i, Random random, int j) {
 		if (this == getVoluciteId()) {
 			return Steamcraft.material;
 		} else {
-			return super.func_149650_a(i, random, j);
+			return super.getItemDropped(i, random, j);
 		}
 	}
 

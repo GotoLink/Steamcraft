@@ -19,34 +19,34 @@ public class BlockTeslaReceiver extends Block {
 
 	public BlockTeslaReceiver() {
 		super(Steamcraft.staticcircuit);
-        func_149675_a(true);
-        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-        func_149713_g(0);
+        setTickRandomly(true);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+        setLightOpacity(0);
 	}
 
 	@Override
-	public boolean func_149696_a(World world, int i, int j, int k, int par5, int par6) {
-		world.func_147459_d(i, j, k, this);
-		return super.func_149696_a(world, i, j, k, par5, par6);
+	public boolean onBlockEventReceived(World world, int i, int j, int k, int par5, int par6) {
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		return super.onBlockEventReceived(world, i, j, k, par5, par6);
 	}
 
 	@Override
-	public boolean func_149744_f() {
+	public boolean canProvidePower() {
 		return true;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149673_e(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public IIcon getIcon(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1 || (l == 0)) {
-			return field_149761_L;
+			return blockIcon;
 		}
 		return sideBlock;
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
-		return Item.func_150898_a(getIdle());
+	public Item getItemDropped(int i, Random random, int j) {
+		return Item.getItemFromBlock(getIdle());
 	}
 
 	@Override
@@ -55,35 +55,35 @@ public class BlockTeslaReceiver extends Block {
 	}
 
 	@Override
-	public int func_149709_b(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int i, int j, int k, int l) {
 		if (par1IBlockAccess.getBlockMetadata(i, j, k) == 2 && l == 0)
 			return 15;
 		return 0;
 	}
 
 	@Override
-	public void func_149726_b(World world, int i, int j, int k) {
+	public void onBlockAdded(World world, int i, int j, int k) {
 		for (int a = -9; a <= 9; a++) {
 			for (int b = -9; b <= 9; b++) {
 				for (int c = -9; c <= 9; c++) {
-					if (world.func_147439_a(i + a, j + b, k + c) == BlockTeslaCoil.getTeslaIdle() || world.func_147439_a(i + a, j + b, k + c) == BlockTeslaCoil.getTeslaActive()) {
-						world.func_147459_d(i + a, j + b, k + c, this);
-						world.func_147464_a(i + a, j + b, k + c, this, func_149738_a(world));
+					if (world.getBlock(i + a, j + b, k + c) == BlockTeslaCoil.getTeslaIdle() || world.getBlock(i + a, j + b, k + c) == BlockTeslaCoil.getTeslaActive()) {
+						world.notifyBlocksOfNeighborChange(i + a, j + b, k + c, this);
+						world.scheduleBlockUpdate(i + a, j + b, k + c, this, tickRate(world));
 					}
 				}
 			}
 		}
-		world.func_147459_d(i, j, k, this);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public int func_149745_a(Random random) {
+	public int quantityDropped(Random random) {
 		return 1;
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l == 1) {
 			return;
@@ -102,44 +102,44 @@ public class BlockTeslaReceiver extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		super.func_149651_a(par1IconRegister);
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		super.registerBlockIcons(par1IconRegister);
 		sideBlock = par1IconRegister.registerIcon("steamcraft:receiverside");
 	}
 
     @Override
-    public boolean func_149686_d(){
+    public boolean renderAsNormalBlock(){
         return false;
     }
 
     @Override
-    public boolean func_149662_c(){
+    public boolean isOpaqueCube(){
         return false;
     }
 
 	@Override
-	public boolean func_149646_a(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1) {
 			return true;
 		}
-		return super.func_149646_a(iblockaccess, i, j, k, l);
+		return super.shouldSideBeRendered(iblockaccess, i, j, k, l);
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 2;
 	}
 
 	@Override
-	public void func_149674_a(World world, int i, int j, int k, Random random) {
-		world.func_147459_d(i, j, k, this);
-		world.func_147471_g(i, j, k);
+	public void updateTick(World world, int i, int j, int k, Random random) {
+		world.notifyBlocksOfNeighborChange(i, j, k, this);
+		world.markBlockForUpdate(i, j, k);
 		if (world.getBlockMetadata(i, j, k) == 2) {
-			world.func_147465_d(i, j, k, getActive(), 2, 2);
+			world.setBlock(i, j, k, getActive(), 2, 2);
 		} else {
-			world.func_147465_d(i, j, k, getIdle(), 1, 2);
+			world.setBlock(i, j, k, getIdle(), 1, 2);
 		}
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	public static Block getActive() {

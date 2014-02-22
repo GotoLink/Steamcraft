@@ -13,7 +13,7 @@ public class BlockHandler extends DataHandler<Block> {
 	public BlockHandler(Block bloc, Class<? extends ItemBlock> itemclass, String... names) {
 		this.block = bloc;
 		if (block != null) {
-			block.func_149663_c(names[0]).func_149658_d(names[1]).func_149647_a(Steamcraft.steamTab);//finalizing the block
+			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
             this.output = new ItemStack(bloc, 1, 0);
 			if (itemclass != null) {
 				GameRegistry.registerBlock(block, itemclass, names[0]);
@@ -24,7 +24,7 @@ public class BlockHandler extends DataHandler<Block> {
 				OreDictionary.registerOre(names[2], block);
 			}
 			if (block.hasTileEntity(0)) {
-				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.func_149739_a());
+				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.getUnlocalizedName());
 			}
 		}
 	}
@@ -33,13 +33,13 @@ public class BlockHandler extends DataHandler<Block> {
 		this.block = bloc;
 		if (block != null) {
             this.output = new ItemStack(bloc, 1, 0);
-			block.func_149663_c(names[0]).func_149658_d(names[1]).func_149647_a(Steamcraft.steamTab);//finalizing the block
+			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
 			GameRegistry.registerBlock(block, names[0]);//registering...
 			if (names.length > 2) {
 				OreDictionary.registerOre(names[2], block);
 			}
 			if (block.hasTileEntity(0)) {
-				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.func_149739_a());
+				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.getUnlocalizedName());
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class BlockHandler extends DataHandler<Block> {
 	@Override
 	public String getName() {
 		if (block != null) {
-			return block.func_149739_a();
+			return block.getUnlocalizedName();
 		}
 		return null;
 	}
@@ -87,9 +87,9 @@ public class BlockHandler extends DataHandler<Block> {
 	public BlockHandler setValues(float... sets) {
 		switch (sets.length) {
 		case 2:
-			block.func_149715_a(sets[1]);
+			block.setLightLevel(sets[1]);
 		case 1:
-			block.func_149711_c(sets[0]);
+			block.setHardness(sets[0]);
 			break;
 		}
 		return this;

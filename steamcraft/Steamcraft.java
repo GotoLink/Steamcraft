@@ -66,8 +66,8 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	private static final String[] FIREARM_PARTS = { "musketcartridge", "percussioncap", "percussionlock", "smoothbarrel", "rifledbarrel", "woodenstock" };
 	private static final String[] MATERIALS = { "etherium", "sulphur", "copper", "obsidianslate", "ingotbrass", "ingotcastiron", "lightbulb", "phosphorus", "uraniumstone", "uraniumpellet",
 			"reactorcore", "coredrillbase", "ingotzinc" };
-	public static final Material solidcircuit = new MaterialLogic(MapColor.field_151660_b);
-	public static final Material staticcircuit = new StaticMaterial(MapColor.field_151660_b);
+	public static final Material solidcircuit = new MaterialLogic(MapColor.airColor);
+	public static final Material staticcircuit = new StaticMaterial(MapColor.airColor);
 	public static final CreativeTabs steamTab = new CreativeTabs("Steamcraft") {
 		@Override
 		@SideOnly(Side.CLIENT)
@@ -200,19 +200,19 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		material = new ItemHandler(new MultiItem(MATERIALS), "steamcraft:mat", "steamcraft:").get();
 		new ItemHandler(new Item().setFull3D().setMaxDamage(64).setMaxStackSize(1), "steamcraft:chisel", "steamcraft:tools/chisel", "chisel").addRecipe(true, "#", "#",
 				"X", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('X'), "ingotBrass").register();
-		new BlockHandler(new BlockCopperWire().func_149672_a(Block.field_149769_e), "copperwire", "redstone_dust", "wireCopper").setValues(0.0F)
+		new BlockHandler(new BlockCopperWire().setStepSound(Block.soundTypeStone), "copperwire", "redstone_dust", "wireCopper").setValues(0.0F)
 				.setOutput(4, 0).addRecipe(false, "dustCopper").register();
-		new BlockHandler(new BlockInverter(false).func_149672_a(Block.field_149766_f), "steamcraft:inverteridle", "steamcraft:inverteridle").setValues(
+		new BlockHandler(new BlockInverter(false).setStepSound(Block.soundTypeWood), "steamcraft:inverteridle", "steamcraft:inverteridle").setValues(
 				0.0F).register();
-		new BlockHandler(new BlockInverter(true).func_149672_a(Block.field_149766_f), "steamcraft:inverteractive", "steamcraft:inverteractive",
+		new BlockHandler(new BlockInverter(true).setStepSound(Block.soundTypeWood), "steamcraft:inverteractive", "steamcraft:inverteractive",
 				"torchCopper").setValues(0.0F, 0.5F).setOutput(4, 0)
 				.addRecipe(true, "X", "#", "I", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "wireCopper", Character.valueOf('I'), "battery").register();
-		new BlockHandler(new BlockDiode(false).func_149672_a(Block.field_149766_f), "steamcraft:diodeidle", "steamcraft:diodeidle").setValues(0.0F)
+		new BlockHandler(new BlockDiode(false).setStepSound(Block.soundTypeWood), "steamcraft:diodeidle", "steamcraft:diodeidle").setValues(0.0F)
 				.addRecipe(true, "#X#", "IRI", Character.valueOf('#'), "torchCopper", Character.valueOf('X'), "wireCopper", Character.valueOf('I'), "stone", Character.valueOf('R'), Items.quartz)
 				.register();
-		new BlockHandler(new BlockDiode(true).func_149672_a(Block.field_149766_f), "steamcraft:diodeactive", "steamcraft:diodeactive").setValues(0.0F,
+		new BlockHandler(new BlockDiode(true).setStepSound(Block.soundTypeWood), "steamcraft:diodeactive", "steamcraft:diodeactive").setValues(0.0F,
 				0.625F).register();
-		new BlockHandler(new BlockPoweredRail(true).func_149672_a(Block.field_149777_j), "steamcraft:rail", "steamcraft:rail").setValues(0.7F).register();
+		new BlockHandler(new BlockPoweredRail(true).setStepSound(Block.soundTypeMetal), "steamcraft:rail", "steamcraft:rail").setValues(0.7F).register();
 		new BlockHandler(new BlockNetherSapling(), "steamcraft.nethersapling", "steamcraft:nethersapling", "saplingNether").register();
 		new BlockHandler(new BlockElectricLamp(TileEntityLamp.class, false), "steamcraft:electricLampOff", "steamcraft:electriclamp").setValues(0.0F)
 				.register();
@@ -224,44 +224,44 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 						Items.quartz).register();
 		new BlockHandler(new BlockTeslaCoil(true), "steamcraft:teslaCoilOn", "steamcraft:teslaactive").setValues(0.0F, 0.625F)
 				.addAchievement("itsalive", 1, 2, AchievementList.acquireIron).register();
-		new BlockHandler(new BlockTeslaReceiver().func_149672_a(Block.field_149777_j), "steamcraft:receiver", "steamcraft:receiver", "teslaReceiver")
+		new BlockHandler(new BlockTeslaReceiver().setStepSound(Block.soundTypeMetal), "steamcraft:receiver", "steamcraft:receiver", "teslaReceiver")
 				.setValues(0.5F)
 				.addRecipe(true, "#X#", "ITI", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('I'), "wireCopper", Character.valueOf('T'),
 						Items.quartz).register();
-		new BlockHandler(new BlockOre().func_149752_b(5F).func_149672_a(Block.field_149779_h), "steamcraft:orezinc", "steamcraft:zincore", "oreZinc")
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:orezinc", "steamcraft:zincore", "oreZinc")
 				.setValues(2.5F).setHarvest("pickaxe", 1).setHarvest("drill", 1).addSmelt(new ItemStack(material, 1, 12), 1.0F).register();
-		new BlockHandler(new BlockTeslaReceiver().func_149672_a(Block.field_149777_j), "steamcraft:receiverOn", "steamcraft:receiveractive").setValues(
+		new BlockHandler(new BlockTeslaReceiver().setStepSound(Block.soundTypeMetal), "steamcraft:receiverOn", "steamcraft:receiveractive").setValues(
 				0.5F, 0.625F).register();
-		new BlockHandler(new BlockSteamFurnace(false).func_149672_a(Block.field_149777_j), "steamcraft:steamFurnace", "steamcraft:steamfurnaceidle",
+		new BlockHandler(new BlockSteamFurnace(false).setStepSound(Block.soundTypeMetal), "steamcraft:steamFurnace", "steamcraft:steamfurnaceidle",
 				"furnaceSteam").setValues(4F)
 				.addRecipe(true, "# #", "#X#", "#I#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Items.bucket, Character.valueOf('I'), Blocks.furnace).register();
-		new BlockHandler(new BlockSteamFurnace(true).func_149672_a(Block.field_149777_j), "steamcraft:steamFurnaceOn",
+		new BlockHandler(new BlockSteamFurnace(true).setStepSound(Block.soundTypeMetal), "steamcraft:steamFurnaceOn",
 				"steamcraft:steamfurnaceactive").setValues(4F, 0.875F).register();
-		new BlockHandler(new BlockChemFurnace(false).func_149672_a(Block.field_149777_j), "steamcraft:chemFurnace", "steamcraft:chemfurnaceidle",
+		new BlockHandler(new BlockChemFurnace(false).setStepSound(Block.soundTypeMetal), "steamcraft:chemFurnace", "steamcraft:chemfurnaceidle",
 				"furnaceChemical").setValues(4.5F)
 				.addRecipe(true, "###", "#X#", "#I#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Items.diamond, Character.valueOf('I'), "furnaceSteam").register();
-		new BlockHandler(new BlockChemFurnace(true).func_149672_a(Block.field_149777_j), "steamcraft:chemFurnaceOn",
+		new BlockHandler(new BlockChemFurnace(true).setStepSound(Block.soundTypeMetal), "steamcraft:chemFurnaceOn",
 				"steamcraft:chemfurnaceactive").setValues(4.5F, 0.875F).register();
-		new BlockHandler(new BlockNukeFurnace(false).func_149672_a(Block.field_149777_j), "steamcraft:nukeFurnace", "steamcraft:nukefurnaceidle",
+		new BlockHandler(new BlockNukeFurnace(false).setStepSound(Block.soundTypeMetal), "steamcraft:nukeFurnace", "steamcraft:nukefurnaceidle",
 				"furnaceNuke").setValues(5F)
 				.addRecipe(true, "#I#", "#X#", "#I#", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('X'), "itemReactorCore", Character.valueOf('I'), "gemEtherium")
 				.addAchievement("fallout", 0, 1, AchievementList.acquireIron).register();
-		new BlockHandler(new BlockNukeFurnace(true).func_149672_a(Block.field_149777_j), "steamcraft:nukeFurnaceOn",
+		new BlockHandler(new BlockNukeFurnace(true).setStepSound(Block.soundTypeMetal), "steamcraft:nukeFurnaceOn",
 				"steamcraft:nukefurnaceactive").setValues(5F, 0.9375F).register();
-		new BlockHandler(new BlockBattery().func_149672_a(Block.field_149777_j), "steamcraft:battery", "steamcraft:battery", "battery")
+		new BlockHandler(new BlockBattery().setStepSound(Block.soundTypeMetal), "steamcraft:battery", "steamcraft:battery", "battery")
 				.setValues(0.5F, 0.625F).addRecipe(true, "###", "IXI", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('X'), Items.quartz, Character.valueOf('I'), "wireCopper")
 				.register();
-		new BlockHandler(new BlockOre().func_149752_b(5F).func_149672_a(Block.field_149779_h), "steamcraft:brimstone", "steamcraft:brimstone",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:brimstone", "steamcraft:brimstone",
 				"oreBrimstone").setValues(3F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 1), 1.0F).register();
-		new BlockHandler(new BlockOre().func_149752_b(5F).func_149672_a(Block.field_149779_h), "steamcraft:orePhosphate", "steamcraft:phosphate",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:orePhosphate", "steamcraft:phosphate",
 				"orePhosphate").setValues(2.5F, 0.75F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 7), 1.0F).register();
-		new BlockHandler(new BlockUraniteOre().func_149752_b(6F).func_149672_a(Block.field_149779_h), "steamcraft:oreUranite", "steamcraft:uranite",
+		new BlockHandler(new BlockUraniteOre().setResistance(6F).setStepSound(Block.soundTypeGrass), "steamcraft:oreUranite", "steamcraft:uranite",
 				"oreUranite").setValues(10F, 0.625F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 8), 1.0F).register();
-		new BlockHandler(new BlockOre().func_149752_b(5F).func_149672_a(Block.field_149779_h), "steamcraft:oreBornite", "steamcraft:bornite",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:oreBornite", "steamcraft:bornite",
 				"oreCopper").setValues(3F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 2), 1.0F).register();
-		new BlockHandler(new BlockSCOre().func_149752_b(6000000F).func_149672_a(Block.field_149779_h), "steamcraft:oreVolucite",
+		new BlockHandler(new BlockSCOre().setResistance(6000000F).setStepSound(Block.soundTypeGrass), "steamcraft:oreVolucite",
 				"steamcraft:voluciteore", "oreVolucite").setValues(50F).setHarvest("pickaxe", 5).addSmelt(new ItemStack(material, 1, 0), 1.0F).register();
-		new BlockHandler(new BlockTorchPhosphorus().func_149672_a(Block.field_149766_f), "steamcraft:torchPhosphorus", "steamcraft:torchphosphorus")
+		new BlockHandler(new BlockTorchPhosphorus().setStepSound(Block.soundTypeWood), "steamcraft:torchPhosphorus", "steamcraft:torchphosphorus")
 				.setValues(0.0F, 1.0F).setOutput(4, 0).addRecipe(true, "X", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), "ingotPosphate").register();
 		BlockHandler roofTile = new BlockHandler(new BlockTile(), "steamcraft:roofTile", "steamcraft:slatetiles", "stairFlint")
                 .setValues(2F).setHarvest("pickaxe", 0).setHarvest("drill", 0);
@@ -283,19 +283,19 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 			decor.addSmelt(in2[i - 4], i, 1.0F);
 		}
 		decor.register();
-		BlockHandler fencegate = new BlockHandler(new BlockSCFenceGate().func_149752_b(20F).func_149672_a(Block.field_149777_j),
+		BlockHandler fencegate = new BlockHandler(new BlockSCFenceGate().setResistance(20F).setStepSound(Block.soundTypeMetal),
 				"steamcraft:gateCastIron", "steamcraft:castironblock", "gateCastIron").setValues(7F);
 		fencegate.addRecipe(true, "#X#", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), "railCastIron").register();
-		new BlockHandler(new BlockSCFence(Material.field_151573_f, fencegate.get(), true).func_149752_b(20F).func_149672_a(Block.field_149777_j),
+		new BlockHandler(new BlockSCFence(Material.iron, fencegate.get(), true).setResistance(20F).setStepSound(Block.soundTypeMetal),
 				"steamcraft:railingCastIron", "steamcraft:castironblock", "railCastIron").setValues(7F).setHarvest("pickaxe", 0).setHarvest("drill", 0).setOutput(2, 0)
 				.addRecipe(true, "###", "###", Character.valueOf('#'), "ingotCastIron").register();
 		new BlockHandler(new BlockLamp(true), "steamcraft:lampOn", "steamcraft:lampblock").setHarvest("pickaxe", 0).setHarvest("drill", 0)
 				.addRecipe(true, "#X#", "XIX", "#X#", Character.valueOf('#'), "ingotCastIron", Character.valueOf('X'), Blocks.glass, Character.valueOf('I'), Items.glowstone_dust).register();
 		new BlockHandler(new BlockLamp(false), "steamcraft:lamp", "steamcraft:lampblock").register();
-		new BlockHandler(new BlockBrassLog().func_149672_a(Block.field_149777_j), "steamcraft:logBrass", "steamcraft:brasslog").setValues(5F)
+		new BlockHandler(new BlockBrassLog().setStepSound(Block.soundTypeMetal), "steamcraft:logBrass", "steamcraft:brasslog").setValues(5F)
 				.setHarvest("pickaxe", 2).setHarvest("drill", 2).setOutput(4, 0).addRecipe(true, "###", "#I#", "###", Character.valueOf('#'), "ingotBrass", Character.valueOf('I'), "logWood")
 				.register();
-		new BlockHandler(new BlockNetherLeaves(Material.field_151575_d).func_149713_g(1).func_149672_a(Block.field_149778_k), "steamcraft:leavesLamp",
+		new BlockHandler(new BlockNetherLeaves(Material.wood).setLightOpacity(1).setStepSound(Block.soundTypeGlass), "steamcraft:leavesLamp",
 				"steamcraft:brassleaves").setValues(2F, 0.9375F).setHarvest("pickaxe", 0).setHarvest("drill", 0).setOutput(4, 0)
 				.addRecipe(true, "#X#", "XIX", "#X#", Character.valueOf('#'), "ingotBrass", Character.valueOf('X'), Blocks.glass, Character.valueOf('I'), Items.glowstone_dust).register();
 		new BlockHandler(new BlockWirelessLamp(TileEntityLamp.class, false), "steamcraft:wirelessLampOff", "steamcraft:wirelesslamp").setValues(0.0F)
@@ -304,7 +304,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				1.0F).register();
 		new BlockHandler(new BlockSCStairs(roofTile.get(), 0, Items.flint, 2), "steamcraft:stairsRoof", "steamcraft:slatetiles").setOutput(4, 0)
 				.addRecipe(true, "#  ", "## ", "###", Character.valueOf('#'), Items.flint).register();
-		new BlockHandler(new BlockTeaPlant().func_149672_a(Block.field_149779_h), "steamcraft:teaplant", "steamcraft:teaplant", "plantTea")
+		new BlockHandler(new BlockTeaPlant().setStepSound(Block.soundTypeGrass), "steamcraft:teaplant", "steamcraft:teaplant", "plantTea")
 				.setValues(0.0F).register();
 		new ItemHandler(new ItemCoreDrill(), "steamcraft:coreDrill", "steamcraft:coredrill")
 				.addRecipe(true, "X", "#", "I", Character.valueOf('#'), "ingotPosphate", Character.valueOf('X'), "drillGold", Character.valueOf('I'), "itemDrillBase")
@@ -496,11 +496,11 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
             event.player.triggerAchievement(achs.get("heavenpiercing"));
 			return;
 		}
-		if (event.crafting.getItem() == Item.func_150898_a(BlockTeslaCoil.getTeslaIdle())) {
+		if (event.crafting.getItem() == Item.getItemFromBlock(BlockTeslaCoil.getTeslaIdle())) {
             event.player.triggerAchievement(achs.get("itsalive"));
 			return;
 		}
-		if (event.crafting.getItem() == Item.func_150898_a(HandlerRegistry.getBlock("steamcraft:decor").get())) {
+		if (event.crafting.getItem() == Item.getItemFromBlock(HandlerRegistry.getBlock("steamcraft:decor").get())) {
             event.player.triggerAchievement(achs.get("mastercraftsman"));
 			return;
 		}
@@ -580,8 +580,8 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		}
 		EntityRegistry.registerModEntity(EntityMusketBall.class, "MusketBall", 1, this, 120, 1, true);
 		EntityRegistry.registerModEntity(EntityHighwayman.class, "Highwayman", 2, this, 120, 1, true);
-        BiomeGenBase[] biomes = new BiomeGenBase[BiomeGenBase.field_150597_n.size()];
-        BiomeGenBase.field_150597_n.toArray(biomes);
+        BiomeGenBase[] biomes = new BiomeGenBase[BiomeGenBase.explorationBiomesList.size()];
+        BiomeGenBase.explorationBiomesList.toArray(biomes);
 		EntityRegistry.addSpawn(EntityHighwayman.class, 5, 1, 5, EnumCreatureType.monster, biomes);
 		GameRegistry.addSmelting(Items.iron_ingot, new ItemStack(material, 1, 5), 1.0F);
 		GameRegistry.addSmelting(Blocks.gravel, new ItemStack(Items.flint), 1.0F);

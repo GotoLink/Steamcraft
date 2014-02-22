@@ -13,12 +13,12 @@ public class BlockWirelessLamp extends BlockElectricLamp {
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
+	public Item getItemDropped(int i, Random random, int j) {
 		return HandlerRegistry.getItem("steamcraft:wirelessLamp").get();
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 2;
 	}
 

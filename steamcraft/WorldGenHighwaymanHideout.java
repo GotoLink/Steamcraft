@@ -24,14 +24,14 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 		for (int k1 = i - l - 1; k1 <= i + l + 1; k1++) {
 			for (int j2 = j - 1; j2 <= j + byte0 + 1; j2++) {
 				for (int i3 = k - i1 - 1; i3 <= k + i1 + 1; i3++) {
-					Material material = world.func_147439_a(k1, j2, i3).func_149688_o();
+					Material material = world.getBlock(k1, j2, i3).getMaterial();
 					if (j2 == j - 1 && !material.isSolid()) {
 						return false;
 					}
 					if (j2 == j + byte0 + 1 && !material.isSolid()) {
 						return false;
 					}
-					if ((k1 == i - l - 1 || k1 == i + l + 1 || i3 == k - i1 - 1 || i3 == k + i1 + 1) && j2 == j && world.func_147437_c(k1, j2, i3) && world.func_147437_c(k1, j2 + 1, i3)) {
+					if ((k1 == i - l - 1 || k1 == i + l + 1 || i3 == k - i1 - 1 || i3 == k + i1 + 1) && j2 == j && world.isAirBlock(k1, j2, i3) && world.isAirBlock(k1, j2 + 1, i3)) {
 						j1++;
 					}
 				}
@@ -44,11 +44,11 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 			for (int k2 = j + byte0; k2 >= j - 1; k2--) {
 				for (int j3 = k - i1 - 1; j3 <= k + i1 + 1; j3++) {
 					if (l1 == i - l - 1 || k2 == j - 1 || j3 == k - i1 - 1 || l1 == i + l + 1 || k2 == j + byte0 + 1 || j3 == k + i1 + 1) {
-						if (k2 >= 0 && !world.func_147439_a(l1, k2 - 1, j3).func_149688_o().isSolid()) {
+						if (k2 >= 0 && !world.getBlock(l1, k2 - 1, j3).getMaterial().isSolid()) {
                             func_150515_a(world, l1, k2, j3, Blocks.air);
 							continue;
 						}
-						if (!world.func_147439_a(l1, k2, j3).func_149688_o().isSolid()) {
+						if (!world.getBlock(l1, k2, j3).getMaterial().isSolid()) {
 							continue;
 						}
 						if (k2 != j - 1 && random.nextInt(4) == 0) {
@@ -58,7 +58,7 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 							if (randomBlockType > 3) {
 								randomBlockType = 0;
 							}
-                            func_150516_a(world, l1, k2, j3, Blocks.stonebrick, randomBlockType);
+                            setBlockAndNotifyAdequately(world, l1, k2, j3, Blocks.stonebrick, randomBlockType);
 						}
 					} else {
                         func_150515_a(world, l1, k2, j3, Blocks.air);
@@ -71,27 +71,27 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 				int k3 = (i + random.nextInt(l * 2 + 1)) - l;
 				int l3 = j;
 				int i4 = (k + random.nextInt(i1 * 2 + 1)) - i1;
-				if (!world.func_147437_c(k3, l3, i4)) {
+				if (!world.isAirBlock(k3, l3, i4)) {
 					continue;
 				}
 				int j4 = 0;
-				if (world.func_147439_a(k3 - 1, l3, i4).func_149688_o().isSolid()) {
+				if (world.getBlock(k3 - 1, l3, i4).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.func_147439_a(k3 + 1, l3, i4).func_149688_o().isSolid()) {
+				if (world.getBlock(k3 + 1, l3, i4).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.func_147439_a(k3, l3, i4 - 1).func_149688_o().isSolid()) {
+				if (world.getBlock(k3, l3, i4 - 1).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.func_147439_a(k3, l3, i4 + 1).func_149688_o().isSolid()) {
+				if (world.getBlock(k3, l3, i4 + 1).getMaterial().isSolid()) {
 					j4++;
 				}
 				if (j4 != 1) {
 					continue;
 				}
                 func_150515_a(world, k3, l3, i4, Blocks.chest);
-				TileEntityChest tileentitychest = (TileEntityChest) world.func_147438_o(k3, l3, i4);
+				TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(k3, l3, i4);
 				int k4 = 0;
 				do {
 					if (k4 >= 8) {
@@ -106,8 +106,8 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 			}
 		}
         func_150515_a(world, i, j, k, Blocks.mob_spawner);
-		TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.func_147438_o(i, j, k);
-		tileentitymobspawner.func_145881_a().setMobID(pickMobSpawner(random));
+		TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
+		tileentitymobspawner.func_145881_a().setEntityName(pickMobSpawner(random));
 		return true;
 	}
 

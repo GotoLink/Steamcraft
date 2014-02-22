@@ -28,9 +28,9 @@ public class BlockDecor extends Block {
 	private static final float[] hardness = new float[] { 7, 50, 5, 10, 5, 3, 5, 7, 50, 5, 3, 2, 10 };
 
 	public BlockDecor() {
-		super(Material.field_151573_f);
-		func_149672_a(Block.field_149777_j);
-        func_149752_b(10F);
+		super(Material.iron);
+		setStepSound(Block.soundTypeMetal);
+        setResistance(10F);
 		String[] toolsets = { "pickaxe", "drill" };
 		for (int ix = 2; ix < names.length; ix++) {
 			for (String tool : toolsets)
@@ -47,22 +47,22 @@ public class BlockDecor extends Block {
 	}
 
 	@Override
-	public int func_149692_a(int metadata) {
+	public int damageDropped(int metadata) {
 		return metadata;
 	}
 
 	@Override
-	public float func_149712_f(World world, int x, int y, int z) {
+	public float getBlockHardness(World world, int x, int y, int z) {
 		return hardness[world.getBlockMetadata(x, y, z)];
 	}
 
 	@Override
-	public AxisAlignedBB func_149668_a(World world, int i, int j, int k) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
 		if (world.getBlockMetadata(i, j, k) == 3 || world.getBlockMetadata(i, j, k) == 12) {
 			float f = 0.1F;
 			return AxisAlignedBB.getAABBPool().getAABB(i + f, j, k + f, i + 1 - f, j + 1 - f, k + 1 - f);
 		} else
-			return super.func_149668_a(world, i, j, k);
+			return super.getCollisionBoundingBoxFromPool(world, i, j, k);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class BlockDecor extends Block {
 	}
 
 	@Override
-	public IIcon func_149691_a(int i, int j) {
+	public IIcon getIcon(int i, int j) {
 		return icons[j];
 	}
 
@@ -98,27 +98,27 @@ public class BlockDecor extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149666_a(Item par1, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item par1, CreativeTabs tab, List subItems) {
 		for (int ix = 0; ix < names.length; ix++) {
 			subItems.add(new ItemStack(this, 1, ix));
 		}
 	}
 
 	@Override
-	public void func_149724_b(World world, int i, int j, int k, Entity entity) {
+	public void onEntityWalking(World world, int i, int j, int k, Entity entity) {
 		if (world.getBlockMetadata(i, j, k) == 3 || world.getBlockMetadata(i, j, k) == 12)
 			entity.attackEntityFrom(DamageSource.magic, 1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (world.getBlockMetadata(i, j, k) == 3 || world.getBlockMetadata(i, j, k) == 12)
 			animate(world, i, j, k);
 	}
 
 	@Override
-	public void func_149651_a(IIconRegister reg) {
+	public void registerBlockIcons(IIconRegister reg) {
 		icons = new IIcon[names.length];
 		for (int i = 0; i < names.length; i++) {
 			icons[i] = reg.registerIcon("steamcraft:" + names[i]);
@@ -132,22 +132,22 @@ public class BlockDecor extends Block {
 			double d1 = i + random.nextFloat();
 			double d2 = j + random.nextFloat();
 			double d3 = k + random.nextFloat();
-			if (l == 0 && !world.func_147439_a(i, j + 1, k).func_149662_c()) {
+			if (l == 0 && !world.getBlock(i, j + 1, k).isOpaqueCube()) {
 				d2 = j + 1 + d;
 			}
-			if (l == 1 && !world.func_147439_a(i, j - 1, k).func_149662_c()) {
+			if (l == 1 && !world.getBlock(i, j - 1, k).isOpaqueCube()) {
 				d2 = j + 0 - d;
 			}
-			if (l == 2 && !world.func_147439_a(i, j, k + 1).func_149662_c()) {
+			if (l == 2 && !world.getBlock(i, j, k + 1).isOpaqueCube()) {
 				d3 = k + 1 + d;
 			}
-			if (l == 3 && !world.func_147439_a(i, j, k - 1).func_149662_c()) {
+			if (l == 3 && !world.getBlock(i, j, k - 1).isOpaqueCube()) {
 				d3 = k + 0 - d;
 			}
-			if (l == 4 && !world.func_147439_a(i + 1, j, k).func_149662_c()) {
+			if (l == 4 && !world.getBlock(i + 1, j, k).isOpaqueCube()) {
 				d1 = i + 1 + d;
 			}
-			if (l == 5 && !world.func_147439_a(i - 1, j, k).func_149662_c()) {
+			if (l == 5 && !world.getBlock(i - 1, j, k).isOpaqueCube()) {
 				d1 = i + 0 - d;
 			}
 			if (d1 < i || d1 > i + 1 || d2 < 0.0D || d2 > j + 1 || d3 < k || d3 > k + 1) {

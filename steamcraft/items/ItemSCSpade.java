@@ -11,6 +11,6 @@ public class ItemSCSpade extends ItemSCTool {
 
 	@Override
 	public boolean func_150897_b(Block par1Block) {
-		return par1Block.func_149688_o() == Material.field_151597_y || par1Block.func_149688_o() == Material.field_151596_z;
+		return par1Block.getMaterial() == Material.snow || par1Block.getMaterial() == Material.craftedSnow;
 	}
 }

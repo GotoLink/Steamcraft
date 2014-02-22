@@ -20,7 +20,7 @@ public class BlockSCStairs extends BlockStairs {
 
 	public BlockSCStairs(Block block, int meta, Item blockdrop, int quantity) {
 		super(block, meta);
-        func_149713_g(0);
+        setLightOpacity(0);
 		modelBlock = block;
 		blockDrop = blockdrop;
 		dropQuantity = quantity;
@@ -32,55 +32,55 @@ public class BlockSCStairs extends BlockStairs {
 	}
 
 	@Override
-	public void func_149719_a(IBlockAccess iblockaccess, int i, int j, int k) {
-        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+	public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k) {
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
-	public void func_149743_a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List arraylist, Entity ent) {
+	public void addCollisionBoxesToList(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List arraylist, Entity ent) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l == 0) {
-            func_149676_a(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
-            func_149676_a(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 1) {
-            func_149676_a(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
-            func_149676_a(0.5F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 2) {
-            func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.5F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
-            func_149676_a(0.0F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.5F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
 		} else if (l == 3) {
-            func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
-            func_149676_a(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
-			super.func_149743_a(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
+            setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
+			super.addCollisionBoxesToList(world, i, j, k, axisalignedbb, arraylist, ent);
 		}
-        func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
+	public Item getItemDropped(int i, Random random, int j) {
 		if (blockDrop == null) {
-			blockDrop = modelBlock.func_149650_a(i, random, j);
+			blockDrop = modelBlock.getItemDropped(i, random, j);
 		}
 		return blockDrop;
 	}
 
 	@Override
-	public int func_149745_a(Random random) {
+	public int quantityDropped(Random random) {
 		if (dropQuantity == -1) {
-			dropQuantity = modelBlock.func_149745_a(random);
+			dropQuantity = modelBlock.quantityDropped(random);
 		}
 		return dropQuantity;
 	}
 
 	@Override
-	public IIcon func_149691_a(int i, int j) {
-		return modelBlock.func_149691_a(i, 0);
+	public IIcon getIcon(int i, int j) {
+		return modelBlock.getIcon(i, 0);
 	}
 }

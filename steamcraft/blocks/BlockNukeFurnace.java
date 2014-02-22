@@ -17,44 +17,44 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockNukeFurnace extends BlockMainFurnace {
 	public BlockNukeFurnace(boolean flag) {
 		super(flag, "nukefurnaceside", "nukefurnacetop", "nukefurnace");
-        func_149675_a(true);
+        setTickRandomly(true);
 	}
 
 	@Override
-	public TileEntity func_149915_a(World world, int i) {
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityNukeFurnace();
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
-		return Item.func_150898_a(getIdle());
+	public Item getItemDropped(int i, Random random, int j) {
+		return Item.getItemFromBlock(getIdle());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
-		return Item.func_150898_a(getIdle());
+	public Item getItem(World par1World, int par2, int par3, int par4) {
+		return Item.getItemFromBlock(getIdle());
 	}
 
 	@Override
-	public boolean func_149727_a(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
 		if (world.isRemote) {
 			return true;
 		}
-		if (world.func_147438_o(i, j, k) instanceof TileEntityNukeFurnace) {
+		if (world.getTileEntity(i, j, k) instanceof TileEntityNukeFurnace) {
 			entityplayer.openGui(Steamcraft.instance, 2, world, i, j, k);
 		}
 		return true;
 	}
 
 	@Override
-	public void func_149695_a(World world, int i, int j, int k, Block l) {
-		super.func_149695_a(world, i, j, k, l);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!isActive) {
 			return;
 		}
@@ -75,7 +75,7 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 		}
 		world.spawnParticle("reddust", f, f1 + 0.6F, f2, 0.0D, 0.0D, 1.0D);
 		world.spawnParticle("reddust", f, f1 + 0.6F, f2, 0.0D, 0.0D, 1.0D);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	public void spawnSmoke(World world, int i, int j, int k, Random random) {
@@ -86,19 +86,19 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 	}
 
 	@Override
-	public int func_149738_a(World world) {
+	public int tickRate(World world) {
 		return 40;
 	}
 
 	@Override
-	public void func_149674_a(World world, int i, int j, int k, Random random) {
-		TileEntityNukeFurnace tileentityfurnace = (TileEntityNukeFurnace) world.func_147438_o(i, j, k);
-		Block i1 = world.func_147439_a(i + 1, j, k);
-		Block i2 = world.func_147439_a(i - 1, j, k);
-		Block j1 = world.func_147439_a(i, j + 1, k);
-		Block j2 = world.func_147439_a(i, j - 1, k);
-		Block k1 = world.func_147439_a(i, j, k + 1);
-		Block k2 = world.func_147439_a(i, j, k - 1);
+	public void updateTick(World world, int i, int j, int k, Random random) {
+		TileEntityNukeFurnace tileentityfurnace = (TileEntityNukeFurnace) world.getTileEntity(i, j, k);
+		Block i1 = world.getBlock(i + 1, j, k);
+		Block i2 = world.getBlock(i - 1, j, k);
+		Block j1 = world.getBlock(i, j + 1, k);
+		Block j2 = world.getBlock(i, j - 1, k);
+		Block k1 = world.getBlock(i, j, k + 1);
+		Block k2 = world.getBlock(i, j, k - 1);
 		if (tileentityfurnace.getHeat() >= 1000) {
 			absorbWater(world, i - 1, j, k, random);
 			absorbWater(world, i + 1, j, k, random);
@@ -114,21 +114,21 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 		if (i1 == Blocks.fire || i2 == Blocks.fire || j2 == Blocks.fire || k1 == Blocks.fire || k2 == Blocks.fire) {
 			tileentityfurnace.addHeat(80);
 		}
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	private void absorbWater(World world, int i, int j, int k, Random random) {
-		Block id = world.func_147439_a(i, j, k);
+		Block id = world.getBlock(i, j, k);
 		boolean flag = false;
 		if (id == Blocks.flowing_water) {
-			((TileEntityNukeFurnace) world.func_147438_o(i, j, k)).addHeat(-5);
+			((TileEntityNukeFurnace) world.getTileEntity(i, j, k)).addHeat(-5);
 			flag = true;
 		} else if (id == Blocks.water) {
-			((TileEntityNukeFurnace) world.func_147438_o(i, j, k)).addHeat(-10);
+			((TileEntityNukeFurnace) world.getTileEntity(i, j, k)).addHeat(-10);
 			flag = true;
 		}
 		if (flag) {
-			world.func_147468_f(i, j, k);
+			world.setBlockToAir(i, j, k);
 			world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
 			for (int d = 0; d < 4; d++)
 				spawnSmoke(world, i, j, k, random);

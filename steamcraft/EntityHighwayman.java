@@ -7,10 +7,8 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -27,7 +25,7 @@ public class EntityHighwayman extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth).setAttribute(10);
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth).setBaseValue(10);
 	}
 
 	@Override
@@ -45,9 +43,9 @@ public class EntityHighwayman extends EntityMob {
 		EntityPlayer entityplayer = (EntityPlayer) super.findPlayerToAttack();
 		if (entityplayer != null && canEntityBeSeen(entityplayer) && !entityplayer.isDead) {
 			if (rand.nextInt(2) == 0) {
-				entityplayer.func_146105_b(new ChatComponentTranslation("highwayman.dialog1"));
+				entityplayer.addChatComponentMessage(new ChatComponentTranslation("highwayman.dialog1"));
 			} else {
-				entityplayer.func_146105_b(new ChatComponentTranslation("highwayman.dialog1"));
+				entityplayer.addChatComponentMessage(new ChatComponentTranslation("highwayman.dialog1"));
 			}
 			return entityplayer;
 		} else {
@@ -119,13 +117,13 @@ public class EntityHighwayman extends EntityMob {
 		if (p >= 2 && p < 8) {
 			i = rand.nextInt(4);
 			for (int j = 0; j < i; j++) {
-                func_145779_a(Items.gold_ingot, 1);
+                dropItem(Items.gold_ingot, 1);
 			}
 		}
 		if (p == 8 || p == 1) {
 			i = rand.nextInt(2);
 			for (int j = 0; j < i; j++) {
-                func_145779_a(Items.diamond, 1);
+                dropItem(Items.diamond, 1);
 			}
 		}
 	}

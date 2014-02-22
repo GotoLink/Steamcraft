@@ -23,7 +23,7 @@ public class BlockTeaPlant extends BlockCrops {
 	}
 
 	@Override
-	public IIcon func_149691_a(int i, int j) {
+	public IIcon getIcon(int i, int j) {
 		if (j < 1) {
 			return icons[0];
 		} else if (j < 7) {
@@ -34,16 +34,16 @@ public class BlockTeaPlant extends BlockCrops {
 	}
 
 	@Override
-	public int func_149645_b() {
+	public int getRenderType() {
 		return modelID;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		this.icons = new IIcon[3];
 		for (int i = 0; i < this.icons.length; ++i) {
-			this.icons[i] = par1IconRegister.registerIcon(this.func_149641_N() + "_stage_" + i);
+			this.icons[i] = par1IconRegister.registerIcon(this.getTextureName() + "_stage_" + i);
 		}
 	}
 

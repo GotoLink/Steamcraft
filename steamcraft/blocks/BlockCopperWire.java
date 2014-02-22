@@ -15,7 +15,7 @@ public class BlockCopperWire extends BlockRedstoneWire {
 
 	public BlockCopperWire() {
 		super();
-        func_149649_H();
+        disableStats();
 	}
 
 	@Override
@@ -25,28 +25,28 @@ public class BlockCopperWire extends BlockRedstoneWire {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int func_149720_d(IBlockAccess iblockaccess, int i, int j, int k) {
+	public int colorMultiplier(IBlockAccess iblockaccess, int i, int j, int k) {
 		return 0x800000;
 	}
 
 	@Override
-	public int func_149645_b() {
+	public int getRenderType() {
 		return modelID;
 	}
 
 	@Override
-	public Item func_149650_a(int par1, Random par2Random, int par3) {
-		return Item.func_150898_a(this);
+	public Item getItemDropped(int par1, Random par2Random, int par3) {
+		return Item.getItemFromBlock(this);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
-		return Item.func_150898_a(this);
+	public Item getItem(World par1World, int par2, int par3, int par4) {
+		return Item.getItemFromBlock(this);
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l > 0) {
 			double d = i + 0.5D + (random.nextFloat() - 0.5D) * 0.20000000000000001D;
@@ -68,8 +68,8 @@ public class BlockCopperWire extends BlockRedstoneWire {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		super.func_149651_a(par1IconRegister);
-		this.field_149761_L = par1IconRegister.registerIcon("steamcraft:copperwire");
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		super.registerBlockIcons(par1IconRegister);
+		this.blockIcon = par1IconRegister.registerIcon("steamcraft:copperwire");
 	}
 }

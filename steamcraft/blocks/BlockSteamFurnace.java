@@ -19,38 +19,38 @@ public class BlockSteamFurnace extends BlockMainFurnace {
 	}
 
 	@Override
-	public TileEntity func_149915_a(World world, int i) {
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntitySteamFurnace();
 	}
 
 	@Override
-	public Item func_149650_a(int i, Random random, int j) {
-		return Item.func_150898_a(getIdle());
+	public Item getItemDropped(int i, Random random, int j) {
+		return Item.getItemFromBlock(getIdle());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
-		return Item.func_150898_a(getIdle());
+	public Item getItem(World par1World, int par2, int par3, int par4) {
+		return Item.getItemFromBlock(getIdle());
 	}
 
 	@Override
-	public boolean func_149727_a(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
 		if (world.isRemote) {
 			return true;
 		}
-		if (world.func_147438_o(i, j, k) instanceof TileEntitySteamFurnace) {
+		if (world.getTileEntity(i, j, k) instanceof TileEntitySteamFurnace) {
 			entityplayer.openGui(Steamcraft.instance, 0, world, i, j, k);
 		}
 		return true;
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!isActive) {
 			return;
 		}
-		TileEntitySteamFurnace tileentityfurnace = (TileEntitySteamFurnace) world.func_147438_o(i, j, k);
+		TileEntitySteamFurnace tileentityfurnace = (TileEntitySteamFurnace) world.getTileEntity(i, j, k);
 		int l = world.getBlockMetadata(i, j, k);
 		float f = i + 0.5F;
 		float f1 = j + 0.0F + (random.nextFloat() * 6F) / 16F;

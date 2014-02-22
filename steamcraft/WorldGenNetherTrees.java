@@ -29,7 +29,7 @@ public class WorldGenNetherTrees extends WorldGenerator {
 			for (int i2 = i - byte0; i2 <= i + byte0 && flag; i2++) {
 				for (int l2 = k - byte0; l2 <= k + byte0 && flag; l2++) {
 					if (i1 >= 0 && i1 < 128) {
-						Block j3 = world.func_147439_a(i2, i1, l2);
+						Block j3 = world.getBlock(i2, i1, l2);
 						if (j3 != Blocks.air && j3 != getLeavesId()) {
 							flag = false;
 						}
@@ -42,7 +42,7 @@ public class WorldGenNetherTrees extends WorldGenerator {
 		if (!flag) {
 			return false;
 		}
-		Block j1 = world.func_147439_a(i, j - 1, k);
+		Block j1 = world.getBlock(i, j - 1, k);
 		if (j1 != Blocks.netherrack || j >= 128 - l - 1) {
 			return false;
 		}
@@ -54,14 +54,14 @@ public class WorldGenNetherTrees extends WorldGenerator {
 				int l3 = k3 - i;
 				for (int i4 = k - i3; i4 <= k + i3; i4++) {
 					int j4 = i4 - k;
-					if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && j2 != 0) && !world.func_147439_a(k3, k1, i4).func_149686_d()) {
+					if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && j2 != 0) && !world.getBlock(k3, k1, i4).isOpaqueCube()) {
                         func_150515_a(world, k3, k1, i4, getLeavesId());
 					}
 				}
 			}
 		}
 		for (int l1 = 0; l1 < l; l1++) {
-			Block k2 = world.func_147439_a(i, j + l1, k);
+			Block k2 = world.getBlock(i, j + l1, k);
 			if (k2 == Blocks.air || k2 == getLeavesId()) {
                 func_150515_a(world, i, j + l1, k, getLogId());
 			}

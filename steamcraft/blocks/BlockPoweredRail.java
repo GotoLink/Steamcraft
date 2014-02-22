@@ -12,10 +12,10 @@ public class BlockPoweredRail extends BlockRailPowered {
 	}
 
 	@Override
-	public IIcon func_149691_a(int i, int j) {
+	public IIcon getIcon(int i, int j) {
 		if (isPowered) {
-			return super.func_149691_a(i, 8);
+			return super.getIcon(i, 8);
 		} else
-			return super.func_149691_a(i, 0);
+			return super.getIcon(i, 0);
 	}
 }

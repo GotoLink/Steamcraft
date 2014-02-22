@@ -22,34 +22,34 @@ public class BlockInverter extends BlockRedstoneAccess {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149691_a(int par1, int par2) {
-		return par1 == 0 ? (this.torchActive ? BlockDiode.iconInverterActive : BlockDiode.iconInverterIdle) : (par1 == 1 ? this.field_149761_L : Blocks.double_stone_slab.func_149733_h(1));
+	public IIcon getIcon(int par1, int par2) {
+		return par1 == 0 ? (this.torchActive ? BlockDiode.iconInverterActive : BlockDiode.iconInverterIdle) : (par1 == 1 ? this.blockIcon : Blocks.double_stone_slab.getBlockTextureFromSide(1));
 	}
 
 	@Override
-	public Item func_149650_a(int par1, Random par2Random, int par3) {
-		return Item.func_150898_a(getActive().get());
+	public Item getItemDropped(int par1, Random par2Random, int par3) {
+		return Item.getItemFromBlock(getActive().get());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
-		return Item.func_150898_a(getActive().get());
+	public Item getItem(World par1World, int par2, int par3, int par4) {
+		return Item.getItemFromBlock(getActive().get());
 	}
 
 	@Override
-	public boolean func_149667_c(Block par1) {
+	public boolean isAssociatedBlock(Block par1) {
 		return par1 == getIdle().get() || par1 == getActive().get();
 	}
 
 	@Override
-	public void func_149695_a(World world, int i, int j, int k, Block l) {
-		super.func_149695_a(world, i, j, k, l);
-		world.func_147464_a(i, j, k, this, func_149738_a(world));
+	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
+		super.onNeighborBlockChange(world, i, j, k, l);
+		world.scheduleBlockUpdate(i, j, k, this, tickRate(world));
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!torchActive) {
 			return;
 		}
@@ -73,12 +73,12 @@ public class BlockInverter extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public void func_149674_a(World par1World, int par2, int par3, int par4, Random par5Random) {
+	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		boolean flag = this.hasIndirectPower(par1World, par2, par3, par4);
         updateToggleTimes(par1World);
 		if (this.torchActive) {
 			if (flag) {
-				par1World.func_147465_d(par2, par3, par4, getIdle().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
+				par1World.setBlock(par2, par3, par4, getIdle().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
 				if (this.checkBurnout(par1World, par2, par3, par4, true)) {
 					par1World.playSoundEffect(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
 					for (int l = 0; l < 5; ++l) {
@@ -90,7 +90,7 @@ public class BlockInverter extends BlockRedstoneAccess {
 				}
 			}
 		} else if (!flag && !this.checkBurnout(par1World, par2, par3, par4, false)) {
-			par1World.func_147465_d(par2, par3, par4, getActive().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
+			par1World.setBlock(par2, par3, par4, getActive().get(), par1World.getBlockMetadata(par2, par3, par4), 3);
 		}
 	}
 

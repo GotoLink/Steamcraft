@@ -18,7 +18,7 @@ public class BlockNetherLeaves extends Block {
 	}
 
 	@Override
-	public void func_149690_a(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
+	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
 		if (!par1World.isRemote) {
 			int j1 = 20;
 			if (par7 > 0) {
@@ -28,8 +28,8 @@ public class BlockNetherLeaves extends Block {
 				}
 			}
 			if (par1World.rand.nextInt(j1) == 0) {
-				Item k1 = this.func_149650_a(par5, par1World.rand, par7);
-				this.func_149642_a(par1World, par2, par3, par4, new ItemStack(k1, 1, this.func_149692_a(par5)));
+				Item k1 = this.getItemDropped(par5, par1World.rand, par7);
+				this.dropBlockAsItem(par1World, par2, par3, par4, new ItemStack(k1, 1, this.damageDropped(par5)));
 			}
 			j1 = 200;
 			if (par7 > 0) {
@@ -39,13 +39,13 @@ public class BlockNetherLeaves extends Block {
 				}
 			}
 			if (par1World.rand.nextInt(j1) == 0) {
-				this.func_149642_a(par1World, par2, par3, par4, new ItemStack(HandlerRegistry.getBlock("steamcraft.nethersapling").get(), 1, 0));
+				this.dropBlockAsItem(par1World, par2, par3, par4, new ItemStack(HandlerRegistry.getBlock("steamcraft.nethersapling").get(), 1, 0));
 			}
 		}
 	}
 
 	@Override
-	public Item func_149650_a(int par1, Random par2Random, int par3) {
+	public Item getItemDropped(int par1, Random par2Random, int par3) {
 		return Items.blaze_powder;
 	}
 
@@ -60,7 +60,7 @@ public class BlockNetherLeaves extends Block {
 	}
 
 	@Override
-	public int func_149745_a(Random par1Random) {
+	public int quantityDropped(Random par1Random) {
 		return par1Random.nextInt(20) == 0 ? 1 : 0;
 	}
 }

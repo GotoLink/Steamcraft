@@ -21,39 +21,39 @@ public class BlockDiode extends BlockRedstoneRepeater {
 
 	public BlockDiode(boolean flag) {
 		super(flag);
-        func_149649_H();
+        disableStats();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon func_149691_a(int i, int j) {
+	public IIcon getIcon(int i, int j) {
 		if (i == 0) {
-			return !field_149914_a ? iconInverterIdle : iconInverterActive;
+			return !isRepeaterPowered ? iconInverterIdle : iconInverterActive;
 		}
 		if (i == 1) {
-			return !field_149914_a ? iconDiodeIdle : iconDiodeActive;
+			return !isRepeaterPowered ? iconDiodeIdle : iconDiodeActive;
 		}
-		return super.func_149691_a(i, j);
+		return super.getIcon(i, j);
 	}
 
 	@Override
-	public Item func_149650_a(int par1, Random par2Random, int par3) {
-		return Item.func_150898_a(getIdle().get());
+	public Item getItemDropped(int par1, Random par2Random, int par3) {
+		return Item.getItemFromBlock(getIdle().get());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item func_149694_d(World par1World, int par2, int par3, int par4) {
-		return Item.func_150898_a(getIdle().get());
+	public Item getItem(World par1World, int par2, int par3, int par4) {
+		return Item.getItemFromBlock(getIdle().get());
 	}
 
 	@Override
-	public void func_149734_b(World world, int i, int j, int k, Random random) {
-		if (!field_149914_a) {
+	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+		if (!isRepeaterPowered) {
 			return;
 		}
 		int l = world.getBlockMetadata(i, j, k);
-		int i1 = func_149895_l(l);
+		int i1 = getDirection(l);
 		double d = i + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
 		double d1 = j + 0.4F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
 		double d2 = k + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;
@@ -77,16 +77,16 @@ public class BlockDiode extends BlockRedstoneRepeater {
 			int j1 = (l & 12) >> 2;
 			switch (i1) {
 			case 0:
-				d4 = field_149973_b[j1];
+				d4 = repeaterTorchOffset[j1];
 				break;
 			case 1:
-				d3 = -field_149973_b[j1];
+				d3 = -repeaterTorchOffset[j1];
 				break;
 			case 2:
-				d4 = -field_149973_b[j1];
+				d4 = -repeaterTorchOffset[j1];
 				break;
 			case 3:
-				d3 = field_149973_b[j1];
+				d3 = repeaterTorchOffset[j1];
 			}
 		}
 		world.spawnParticle("reddust", d + d3, d1, d2 + d4, -1.0D, 0.7D, 1.0D);
@@ -94,8 +94,8 @@ public class BlockDiode extends BlockRedstoneRepeater {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_149651_a(IIconRegister par1IconRegister) {
-		super.func_149651_a(par1IconRegister);
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		super.registerBlockIcons(par1IconRegister);
 		iconInverterIdle = par1IconRegister.registerIcon("steamcraft:inverteridle");
 		iconInverterActive = par1IconRegister.registerIcon("steamcraft:inverteractive");
 		iconDiodeIdle = par1IconRegister.registerIcon("steamcraft:diodeidle");
@@ -103,12 +103,12 @@ public class BlockDiode extends BlockRedstoneRepeater {
 	}
 
 	@Override
-	protected BlockRedstoneDiode func_149898_i() {
+	protected BlockRedstoneDiode getBlockUnpowered() {
 		return (BlockRedstoneDiode) getIdle().get();
 	}
 
 	@Override
-	protected BlockRedstoneDiode func_149906_e() {
+	protected BlockRedstoneDiode getBlockPowered() {
 		return (BlockRedstoneDiode) getActive().get();
 	}
 
