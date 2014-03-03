@@ -78,9 +78,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	public static Map<ItemStack, String> data = new HashMap<ItemStack, String>();
 	public static ItemStack flintlockMusket, matchlockMusket, percussionCapMusket;
 	public static ItemStack flintlockRifle, matchlockRifle, percussionCapRifle;
-	public static Item spanner;
-	public static Item firearm, part;
-	public static Item material;
+	public static Item spanner, firearm, part, material;
 	private static final WorldGenerator netherGen = new WorldGenNetherTrees();
 	private static final WorldGenerator hideoutGen = new WorldGenHighwaymanHideout();
 	private static WorldGenerator brimstoneGen, zincGen, bornGen, phosphGen, uranGen, volucGen;
@@ -655,9 +653,9 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	}
 
 	public static void addAchievements() {
-		achs.put("carryingyou", new Achievement("carryingyou", "carryingyou", 4, 2, material, achs.get("blackmagic")).registerStat());
+		achs.put("carryingyou", new Achievement("carryingyou", "carryingyou", 4, 2, new ItemStack(material,1,0), achs.get("blackmagic")).registerStat());
 		achs.put("ruinedeverything", new Achievement("ruinedeverything", "ruinedeverything", 0, 0, new ItemStack(material, 1, 8), achs.get("fallout")).registerStat());
-		achs.put("lockstockbarrel", new Achievement("lockstockbarrel", "lockstockbarrel", -1, 3, firearm, AchievementList.acquireIron).registerStat());
+		achs.put("lockstockbarrel", new Achievement("lockstockbarrel", "lockstockbarrel", -1, 3, flintlockMusket, AchievementList.acquireIron).registerStat());
 		AchievementPage.registerAchievementPage(new AchievementPage("Steamcraft", achs.values().toArray(new Achievement[achs.size()])));
 	}
 }
