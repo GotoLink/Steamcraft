@@ -616,24 +616,24 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 2), "X ", "##",'#', Items.iron_ingot,'X', "ingotBrass"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 5), "#  ", " # ", "  #",'#', "plankWood"));
 		GameRegistry.addRecipe(new ItemStack(part, 1, 3), "#  ", " # ", "  #",'#', Items.iron_ingot);
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(part, 1, 4), "itemBarrel", "chisel"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(part, 1, 4), "barrel", "chisel"));
 		flintlockMusket.setItemDamage(flintlockMusket.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(flintlockMusket, "X", "#", "T",'#', "itemBarrel",'X', new ItemStack(Items.flint_and_steel, 1,
-				OreDictionary.WILDCARD_VALUE),'T', "itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(flintlockMusket, "X", "#", "T",'#', "barrel",'X', new ItemStack(Items.flint_and_steel, 1,
+				OreDictionary.WILDCARD_VALUE),'T', "woodenStock"));
 		matchlockMusket.setItemDamage(matchlockMusket.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(matchlockMusket, "X", "#", "T",'#', "itemBarrel",'X', Items.string,'T', "itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(matchlockMusket, "X", "#", "T",'#', "barrel",'X', Items.string,'T', "woodenStock"));
 		percussionCapMusket.setItemDamage(percussionCapMusket.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(percussionCapMusket, "X", "#", "T",'#', "itemBarrel",'X', "itemPercussionLock",'T',
-				"itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(percussionCapMusket, "X", "#", "T",'#', "barrel",'X', "percussionLock",'T',
+				"woodenStock"));
 		flintlockRifle.setItemDamage(flintlockRifle.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(flintlockRifle, "X", "#", "T",'#', "itemBarrelRifled",'X', new ItemStack(Items.flint_and_steel, 1,
-				OreDictionary.WILDCARD_VALUE),'T', "itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(flintlockRifle, "X", "#", "T",'#', "barrelRifled",'X', new ItemStack(Items.flint_and_steel, 1,
+				OreDictionary.WILDCARD_VALUE),'T', "woodenStock"));
 		matchlockRifle.setItemDamage(matchlockRifle.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(matchlockRifle, "X", "#", "T",'#', "itemBarrelRifled",'X', Items.string,'T',
-				"itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(matchlockRifle, "X", "#", "T",'#', "barrelRifled",'X', Items.string,'T',
+				"woodenStock"));
 		percussionCapRifle.setItemDamage(percussionCapRifle.getMaxDamage() - 1);
-		GameRegistry.addRecipe(new ShapedOreRecipe(percussionCapRifle, "X", "#", "T",'#', "itemBarrelRifled",'X', "itemPercussionLock",'T',
-				"itemWoodenStock"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(percussionCapRifle, "X", "#", "T",'#', "barrelRifled",'X', "percussionLock",'T',
+				"woodenStock"));
 		GameRegistry.addRecipe(new ItemStack(part, 8), "X", "#", "T",'#', Items.gunpowder,'X', Items.iron_ingot,'T', Items.paper);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 8, 1), "T", "#", "X",'#', Items.gunpowder,'X', "ingotBrass",'T',
 				Items.paper));

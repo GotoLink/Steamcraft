@@ -1,5 +1,6 @@
 package steamcraft;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.Achievement;
@@ -90,9 +91,14 @@ public abstract class DataHandler<e> {
 
 	public abstract String getName();
 
+    public abstract Item getItem();
+
 	public void register() {
 		HandlerRegistry.register(this);
 	}
 
-	public abstract DataHandler setOutput(int size, int damage);
+    public DataHandler setOutput(int size, int damage) {
+        this.output = new ItemStack(getItem(), size, damage);
+        return this;
+    }
 }

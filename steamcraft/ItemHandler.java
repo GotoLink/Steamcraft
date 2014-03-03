@@ -13,9 +13,9 @@ public class ItemHandler extends DataHandler<Item> {
 		this.item = it;
 		if (item != null) {
 			item.setUnlocalizedName(names[0]).setTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the item
-            this.output = new ItemStack(item, 1, 0);
-			GameRegistry.registerItem(item, names[0]);
-			if (names.length > 2) {
+            GameRegistry.registerItem(item, names[0]);
+            setOutput(1, 0);
+            if (names.length > 2) {
 				OreDictionary.registerOre(names[2], item);
 			}
 		}
@@ -37,6 +37,10 @@ public class ItemHandler extends DataHandler<Item> {
 		return item;
 	}
 
+    public Item getItem(){
+        return item;
+    }
+
 	@Override
 	public String getName() {
 		if (item != null) {
@@ -44,12 +48,6 @@ public class ItemHandler extends DataHandler<Item> {
 		}
 		return null;
 	}
-
-    @Override
-    public DataHandler setOutput(int size, int damage) {
-        this.output = new ItemStack(get(), size, damage);
-        return this;
-    }
 
     public ItemHandler setTool(String tool, int level) {
 		if (tool.equals("drill")) {

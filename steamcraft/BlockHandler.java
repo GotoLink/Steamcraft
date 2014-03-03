@@ -1,6 +1,7 @@
 package steamcraft;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -14,13 +15,13 @@ public class BlockHandler extends DataHandler<Block> {
 		this.block = bloc;
 		if (block != null) {
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
-            this.output = new ItemStack(bloc, 1, 0);
-			if (itemclass != null) {
+            if (itemclass != null) {
 				GameRegistry.registerBlock(block, itemclass, names[0]);
 			} else {
 				GameRegistry.registerBlock(block, names[0]);//registering...
 			}
-			if (names.length > 2) {
+            setOutput(1, 0);
+            if (names.length > 2) {
 				OreDictionary.registerOre(names[2], block);
 			}
 			if (block.hasTileEntity(0)) {
@@ -32,10 +33,10 @@ public class BlockHandler extends DataHandler<Block> {
 	public BlockHandler(Block bloc, String... names) {
 		this.block = bloc;
 		if (block != null) {
-            this.output = new ItemStack(bloc, 1, 0);
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
 			GameRegistry.registerBlock(block, names[0]);//registering...
-			if (names.length > 2) {
+            setOutput(1, 0);
+            if (names.length > 2) {
 				OreDictionary.registerOre(names[2], block);
 			}
 			if (block.hasTileEntity(0)) {
@@ -60,6 +61,10 @@ public class BlockHandler extends DataHandler<Block> {
 		return block;
 	}
 
+    public Item getItem(){
+        return Item.getItemFromBlock(block);
+    }
+
 	@Override
 	public String getName() {
 		if (block != null) {
@@ -67,12 +72,6 @@ public class BlockHandler extends DataHandler<Block> {
 		}
 		return null;
 	}
-
-    @Override
-    public DataHandler setOutput(int size, int damage) {
-        this.output = new ItemStack(get(), size, damage);
-        return this;
-    }
 
 	public BlockHandler setHarvest(String tool, int level) {
         block.setHarvestLevel(tool, level);
