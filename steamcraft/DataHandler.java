@@ -17,42 +17,42 @@ public abstract class DataHandler<e> {
 	}
 
 	public DataHandler addAxe(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XX", "X#", " #", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XX", "X#", " #",'#', "stickWood",'X', input));
 		return this;
 	}
 
 	public DataHandler addBoots(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X X", "X X", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X X", "X X",'X', input));
 		return this;
 	}
 
 	public DataHandler addDrill(Object input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "XXX", "XX#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "XXX", "XX#",'#', "stickWood",'X', input));
 		return this;
 	}
 
 	public DataHandler addHelmet(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "X X", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "X X",'X', input));
 		return this;
 	}
 
 	public DataHandler addHoe(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XX", " #", " #", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XX", " #", " #",'#', "stickWood",'X', input));
 		return this;
 	}
 
 	public DataHandler addLegs(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "X X", "X X", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", "X X", "X X",'X', input));
 		return this;
 	}
 
 	public DataHandler addPick(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", " # ", " # ", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "XXX", " # ", " # ",'#', "stickWood",'X', input));
 		return this;
 	}
 
 	public DataHandler addPlate(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X X", "XXX", "XXX", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X X", "XXX", "XXX",'X', input));
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public abstract class DataHandler<e> {
 	}
 
 	public DataHandler addShovel(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "#", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "#", "#",'#', "stickWood",'X', input));
 		return this;
 	}
 
@@ -82,7 +82,7 @@ public abstract class DataHandler<e> {
 	public abstract DataHandler addSmelt(ItemStack stack, int meta, float xp);
 
 	public DataHandler addSword(String input) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "X", "#", Character.valueOf('#'), "stickWood", Character.valueOf('X'), input));
+		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "X", "#",'#', "stickWood",'X', input));
 		return this;
 	}
 
