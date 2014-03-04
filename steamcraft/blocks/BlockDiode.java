@@ -48,6 +48,7 @@ public class BlockDiode extends BlockRedstoneRepeater {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!isRepeaterPowered) {
 			return;

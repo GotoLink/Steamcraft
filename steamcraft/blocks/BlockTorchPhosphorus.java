@@ -2,6 +2,8 @@ package steamcraft.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 
@@ -11,6 +13,7 @@ public class BlockTorchPhosphorus extends BlockTorch {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		double d = i + 0.5F + (random.nextFloat() - 0.5F) * 0.20000000000000001D;

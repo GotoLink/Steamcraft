@@ -46,6 +46,7 @@ public class BlockSteamFurnace extends BlockMainFurnace {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!isActive) {
 			return;

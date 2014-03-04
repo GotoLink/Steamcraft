@@ -23,6 +23,7 @@ public class BlockTeaPlant extends BlockCrops {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
 		if (j < 1) {
 			return icons[0];

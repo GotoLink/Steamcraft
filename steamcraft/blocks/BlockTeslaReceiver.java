@@ -83,6 +83,7 @@ public class BlockTeslaReceiver extends Block {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l == 1) {
@@ -118,6 +119,7 @@ public class BlockTeslaReceiver extends Block {
     }
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1) {
 			return true;

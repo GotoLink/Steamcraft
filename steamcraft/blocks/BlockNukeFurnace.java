@@ -54,6 +54,7 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (!isActive) {
 			return;
@@ -145,7 +146,10 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 
 	public static void meltdown(World world, int i, int j, int k) {
 		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
-		world.getClosestPlayer(i, j, k, 35).triggerAchievement(Steamcraft.achs.get("ruinedeverything"));
+		EntityPlayer player = world.getClosestPlayer(i, j, k, 35);
+        if(player!=null){
+            player.triggerAchievement(Steamcraft.achs.get("ruinedeverything"));
+        }
 		world.createExplosion(null, i, j, k, 25F, world.getGameRules().getGameRuleBooleanValue("mobGriefing"));
 		double d = i + 0.5F + (0.5F) * 2.0000000000000001D;
 		double d1 = j + 0.7F + (0.5F) * 2.0000000000000001D;

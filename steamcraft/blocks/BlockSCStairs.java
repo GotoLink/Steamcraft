@@ -3,6 +3,8 @@ package steamcraft.blocks;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.entity.Entity;
@@ -80,6 +82,7 @@ public class BlockSCStairs extends BlockStairs {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
 		return modelBlock.getIcon(i, 0);
 	}

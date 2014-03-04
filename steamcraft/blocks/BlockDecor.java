@@ -85,6 +85,7 @@ public class BlockDecor extends Block {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
 		return icons[j];
 	}
@@ -118,6 +119,7 @@ public class BlockDecor extends Block {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
 		icons = new IIcon[names.length];
 		for (int i = 0; i < names.length; i++) {

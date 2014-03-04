@@ -17,6 +17,7 @@ public class BlockBrassLog extends Block {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		if (l == 1 || l == 0) {
 			return blockIcon;

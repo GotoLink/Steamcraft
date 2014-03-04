@@ -46,6 +46,7 @@ public class BlockCopperWire extends BlockRedstoneWire {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
 		if (l > 0) {
