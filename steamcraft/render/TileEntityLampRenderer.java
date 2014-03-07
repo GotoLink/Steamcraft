@@ -92,7 +92,7 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	}
 
 	private static Block getTorchElectricIdle() {
-		return HandlerRegistry.getBlock("steamcraft:electricLamp").get();
+		return HandlerRegistry.getBlock("steamcraft:electricLampOff").get();
 	}
 
 	private static Block getWirelessLampActive() {
@@ -100,6 +100,6 @@ public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	}
 
 	private static Block getWirelessLampIdle() {
-		return HandlerRegistry.getBlock("steamcraft:wirelessLamp").get();
+		return HandlerRegistry.getBlock("steamcraft:wirelessLampOff").get();
 	}
 }

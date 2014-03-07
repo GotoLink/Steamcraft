@@ -133,6 +133,6 @@ public class BlockElectricLamp extends BlockRedstoneAccess {
 	}
 
 	protected BlockHandler getIdle() {
-		return HandlerRegistry.getBlock("steamcraft:electricLamp");
+		return HandlerRegistry.getBlock("steamcraft:electricLampOff");
 	}
 }
