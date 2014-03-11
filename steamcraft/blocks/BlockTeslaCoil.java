@@ -16,7 +16,7 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 	}
 
 	@Override
-	public boolean onBlockEventReceived(World world, int i, int j, int k, int par5, int par6) {
+	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		int l2 = world.getBlockMetadata(i, j, k);
 		int f = 0;
 		int f1 = 0;
@@ -59,7 +59,6 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 		if (torchActive) {
             world.notifyBlocksOfNeighborChange(i, j, k, this);
 		}
-        return true;
 	}
 
 	@Override

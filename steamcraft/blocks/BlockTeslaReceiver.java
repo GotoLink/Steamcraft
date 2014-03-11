@@ -25,9 +25,9 @@ public class BlockTeslaReceiver extends Block {
 	}
 
 	@Override
-	public boolean onBlockEventReceived(World world, int i, int j, int k, int par5, int par6) {
+	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		world.notifyBlocksOfNeighborChange(i, j, k, this);
-		return super.onBlockEventReceived(world, i, j, k, par5, par6);
+		super.breakBlock(world, i, j, k, par5, par6);
 	}
 
 	@Override
