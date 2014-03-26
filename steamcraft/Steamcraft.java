@@ -226,7 +226,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				.setValues(0.5F)
 				.addRecipe(true, "#X#", "ITI",'#', "ingotCastIron",'X', Items.gold_ingot,'I', "wireCopper",'T',
 						Items.quartz).register();
-		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:orezinc", "steamcraft:zincore", "oreZinc")
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:orezinc", "steamcraft:zincore", "oreZinc")
 				.setValues(2.5F).setHarvest("pickaxe", 1).setHarvest("drill", 1).addSmelt(new ItemStack(material, 1, 12), 1.0F).register();
 		new BlockHandler(new BlockTeslaReceiver().setStepSound(Block.soundTypeMetal), "steamcraft:receiverOn", "steamcraft:receiveractive").setValues(
 				0.5F, 0.625F).register();
@@ -249,15 +249,15 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		new BlockHandler(new BlockBattery().setStepSound(Block.soundTypeMetal), "steamcraft:battery", "steamcraft:battery", "battery")
 				.setValues(0.5F, 0.625F).addRecipe(true, "###", "IXI",'#', Items.iron_ingot,'X', Items.quartz,'I', "wireCopper")
 				.register();
-		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:brimstone", "steamcraft:brimstone",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:brimstone", "steamcraft:brimstone",
 				"oreBrimstone").setValues(3F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 1), 1.0F).register();
-		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:orePhosphate", "steamcraft:phosphate",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:orePhosphate", "steamcraft:phosphate",
 				"orePhosphate").setValues(2.5F, 0.75F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 7), 1.0F).register();
-		new BlockHandler(new BlockUraniteOre().setResistance(6F).setStepSound(Block.soundTypeGrass), "steamcraft:oreUranite", "steamcraft:uranite",
+		new BlockHandler(new BlockUraniteOre().setResistance(6F).setStepSound(Block.soundTypeStone), "steamcraft:oreUranite", "steamcraft:uranite",
 				"oreUranite").setValues(10F, 0.625F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 8), 1.0F).register();
-		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeGrass), "steamcraft:oreBornite", "steamcraft:bornite",
+		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:oreBornite", "steamcraft:bornite",
 				"oreCopper").setValues(3F).setHarvest("pickaxe", 2).addSmelt(new ItemStack(material, 1, 2), 1.0F).register();
-		new BlockHandler(new BlockSCOre().setResistance(6000000F).setStepSound(Block.soundTypeGrass), "steamcraft:oreVolucite",
+		new BlockHandler(new BlockSCOre().setResistance(6000000F).setStepSound(Block.soundTypeStone), "steamcraft:oreVolucite",
 				"steamcraft:voluciteore", "oreVolucite").setValues(50F).setHarvest("pickaxe", 5).addSmelt(new ItemStack(material, 1, 0), 1.0F).register();
 		new BlockHandler(new BlockTorchPhosphorus().setStepSound(Block.soundTypeWood), "steamcraft:torchPhosphorus", "steamcraft:torchphosphorus")
 				.setValues(0.0F, 1.0F).setOutput(4, 0).addRecipe(true, "X", "#",'#', "stickWood",'X', "ingotPosphate").register();
