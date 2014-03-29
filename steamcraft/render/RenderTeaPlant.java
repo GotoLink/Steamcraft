@@ -35,7 +35,7 @@ public class RenderTeaPlant extends RenderBlocks {
 		if (growth != 0 && growth != 7) {
 			d1 -= (-1 * growth / 15) + 0.4;
 		}
-        renderBlockStemSmall(block, blockaccess.getBlockMetadata(i, j, k), d, d1, d2, 1.0F);
+        drawCrossedSquares(getBlockIconFromSideAndMetadata(block, 0, blockaccess.getBlockMetadata(i, j, k)), d, d1, d2, 1.0F);
 		return true;
 	}
 }
