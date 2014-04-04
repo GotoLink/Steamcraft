@@ -47,7 +47,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "steamcraft", name = "SteamCraft", version = "0.3")
+@Mod(modid = "steamcraft", name = "SteamCraft", useMetadata = true)
 public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	@Instance(value = "steamcraft")
 	public static Steamcraft instance;
@@ -184,6 +184,17 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent event) {
+        if(event.getSourceFile().getName().endsWith(".jar") && event.getSide().isClient()){
+            try {
+                Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,
+                        FMLCommonHandler.instance().findContainerFor(this),
+                        "https://raw.github.com/GotoLink/SkillAPI/master/update.xml",
+                        "https://raw.github.com/GotoLink/SkillAPI/master/changelog.md"
+                );
+            } catch (Throwable e) {
+            }
+        }
+
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		config.addCustomCategoryComment("Generation", "TPC:Tries per chunk");

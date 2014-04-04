@@ -1,0 +1,26 @@
+<mod modid="steamcraft">
+    <mcVersion version="1.7.2">
+        <release type="release" version="0.3"
+                 url="http://www.minecraftforum.net/topic/1651891-172forgegotolink-updates-mystic-mods/#Steamcraft"
+                 download="http://www.mediafire.com/download/8k6vjpj6j1rjc8m/Steamcraft-0.3(1.7.2).jar"
+                 md5="195468FBEF65654EEED2A99C7AEBDFB6"
+                />
+    </mcVersion>
+	<mcVersion version="1.6.4">
+        <release type="release" version="0.3"
+                 url="http://www.minecraftforum.net/topic/1651891-172forgegotolink-updates-mystic-mods/#Steamcraft"
+                 download="http://www.mediafire.com/download/3uc7ctiv25ovzaz/Steamcraft_0.3(1.6.X).zip"
+                 md5="6E29202091D2A36C2246B6DBC42D2A0A"
+                />
+        <release type="release" version="0.2"
+                 url="http://www.minecraftforum.net/topic/1651891-172forgegotolink-updates-mystic-mods/#Steamcraft"
+                 download="http://www.mediafire.com/download/ldfsxq9y86jg8md/Steamcraft_0.2(1.6.X).zip"
+                 md5="6E29202091D2A36C2246B6DBC42D2A0A"
+                />
+        <release type="release" version="0.1"
+                 url="http://www.minecraftforum.net/topic/1651891-172forgegotolink-updates-mystic-mods/#Steamcraft"
+                 download="http://www.mediafire.com/download/12r0udztgcmrszh/Steamcraft_0.1(1.6.X).zip"
+                 md5="6E29202091D2A36C2246B6DBC42D2A0A"
+                />
+    </mcVersion>
+</mod>
