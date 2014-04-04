@@ -188,8 +188,8 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
             try {
                 Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,
                         FMLCommonHandler.instance().findContainerFor(this),
-                        "https://raw.github.com/GotoLink/SkillAPI/master/update.xml",
-                        "https://raw.github.com/GotoLink/SkillAPI/master/changelog.md"
+                        "https://raw.github.com/GotoLink/Steamcraft/master/update.xml",
+                        "https://raw.github.com/GotoLink/Steamcraft/master/changelog.md"
                 );
             } catch (Throwable e) {
             }
