@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
-import steamcraft.Steamcraft;
 
 public class ItemKettle extends Item {
 	public ItemKettle() {
@@ -19,7 +18,7 @@ public class ItemKettle extends Item {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (itemstack.getItem() == getHot() && itemstack.getItemDamage() < itemstack.getMaxDamage() - 5) {
 			if (getStackPosition(entityplayer.inventory, ItemTeacup.getEmpty()) > -1) {
-				entityplayer.triggerAchievement(Steamcraft.achs.get("timeforacuppa"));
+				entityplayer.triggerAchievement(HandlerRegistry.getAchievement("timeforacuppa"));
 				entityplayer.inventory.setInventorySlotContents(getStackPosition(entityplayer.inventory, ItemTeacup.getEmpty()), new ItemStack(ItemTeacup.getFull(), 1));
 				itemstack.damageItem((itemstack.getMaxDamage() / 3) - 1, entityplayer);
 			}

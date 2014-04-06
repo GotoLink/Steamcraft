@@ -148,12 +148,12 @@ public class BlockNukeFurnace extends BlockMainFurnace {
 		//world.playSoundEffect((float)i, (float)j, (float)k, "ambient.weather.thunder", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
 		EntityPlayer player = world.getClosestPlayer(i, j, k, 35);
         if(player!=null){
-            player.triggerAchievement(Steamcraft.achs.get("ruinedeverything"));
+            player.triggerAchievement(HandlerRegistry.getAchievement("ruinedeverything"));
         }
 		world.createExplosion(null, i, j, k, 25F, world.getGameRules().getGameRuleBooleanValue("mobGriefing"));
-		double d = i + 0.5F + (0.5F) * 2.0000000000000001D;
-		double d1 = j + 0.7F + (0.5F) * 2.0000000000000001D;
-		double d2 = k + 0.5F + (0.5F) * 2.0000000000000001D;
+		double d = i + 1.5F;
+		double d1 = j + 1.7F;
+		double d2 = k + 1.5F;
 		world.spawnParticle("reddust", d, d1, d2, -1.0D, 1.0D, 0.0D);
 	}
 }

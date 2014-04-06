@@ -4,6 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.Achievement;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -11,9 +13,23 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class DataHandler<e> {
 	protected ItemStack output;
+    public DataHandler addAchievement(String name, int j, int k, String parent){
+        StatBase stat = StatList.func_151177_a(parent);
+        if(stat instanceof Achievement){
+            addAchievement(name, j, k, (Achievement) stat);
+        }
+        return this;
+    }
 
 	public DataHandler addAchievement(String name, int j, int k, Achievement parent) {
-		Steamcraft.achs.put(name, new Achievement(name, name, j, k, output.copy(), parent).registerStat());
+        StatBase stat = StatList.func_151177_a(name);
+        Achievement achievement;
+        if(stat instanceof Achievement){
+            achievement = (Achievement) stat;
+        }else{
+            achievement = new Achievement(name, name, j, k, output.copy(), parent).registerStat();
+        }
+        HandlerRegistry.addAchievement(name, achievement);
 		return this;
 	}
 
@@ -69,7 +85,7 @@ public abstract class DataHandler<e> {
 	}
 
 	public DataHandler addSeed(int weight) {
-		MinecraftForge.addGrassSeed(output, weight);
+		MinecraftForge.addGrassSeed(output.copy(), weight);
 		return this;
 	}
 
@@ -99,6 +115,11 @@ public abstract class DataHandler<e> {
 
     public DataHandler setOutput(int size, int damage) {
         this.output = new ItemStack(getItem(), size, damage);
+        return this;
+    }
+
+    public DataHandler setOutput(ItemStack stack) {
+        this.output = stack;
         return this;
     }
 }
