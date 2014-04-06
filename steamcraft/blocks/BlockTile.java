@@ -7,6 +7,6 @@ public class BlockTile extends Block{
     public BlockTile() {
         super(Material.rock);
         setResistance(10F);
-        setStepSound(Block.soundTypeGrass);
+        setStepSound(Block.soundTypeStone);
     }
 }
