@@ -38,17 +38,12 @@ processResources {
 jar {
     //Keep the jar as clean as possible
     includeEmptyDirs = false
-    exclude('*.java')
+    //Append with minecraft version
+    classifier = "("+minecraft.version+")"
+    archiveName = archivesBaseName + "-" + version + classifier+"."+extension
     // Add Coremod Manifest
     manifest {
         attributes 'FMLCorePlugin': "steamcraft.SteamcraftPlugin"
         attributes 'FMLCorePluginContainsFMLMod': true
     }
-}
-jar {
-    //Keep the jar as clean as possible
-    includeEmptyDirs = false
-    //Append with minecraft version
-    classifier = "("+minecraft.version+")"
-    archiveName = archivesBaseName + "-" + version + classifier+"."+extension
 }
