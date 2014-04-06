@@ -4,12 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraftforge.common.ForgeHooks;
+import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 
-import java.util.Iterator;
 import java.util.Set;
 
-public class ItemSCTool extends ItemTool {
+public abstract class ItemSCTool extends ItemTool {
 	public Set<Block> blocksEffectiveAgainst;
 	public float baseDamage;
 
@@ -19,19 +19,32 @@ public class ItemSCTool extends ItemTool {
 		this.baseDamage = j + enumtoolmaterial.getDamageVsEntity();
 	}
 
+    @Override
+    public float func_150893_a(ItemStack itemStack, Block block){
+        if(blocksEffectiveAgainst==null){
+            blocksEffectiveAgainst = getEffectivelyBrokenBlocks();
+        }
+        return blocksEffectiveAgainst.contains(block) ? this.efficiencyOnProperMaterial : 1.0F;
+    }
+
 	@Override
 	public float getDigSpeed(ItemStack itemstack, Block block, int meta) {
-		if (toolMaterial == Steamcraft.TOOLSTEAM) {
-            Iterator itr = blocksEffectiveAgainst.iterator();
-			while (itr.hasNext()) {
-				if (itr.next() == block) {
-					return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
-				}
-			}
-			if (ForgeHooks.isToolEffective(itemstack, block, meta)) {
-				return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
-			}
-		}
-		return super.getDigSpeed(itemstack, block, meta);
+        if(blocksEffectiveAgainst==null){
+            blocksEffectiveAgainst = getEffectivelyBrokenBlocks();
+        }
+        if (blocksEffectiveAgainst.contains(block) || ForgeHooks.isToolEffective(itemstack, block, meta)){
+            if (toolMaterial == Steamcraft.TOOLSTEAM) {
+                return efficiencyOnProperMaterial - (((float) itemstack.getItemDamage()) * 11 / 320);
+            }else{
+                return efficiencyOnProperMaterial;
+            }
+        }
+		return 1.0F;
 	}
+
+    public static Block get(String name) {
+        return HandlerRegistry.getBlock("steamcraft:" + name).get();
+    }
+
+    abstract Set<Block> getEffectivelyBrokenBlocks();
 }
