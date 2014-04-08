@@ -10,20 +10,19 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockHandler extends DataHandler<Block> {
 	private Block block = null;
+    private Class<? extends ItemBlock> itemclass;
+    private String oreName;
 
 	public BlockHandler(Block bloc, Class<? extends ItemBlock> itemclass, String... names) {
+        super(names[0]);
 		this.block = bloc;
 		if (block != null) {
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
-            if (itemclass != null) {
-				GameRegistry.registerBlock(block, itemclass, names[0]);
-			} else {
-				GameRegistry.registerBlock(block, names[0]);//registering...
-			}
+            this.itemclass = itemclass;
             setOutput(1, 0);
             if (names.length > 2) {
-				OreDictionary.registerOre(names[2], block);
-			}
+                oreName = names[2];
+            }
 			if (block.hasTileEntity(0)) {
 				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.getUnlocalizedName());
 			}
@@ -31,19 +30,34 @@ public class BlockHandler extends DataHandler<Block> {
 	}
 
 	public BlockHandler(Block bloc, String... names) {
+        super(names[0]);
 		this.block = bloc;
 		if (block != null) {
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
-			GameRegistry.registerBlock(block, names[0]);//registering...
-            setOutput(1, 0);
+			setOutput(1, 0);
             if (names.length > 2) {
-				OreDictionary.registerOre(names[2], block);
-			}
+                oreName = names[2];
+            }
 			if (block.hasTileEntity(0)) {
 				GameRegistry.registerTileEntity(block.createTileEntity(null, 0).getClass(), block.getUnlocalizedName());
 			}
 		}
 	}
+
+    @Override
+    public void register(boolean asInternal) {
+        if (block != null) {
+            super.register(asInternal);
+            if (itemclass != null) {
+                GameRegistry.registerBlock(block, itemclass, registryName);
+            } else {
+                GameRegistry.registerBlock(block, registryName);//registering...
+            }
+            if (oreName != null) {
+                OreDictionary.registerOre(oreName, block);
+            }
+        }
+    }
 
     @Override
     public DataHandler addSmelt(ItemStack stack, float xp) {

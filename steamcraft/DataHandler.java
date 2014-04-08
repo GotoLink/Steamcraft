@@ -12,7 +12,13 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class DataHandler<e> {
+    protected final String registryName;
 	protected ItemStack output;
+
+    protected DataHandler(String name) {
+        registryName = name;
+    }
+
     public DataHandler addAchievement(String name, int j, int k, String parent){
         StatBase stat = StatList.func_151177_a(parent);
         if(stat instanceof Achievement){
@@ -109,8 +115,9 @@ public abstract class DataHandler<e> {
 
     public abstract Item getItem();
 
-	public void register() {
-		HandlerRegistry.register(this);
+	public void register(boolean asInternal) {
+		if(asInternal)
+            HandlerRegistry.register(this);
 	}
 
     public DataHandler setOutput(int size, int damage) {

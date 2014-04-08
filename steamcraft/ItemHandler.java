@@ -8,18 +8,30 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemHandler extends DataHandler<Item> {
 	private Item item = null;
+    private String oreName;
 
 	public ItemHandler(Item it, String... names) {
+        super(names[0]);
 		this.item = it;
 		if (item != null) {
 			item.setUnlocalizedName(names[0]).setTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the item
-            GameRegistry.registerItem(item, names[0]);
             setOutput(1, 0);
             if (names.length > 2) {
-				OreDictionary.registerOre(names[2], item);
+                oreName = names[2];
 			}
 		}
 	}
+
+    @Override
+    public void register(boolean asInternal) {
+        if (item != null) {
+            super.register(asInternal);
+            GameRegistry.registerItem(item, registryName);//registering...
+            if (oreName != null) {
+                OreDictionary.registerOre(oreName, item);
+            }
+        }
+    }
 
     @Override
     public DataHandler addSmelt(ItemStack stack, float xp) {

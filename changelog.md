@@ -1,3 +1,8 @@
+== Steamcraft 0.4 ==
+* Reworked achievements
+* Fixed block sounds
+* Fixed block harvesting
+
 == Steamcraft 0.3 ==
 * Added zinc ore generation, smeltable into ingots (suggestion and arts by SolemnSoul)
 * Added settings for all types of generation
