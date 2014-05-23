@@ -14,8 +14,8 @@ import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
 
 public class BlockElectricLamp extends BlockRedstoneAccess {
-	public boolean torchActive;
-	private Class<?> EntityClass;
+	public final boolean torchActive;
+	private final Class<?> EntityClass;
 
 	public BlockElectricLamp(Class<?> class1, boolean flag) {
 		super(flag);

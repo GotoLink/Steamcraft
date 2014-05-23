@@ -206,7 +206,7 @@ public class EntityMusketBall extends Entity {
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		float f3 = 0.99F;
 		float f5 = 0.03F;
-		if (isRifled == true) {
+		if (isRifled) {
 			f5 = 0.001F;
 		}
 		if (isInWater()) {

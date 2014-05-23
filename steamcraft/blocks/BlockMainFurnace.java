@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockMainFurnace extends BlockFurnace {
 	protected IIcon furnaceIconTop;
 	protected IIcon furnaceIconFront;
-	protected boolean isActive;
+	protected final boolean isActive;
 	private String[] names = new String[3];
 
 	protected BlockMainFurnace(boolean par2, String side, String top, String front) {

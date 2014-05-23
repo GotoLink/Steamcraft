@@ -24,9 +24,9 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
-	public static Minecraft minecraft = Minecraft.getMinecraft();
-    public static RenderCopperWire copperRender = new RenderCopperWire();
-    public static RenderTeaPlant teaRender = new RenderTeaPlant();
+	public static final Minecraft minecraft = Minecraft.getMinecraft();
+    public static final RenderCopperWire copperRender = new RenderCopperWire();
+    public static final RenderTeaPlant teaRender = new RenderTeaPlant();
 
 	@Override
 	public int getRenderId() {

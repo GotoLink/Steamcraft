@@ -33,8 +33,7 @@ public class ItemSCArmor extends ItemArmor {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		ItemSCArmor item = (ItemSCArmor) stack.getItem();
-		String s1 = String.format("steamcraft:textures/models/armor/%s_layer_%d.png", Steamcraft.ARMOR_NAMES[item.renderIndex], (slot == 2 ? 2 : 1));
-		return s1;
+		return String.format("steamcraft:textures/models/armor/%s_layer_%d.png", Steamcraft.ARMOR_NAMES[item.renderIndex], (slot == 2 ? 2 : 1));
 	}
 
 	@Override
@@ -62,7 +61,6 @@ public class ItemSCArmor extends ItemArmor {
 				player.getEntityData().setShort("Aqualung", (short) decreaseAirSupply(player, player.getEntityData().getShort("Aqualung")));
 				player.setAir(300);
 			}
-			return;
 		}
 	}
 

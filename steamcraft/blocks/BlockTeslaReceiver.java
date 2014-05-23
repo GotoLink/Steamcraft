@@ -121,10 +121,7 @@ public class BlockTeslaReceiver extends Block {
 	@Override
     @SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-		if (l == 1) {
-			return true;
-		}
-		return super.shouldSideBeRendered(iblockaccess, i, j, k, l);
+		return l == 1 || super.shouldSideBeRendered(iblockaccess, i, j, k, l);
 	}
 
 	@Override

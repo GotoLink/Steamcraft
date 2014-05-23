@@ -13,8 +13,8 @@ import steamcraft.TileEntityLamp;
 public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	public static final ResourceLocation lampOn = new ResourceLocation("steamcraft", "item/lampon.png");
 	public static final ResourceLocation lampOff = new ResourceLocation("steamcraft", "item/lampoff.png");
-	private ModelLampUp lampModelUp;
-	private ModelLampSide lampModelSide;
+	private final ModelLampUp lampModelUp;
+	private final ModelLampSide lampModelSide;
 
 	public TileEntityLampRenderer() {
 		lampModelUp = new ModelLampUp();

@@ -119,7 +119,7 @@ public class ContainerChemFurnace extends Container {
 		return itemstack;
 	}
 
-	private TileEntityChemFurnace furnace;
+	private final TileEntityChemFurnace furnace;
 	private int cookTime;
 	private int burnTime;
 	private int itemBurnTimea;

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemElectricLamp extends Item {
-	private Block spawnID;
+	private final Block spawnID;
 
 	public ItemElectricLamp(Block spawn) {
 		super();

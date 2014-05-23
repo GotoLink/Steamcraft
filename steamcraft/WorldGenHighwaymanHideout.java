@@ -69,29 +69,28 @@ public class WorldGenHighwaymanHideout extends WorldGenerator {
 		for (int i2 = 0; i2 < 2; i2++) {
 			label0: for (int l2 = 0; l2 < 3; l2++) {
 				int k3 = (i + random.nextInt(l * 2 + 1)) - l;
-				int l3 = j;
 				int i4 = (k + random.nextInt(i1 * 2 + 1)) - i1;
-				if (!world.isAirBlock(k3, l3, i4)) {
+				if (!world.isAirBlock(k3, j, i4)) {
 					continue;
 				}
 				int j4 = 0;
-				if (world.getBlock(k3 - 1, l3, i4).getMaterial().isSolid()) {
+				if (world.getBlock(k3 - 1, j, i4).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.getBlock(k3 + 1, l3, i4).getMaterial().isSolid()) {
+				if (world.getBlock(k3 + 1, j, i4).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.getBlock(k3, l3, i4 - 1).getMaterial().isSolid()) {
+				if (world.getBlock(k3, j, i4 - 1).getMaterial().isSolid()) {
 					j4++;
 				}
-				if (world.getBlock(k3, l3, i4 + 1).getMaterial().isSolid()) {
+				if (world.getBlock(k3, j, i4 + 1).getMaterial().isSolid()) {
 					j4++;
 				}
 				if (j4 != 1) {
 					continue;
 				}
-                func_150515_a(world, k3, l3, i4, Blocks.chest);
-				TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(k3, l3, i4);
+                func_150515_a(world, k3, j, i4, Blocks.chest);
+				TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(k3, j, i4);
 				int k4 = 0;
 				do {
 					if (k4 >= 8) {

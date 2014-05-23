@@ -109,7 +109,7 @@ public class ContainerNukeFurnace extends Container {
 				return null;
 			}
 			if (itemstack1.stackSize == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(null);
 			} else {
 				slot.onSlotChanged();
 			}
@@ -121,7 +121,7 @@ public class ContainerNukeFurnace extends Container {
 		return itemstack;
 	}
 
-	private TileEntityNukeFurnace furnace;
+	private final TileEntityNukeFurnace furnace;
 	private int cookTime;
 	private int burnTime;
 	private int itemBurnTime;

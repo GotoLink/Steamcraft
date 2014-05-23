@@ -96,11 +96,7 @@ public class BlockBattery extends Block {
 		if (!super.shouldSideBeRendered(iblockaccess, i, j, k, l)) {
 			return false;
 		}
-		if (l == 0) {
-			return true;
-		} else {
-			return iblockaccess.getBlock(i, j, k) != this;
-		}
+		return l == 0 || iblockaccess.getBlock(i, j, k) != this;
 	}
 
 	@Override

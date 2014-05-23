@@ -153,10 +153,7 @@ public class ItemFirearm extends Item {
 	}
 
 	public static boolean hasPercussion(ItemStack stack) {
-		if (stack.hasTagCompound())
-			return stack.getTagCompound().getBoolean("percussion");
-		else
-			return false;
+		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("percussion");
 	}
 
 	public static boolean isRifled(ItemStack stack) {

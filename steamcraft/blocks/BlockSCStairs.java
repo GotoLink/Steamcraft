@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSCStairs extends BlockStairs {
-	private Block modelBlock;
+	private final Block modelBlock;
 	private Item blockDrop;
 	private int dropQuantity;
 

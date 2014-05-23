@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLamp extends Block {
-	private boolean isPowered;
+	private final boolean isPowered;
 
 	public BlockLamp(boolean flag) {
 		super(Material.wood);

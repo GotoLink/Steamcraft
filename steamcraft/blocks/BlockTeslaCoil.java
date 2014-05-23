@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
 
 public class BlockTeslaCoil extends BlockRedstoneAccess {
-	private boolean torchActive;
+	private final boolean torchActive;
 
 	public BlockTeslaCoil(boolean flag) {
 		super(flag);
@@ -18,9 +18,7 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		int l2 = world.getBlockMetadata(i, j, k);
-		int f = 0;
-		int f1 = 0;
-		int f2 = 0;
+		int f, f1, f2;
 		if (l2 == 3) {
 			f = 0;
 			f1 = 1;
@@ -93,16 +91,14 @@ public class BlockTeslaCoil extends BlockRedstoneAccess {
 	public void updateTick(World world, int i, int j, int k, Random random) {
 		boolean flag = this.hasIndirectPower(world, i, j, k);
         updateToggleTimes(world);
-		byte nnum = 1;
+		byte nnum;
 		if (torchActive) {
 			nnum = 2;
 		} else {
 			nnum = 1;
 		}
 		int l2 = world.getBlockMetadata(i, j, k);
-		int f = 0;
-		int f1 = 0;
-		int f2 = 0;
+		int f, f1, f2;
 		if (l2 == 3) {
 			f = 0;
 			f1 = 1;

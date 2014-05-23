@@ -28,14 +28,12 @@ public class RenderTeaPlant extends RenderBlocks {
 			f3 = f6;
 		}
 		tessellator.setColorOpaque_F(f * f1, f * f2, f * f3);
-		double d = i;
 		double d1 = j;
-		double d2 = k;
 		float growth = blockaccess.getBlockMetadata(i, j, k);
 		if (growth != 0 && growth != 7) {
 			d1 -= (-1 * growth / 15) + 0.4;
 		}
-        drawCrossedSquares(getBlockIconFromSideAndMetadata(block, 0, blockaccess.getBlockMetadata(i, j, k)), d, d1, d2, 1.0F);
+        drawCrossedSquares(getBlockIconFromSideAndMetadata(block, 0, blockaccess.getBlockMetadata(i, j, k)), i, d1, k, 1.0F);
 		return true;
 	}
 }

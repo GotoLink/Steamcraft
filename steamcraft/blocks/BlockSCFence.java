@@ -25,11 +25,7 @@ public class BlockSCFence extends BlockFence {
 		if (world.getBlock(i, j - 1, k) == this) {
 			return true;
 		}
-		if (!world.getBlock(i, j - 1, k).getMaterial().isSolid()) {
-			return false;
-		} else {
-			return super.canPlaceBlockAt(world, i, j, k);
-		}
+		return world.getBlock(i, j - 1, k).getMaterial().isSolid() && super.canPlaceBlockAt(world, i, j, k);
 	}
 
 	@Override
@@ -46,6 +42,6 @@ public class BlockSCFence extends BlockFence {
 		return l == this || l == blockGate;
 	}
 
-	public Block blockGate;
-	public boolean doesJoinBlocks;
+	public final Block blockGate;
+	public final boolean doesJoinBlocks;
 }

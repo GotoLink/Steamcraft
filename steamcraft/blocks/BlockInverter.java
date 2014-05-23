@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockInverter extends BlockRedstoneAccess {
-	private boolean torchActive;
+	private final boolean torchActive;
 
 	public BlockInverter(boolean flag) {
 		super(flag);

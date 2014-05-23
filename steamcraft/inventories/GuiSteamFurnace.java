@@ -35,6 +35,6 @@ public class GuiSteamFurnace extends GuiContainer {
 		drawTexturedModalRect(guiLeft + 32, (guiTop + 16 + 31) - i2, 176, (31 + 31 - i2), 8, i2 + 2);
 	}
 
-	private TileEntitySteamFurnace furnaceInventory;
+	private final TileEntitySteamFurnace furnaceInventory;
 	private static final ResourceLocation gui = new ResourceLocation("steamcraft", "textures/gui/steamfurnace.png");
 }

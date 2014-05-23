@@ -125,7 +125,7 @@ public class ContainerSteamFurnace extends Container {
 		return itemstack;
 	}
 
-	private TileEntitySteamFurnace furnace;
+	private final TileEntitySteamFurnace furnace;
 	private int cookTime;
 	private int burnTime;
 	private int itemBurnTime;
