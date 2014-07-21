@@ -59,7 +59,7 @@ public class BlockDecor extends Block {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
 		if (world.getBlockMetadata(i, j, k) == 3 || world.getBlockMetadata(i, j, k) == 12) {
 			float f = 0.1F;
-			return AxisAlignedBB.getAABBPool().getAABB(i + f, j, k + f, i + 1 - f, j + 1 - f, k + 1 - f);
+			return AxisAlignedBB.getBoundingBox(i + f, j, k + f, i + 1 - f, j + 1 - f, k + 1 - f);
 		} else
 			return super.getCollisionBoundingBoxFromPool(world, i, j, k);
 	}

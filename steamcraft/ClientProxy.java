@@ -90,7 +90,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	}
 
 	public static void renderThings(EntityPlayer entityPlayer) {
-		ScaledResolution scaledresolution = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		short aqualungAir = entityPlayer.getEntityData().getShort("Aqualung");

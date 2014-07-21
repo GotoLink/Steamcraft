@@ -30,7 +30,7 @@ public class BlockSCFence extends BlockFence {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-		return AxisAlignedBB.getAABBPool().getAABB(i, j, k, i + 1, j + 1.5F, k + 1);
+		return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + 1.5F, k + 1);
 	}
 
 	@Override
