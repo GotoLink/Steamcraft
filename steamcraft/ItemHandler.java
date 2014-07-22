@@ -2,8 +2,6 @@ package steamcraft;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemHandler extends DataHandler<Item> {
@@ -23,26 +21,14 @@ public class ItemHandler extends DataHandler<Item> {
 	}
 
     @Override
-    public void register(boolean asInternal) {
+    public DataHandler register(boolean asInternal) {
         if (item != null) {
-            super.register(asInternal);
             GameRegistry.registerItem(item, registryName);//registering...
             if (oreName != null) {
                 OreDictionary.registerOre(oreName, item);
             }
         }
-    }
-
-    @Override
-    public DataHandler addSmelt(ItemStack stack, float xp) {
-        FurnaceRecipes.smelting().func_151396_a(get(), stack, xp);
-        return this;
-    }
-
-    @Override
-    public DataHandler addSmelt(ItemStack stack, int meta, float xp) {
-        FurnaceRecipes.smelting().func_151394_a(new ItemStack(get(), 1, meta), stack, xp);
-        return this;
+        return super.register(asInternal);
     }
 
     public Item get() {

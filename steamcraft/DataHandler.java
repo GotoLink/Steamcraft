@@ -2,6 +2,7 @@ package steamcraft;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
@@ -16,7 +17,7 @@ public abstract class DataHandler<e> {
 	protected ItemStack output;
 
     protected DataHandler(String name) {
-        registryName = name;
+        registryName = name.substring(name.indexOf(":")+1);
     }
 
     public DataHandler addAchievement(String name, int j, int k, String parent){
@@ -100,9 +101,15 @@ public abstract class DataHandler<e> {
 		return this;
 	}
 
-	public abstract DataHandler addSmelt(ItemStack stack, float xp);
+    public DataHandler addSmelt(ItemStack stack, float xp) {
+        FurnaceRecipes.smelting().func_151396_a(getItem(), stack, xp);
+        return this;
+    }
 
-	public abstract DataHandler addSmelt(ItemStack stack, int meta, float xp);
+    public DataHandler addSmelt(ItemStack stack, int meta, float xp) {
+        FurnaceRecipes.smelting().func_151394_a(new ItemStack(getItem(), 1, meta), stack, xp);
+        return this;
+    }
 
 	public DataHandler addSword(String input) {
 		GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), "X", "X", "#",'#', "stickWood",'X', input));
@@ -115,9 +122,10 @@ public abstract class DataHandler<e> {
 
     public abstract Item getItem();
 
-	public void register(boolean asInternal) {
+	public DataHandler register(boolean asInternal) {
 		if(asInternal)
             HandlerRegistry.register(this);
+        return this;
 	}
 
     public DataHandler setOutput(int size, int damage) {

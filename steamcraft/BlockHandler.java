@@ -3,8 +3,6 @@ package steamcraft;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -19,7 +17,6 @@ public class BlockHandler extends DataHandler<Block> {
 		if (block != null) {
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
             this.itemclass = itemclass;
-            setOutput(1, 0);
             if (names.length > 2) {
                 oreName = names[2];
             }
@@ -34,8 +31,7 @@ public class BlockHandler extends DataHandler<Block> {
 		this.block = bloc;
 		if (block != null) {
 			block.setBlockName(names[0]).setBlockTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the block
-			setOutput(1, 0);
-            if (names.length > 2) {
+			if (names.length > 2) {
                 oreName = names[2];
             }
 			if (block.hasTileEntity(0)) {
@@ -45,9 +41,8 @@ public class BlockHandler extends DataHandler<Block> {
 	}
 
     @Override
-    public void register(boolean asInternal) {
+    public DataHandler register(boolean asInternal) {
         if (block != null) {
-            super.register(asInternal);
             if (itemclass != null) {
                 GameRegistry.registerBlock(block, itemclass, registryName);
             } else {
@@ -56,19 +51,9 @@ public class BlockHandler extends DataHandler<Block> {
             if (oreName != null) {
                 OreDictionary.registerOre(oreName, block);
             }
+            setOutput(1, 0);
         }
-    }
-
-    @Override
-    public DataHandler addSmelt(ItemStack stack, float xp) {
-        FurnaceRecipes.smelting().func_151393_a(get(), stack, xp);
-        return this;
-    }
-
-    @Override
-    public DataHandler addSmelt(ItemStack stack, int meta, float xp) {
-        FurnaceRecipes.smelting().func_151394_a(new ItemStack(get(), 1, meta), stack, xp);
-        return this;
+        return super.register(asInternal);
     }
 
     public Block get() {
