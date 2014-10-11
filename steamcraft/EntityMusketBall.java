@@ -228,7 +228,7 @@ public class EntityMusketBall extends Entity {
 		nbttagcompound.setShort("xTile", (short) xTile);
 		nbttagcompound.setShort("yTile", (short) yTile);
 		nbttagcompound.setShort("zTile", (short) zTile);
-		nbttagcompound.setInteger("inTile", GameData.blockRegistry.getId(inTile));
+		nbttagcompound.setInteger("inTile", GameData.getBlockRegistry().getId(inTile));
 		nbttagcompound.setByte("inData", (byte) inData);
 		nbttagcompound.setByte("shake", (byte) arrowShake);
 		nbttagcompound.setBoolean("player", doesArrowBelongToPlayer);
@@ -239,7 +239,7 @@ public class EntityMusketBall extends Entity {
 		xTile = nbttagcompound.getShort("xTile");
 		yTile = nbttagcompound.getShort("yTile");
 		zTile = nbttagcompound.getShort("zTile");
-		inTile = GameData.blockRegistry.get(nbttagcompound.getInteger("inTile"));
+		inTile = GameData.getBlockRegistry().getObjectById(nbttagcompound.getInteger("inTile"));
 		inData = nbttagcompound.getByte("inData") & 0xff;
 		arrowShake = nbttagcompound.getByte("shake") & 0xff;
 		doesArrowBelongToPlayer = nbttagcompound.getBoolean("player");

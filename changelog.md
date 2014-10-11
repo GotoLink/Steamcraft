@@ -1,3 +1,7 @@
+== Steamcraft 0.5 ==
+* Added more ore dictionary support
+* Fixed a few recipes
+
 == Steamcraft 0.4 ==
 * Reworked achievements
 * Fixed block sounds

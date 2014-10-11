@@ -17,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import steamcraft.Steamcraft;
 import steamcraft.WorldGenNetherTrees;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,13 +49,12 @@ public class BlockNetherSapling extends BlockSapling {
 		if (!TerrainGen.saplingGrowTree(world, par5Random, par2, par3, par4))
 			return;
 		int l = world.getBlockMetadata(par2, par3, par4);
-		WorldGenerator tree = new WorldGenNetherTrees();
 		/*
 		 * if (par5Random.nextInt(10) == 0) { object = new
 		 * WorldGenBigTree(true); }
 		 */
 		world.setBlock(par2, par3, par4, Blocks.air, 0, 4);
-		if (!tree.generate(world, par5Random, par2, par3, par4)) {
+		if (!Steamcraft.netherGen.generate(world, par5Random, par2, par3, par4)) {
 			world.setBlock(par2, par3, par4, this, l, 4);
 		}
 	}

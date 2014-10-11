@@ -51,7 +51,6 @@ public class BlockHandler extends DataHandler<Block> {
             if (oreName != null) {
                 OreDictionary.registerOre(oreName, block);
             }
-            setOutput(1, 0);
         }
         return super.register(asInternal);
     }

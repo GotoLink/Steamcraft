@@ -1,4 +1,11 @@
 <mod modid="steamcraft">
+    <mcVersion version="1.7.10">
+        <release type="release" version="0.5"
+                 url="http://www.minecraftforum.net/topic/1651891-/#Steamcraft"
+                 download="http://www.mediafire.com/download/anr3i9syqntz747/Steamcraft-0.5(1.7.10).jar"
+                 md5="F2934BB0F0E79010805A4B1DC3CF9A37"
+                />
+    </mcVersion>
     <mcVersion version="1.7.2">
         <release type="release" version="0.4"
                  url="http://www.minecraftforum.net/topic/1651891-/#Steamcraft"

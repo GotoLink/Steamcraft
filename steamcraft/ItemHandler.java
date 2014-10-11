@@ -13,7 +13,6 @@ public class ItemHandler extends DataHandler<Item> {
 		this.item = it;
 		if (item != null) {
 			item.setUnlocalizedName(names[0]).setTextureName(names[1]).setCreativeTab(Steamcraft.steamTab);//finalizing the item
-            setOutput(1, 0);
             if (names.length > 2) {
                 oreName = names[2];
 			}

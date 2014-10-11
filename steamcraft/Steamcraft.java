@@ -77,7 +77,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	public static ItemStack flintlockMusket, matchlockMusket, percussionCapMusket;
 	public static ItemStack flintlockRifle, matchlockRifle, percussionCapRifle;
 	public static Item spanner, firearm, part, material;
-	private static final WorldGenerator netherGen = new WorldGenNetherTrees();
+	public static final WorldGenerator netherGen = new WorldGenNetherTrees();
 	private static final WorldGenerator hideoutGen = new WorldGenHighwaymanHideout();
 	private static WorldGenerator brimstoneGen, zincGen, bornGen, phosphGen, uranGen, volucGen;
 	public static int genNetherTree = 20, genHideout = 8, genBrin = 12, genZinc = 6, genBorn = 20, genPhos = 3, genUr = 2, genVol = 1;
@@ -91,14 +91,12 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 	}
 
 	public void generateNether(World world, Random rand, int k, int l) {
-		if (genNetherTree > 0) {
-			for (int i = 0; i < genNetherTree; i++) {
-				int x = k + rand.nextInt(16);
-				int y = rand.nextInt(128);
-				int z = l + rand.nextInt(16);
-				netherGen.generate(world, rand, x, y, z);
-			}
-		}
+        for (int i = 0; i < genNetherTree; i++) {
+            int x = k + rand.nextInt(16);
+            int y = rand.nextInt(128);
+            int z = l + rand.nextInt(16);
+            netherGen.generate(world, rand, x, y, z);
+        }
 	}
 
 	public void generateSurface(World world, Random rand, int k, int l) {
@@ -206,15 +204,15 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		genVol = config.get("Generation", "Volucite_TPC", genVol).getInt();
         //Obsidian tools
         new ItemHandler(new ItemSCPickaxe(TOOLOBSIDIAN), "steamcraft:pickaxeObsidian", "steamcraft:tools/obsidianpick").setTool("pickaxe", 5)
-                .addAchievement("blackmagic", 3, 2, AchievementList.buildBetterPickaxe).addPick("slateObsidian").register(true);
+                .register(true).addAchievement("blackmagic", 3, 2, AchievementList.buildBetterPickaxe).addPick("slateObsidian");
         new ItemHandler(new ItemSpade(TOOLOBSIDIAN), "steamcraft:shovelObsidian", "steamcraft:tools/obsidianspade").setTool("shovel", 5).addShovel(
-                "slateObsidian").register(false);
+                "slateObsidian");
         new ItemHandler(new ItemSCAxe(TOOLOBSIDIAN), "steamcraft:hatchetObsidian", "steamcraft:tools/obsidianaxe").setTool("axe", 5).addAxe(
-                "slateObsidian").register(false);
-        new ItemHandler(new ItemHoe(TOOLOBSIDIAN), "steamcraft:hoeObsidian", "steamcraft:tools/obsidianhoe").addHoe("slateObsidian").register(false);
-        new ItemHandler(new ItemSCSword(TOOLOBSIDIAN), "steamcraft:swordObsidian", "steamcraft:tools/obsidiansword").addSword("slateObsidian").register(false);
+                "slateObsidian");
+        new ItemHandler(new ItemHoe(TOOLOBSIDIAN), "steamcraft:hoeObsidian", "steamcraft:tools/obsidianhoe").addHoe("slateObsidian");
+        new ItemHandler(new ItemSCSword(TOOLOBSIDIAN), "steamcraft:swordObsidian", "steamcraft:tools/obsidiansword").addSword("slateObsidian");
         new ItemHandler(new ItemSCDrill(TOOLOBSIDIAN), "steamcraft:drillObsidian", "steamcraft:tools/obsidiandrill", "drillObsidian").setTool("drill",
-                5).addDrill("slateObsidian").register(false);
+                5).addDrill("slateObsidian");
         //Furnaces
         new BlockHandler(new BlockSteamFurnace(false).setStepSound(Block.soundTypeMetal), "steamcraft:steamFurnace", "steamcraft:steamfurnaceidle",
                 "furnaceSteam").setValues(4F).register(true)
@@ -232,11 +230,10 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
                 .addAchievement("fallout", 0, 1, AchievementList.acquireIron);
         new BlockHandler(new BlockNukeFurnace(true).setStepSound(Block.soundTypeMetal), "steamcraft:nukeFurnaceOn",
                 "steamcraft:nukefurnaceactive").setValues(5F, 0.9375F).register(true);
-        ItemHandler handler = (ItemHandler) new ItemHandler(new MultiItem(MATERIALS), "steamcraft:mat", "steamcraft:").addAchievement("carryingyou", 4, 2, "blackmagic").setOutput(1,8).addAchievement("ruinedeverything", 0, 0, "fallout");
+        ItemHandler handler = (ItemHandler) new ItemHandler(new MultiItem(MATERIALS), "steamcraft:mat", "steamcraft:").register(true).addAchievement("carryingyou", 4, 2, "blackmagic").setOutput(1,8).addAchievement("ruinedeverything", 0, 0, "fallout");
 		material = handler.get();
-        handler.register(true);
-		new ItemHandler(new Item().setFull3D().setMaxDamage(64).setMaxStackSize(1), "steamcraft:chisel", "steamcraft:tools/chisel", "chisel").addRecipe(true, "#", "#",
-				"X",'#', Items.iron_ingot,'X', "ingotBrass").register(true);
+		new ItemHandler(new Item().setFull3D().setMaxDamage(64).setMaxStackSize(1), "steamcraft:chisel", "steamcraft:tools/chisel", "chisel").register(true).addRecipe(true, "#", "#",
+				"X",'#', Items.iron_ingot,'X', "ingotBrass");
 		new BlockHandler(new BlockCopperWire().setStepSound(Block.soundTypeStone), "copperwire", "redstone_dust", "wireCopper").setValues(0.0F)
                 .register(true).setOutput(4, 0).addRecipe(false, "dustCopper");
 		new BlockHandler(new BlockInverter(false).setStepSound(Block.soundTypeWood), "steamcraft:inverteridle", "steamcraft:inverteridle").setValues(
@@ -245,7 +242,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				"torchCopper").setValues(0.0F, 0.5F).register(true).setOutput(4, 0)
 				.addRecipe(true, "X", "#", "I",'#', "stickWood",'X', "wireCopper",'I', "battery");
 		new BlockHandler(new BlockDiode(false).setStepSound(Block.soundTypeWood), "steamcraft:diodeidle", "steamcraft:diodeidle").setValues(0.0F)
-                .register(true).addRecipe(true, "#X#", "IRI",'#', "torchCopper",'X', "wireCopper",'I', "stone",'R', Items.quartz);
+                .register(true).addRecipe(true, "#X#", "IRI",'#', "torchCopper",'X', "wireCopper",'I', "stone",'R', "gemQuartz");
 		new BlockHandler(new BlockDiode(true).setStepSound(Block.soundTypeWood), "steamcraft:diodeactive", "steamcraft:diodeactive").setValues(0.0F,
 				0.625F).register(true);
 		new BlockHandler(new BlockPoweredRail(true).setStepSound(Block.soundTypeMetal), "steamcraft:rail", "steamcraft:rail").setValues(0.7F).register(true);
@@ -256,21 +253,19 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				1.0F).register(true);
 		new BlockHandler(new BlockTeslaCoil(false), "steamcraft:teslaCoil", "steamcraft:teslaidle")
 				.setValues(0.0F).register(true)
-				.addRecipe(true, " X ", "I#I", "ITI",'#', Items.gold_ingot,'X', "itemLightBulb",'I', "wireCopper",'T',
-						Items.quartz);
+				.addRecipe(true, " X ", "I#I", "ITI",'#', "ingotGold",'X', "itemLightBulb",'I', "wireCopper",'T', "gemQuartz");
 		new BlockHandler(new BlockTeslaCoil(true), "steamcraft:teslaCoilOn", "steamcraft:teslaactive").setValues(0.0F, 0.625F)
                 .register(true).addAchievement("itsalive", 1, 2, AchievementList.acquireIron);
 		new BlockHandler(new BlockTeslaReceiver().setStepSound(Block.soundTypeMetal), "steamcraft:receiver", "steamcraft:receiver", "teslaReceiver")
 				.setValues(0.5F).register(true)
-				.addRecipe(true, "#X#", "ITI",'#', "ingotCastIron",'X', Items.gold_ingot,'I', "wireCopper",'T',
-						Items.quartz);
+				.addRecipe(true, "#X#", "ITI",'#', "ingotCastIron",'X', "ingotGold",'I', "wireCopper",'T', "gemQuartz");
 		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:orezinc", "steamcraft:zincore", "oreZinc")
 				.setValues(2.5F).setHarvest("pickaxe", 1).setHarvest("drill", 1).register(true).addSmelt(new ItemStack(material, 1, 12), 1.0F);
 		new BlockHandler(new BlockTeslaReceiver().setStepSound(Block.soundTypeMetal), "steamcraft:receiverOn", "steamcraft:receiveractive").setValues(
 				0.5F, 0.625F).register(true);
 		new BlockHandler(new BlockBattery().setStepSound(Block.soundTypeMetal), "steamcraft:battery", "steamcraft:battery", "battery")
 				.setValues(0.5F, 0.625F).register(true)
-                .addRecipe(true, "###", "IXI",'#', Items.iron_ingot,'X', Items.quartz,'I', "wireCopper");
+                .addRecipe(true, "###", "IXI",'#', "ingotIron",'X', "gemQuartz",'I', "wireCopper");
 		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:brimstone", "steamcraft:brimstone",
 				"oreBrimstone").setValues(3F).setHarvest("pickaxe", 2).register(true).addSmelt(new ItemStack(material, 1, 1), 1.0F);
 		new BlockHandler(new BlockOre().setResistance(5F).setStepSound(Block.soundTypeStone), "steamcraft:orePhosphate", "steamcraft:phosphate",
@@ -309,14 +304,14 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				"steamcraft:railingCastIron", "steamcraft:castironblock", "railCastIron").setValues(7F).setHarvest("pickaxe", 0).setHarvest("drill", 0).register(true).setOutput(2, 0)
 				.addRecipe(true, "###", "###", '#', "ingotCastIron");
 		new BlockHandler(new BlockLamp(true), "steamcraft:lampOn", "steamcraft:lampblock").setHarvest("pickaxe", 0).setHarvest("drill", 0).register(true)
-				.addRecipe(true, "#X#", "XIX", "#X#",'#', "ingotCastIron",'X', Blocks.glass,'I', Items.glowstone_dust);
+				.addRecipe(true, "#X#", "XIX", "#X#",'#', "ingotCastIron",'X', "blockGlass",'I', "dustGlowstone");
 		new BlockHandler(new BlockLamp(false), "steamcraft:lamp", "steamcraft:lampblock").register(true);
 		new BlockHandler(new BlockBrassLog().setStepSound(Block.soundTypeMetal), "steamcraft:logBrass", "steamcraft:brasslog").setValues(5F)
 				.setHarvest("pickaxe", 2).setHarvest("drill", 2).register(true)
                 .setOutput(4, 0).addRecipe(true, "###", "#I#", "###", '#', "ingotBrass", 'I', "logWood");
 		new BlockHandler(new BlockNetherLeaves(Material.wood).setLightOpacity(1).setStepSound(Block.soundTypeGlass), "steamcraft:leavesLamp",
 				"steamcraft:brassleaves").setValues(2F, 0.9375F).setHarvest("pickaxe", 0).setHarvest("drill", 0).register(true)
-                .setOutput(4, 0).addRecipe(true, "#X#", "XIX", "#X#", '#', "ingotBrass", 'X', Blocks.glass, 'I', Items.glowstone_dust);
+                .setOutput(4, 0).addRecipe(true, "#X#", "XIX", "#X#", '#', "ingotBrass", 'X', "blockGlass", 'I', "dustGlowstone");
 		new BlockHandler(new BlockWirelessLamp(TileEntityLamp.class, false), "steamcraft:wirelessLampOff", "steamcraft:wirelesslamp").setValues(0.0F)
 				.register(true);
 		new BlockHandler(new BlockWirelessLamp(TileEntityLamp.class, true), "steamcraft:wirelessLampOn", "steamcraft:wirelesslamp").setValues(0.0F,
@@ -325,78 +320,76 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 				.addRecipe(true, "#  ", "## ", "###",'#', Items.flint).setOutput(4, 0);
 		new BlockHandler(new BlockTeaPlant().setStepSound(Block.soundTypeGrass), "steamcraft:teaplant", "steamcraft:teaplant", "plantTea")
 				.setValues(0.0F).register(true);
-        new ItemHandler(new ItemSCDrill(TOOLSTEAM), "steamcraft:drillSteam", "steamcraft:tools/steamdrill", "drillSteam").setTool("drill", 7).addRecipe(
-                true, "XXX", "XIX", "XX#",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
-        new ItemHandler(new ItemSCDrill(Item.ToolMaterial.IRON), "steamcraft:drillIron", "steamcraft:tools/irondrill", "drillIron").setTool("drill", 2)
-                .addDrill(Items.iron_ingot).addAchievement("spiralnemesis", 2, -1, AchievementList.buildWorkBench).register(true);
+        new ItemHandler(new ItemSCDrill(TOOLSTEAM), "steamcraft:drillSteam", "steamcraft:tools/steamdrill", "drillSteam").setTool("drill", 7)
+                .addRecipe(true, "XXX", "XIX", "XX#",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
+        new ItemHandler(new ItemSCDrill(Item.ToolMaterial.IRON), "steamcraft:drillIron", "steamcraft:tools/irondrill", "drillIron").setTool("drill", 2).register(true)
+                .addDrill(Items.iron_ingot).addAchievement("spiralnemesis", 2, -1, AchievementList.buildWorkBench);
         new ItemHandler(new ItemSCDrill(Item.ToolMaterial.WOOD), "steamcraft:drillWood", "steamcraft:tools/wooddrill", "drillWood").setTool("drill", 0)
-                .addDrill("plankWood").register(false);
+                .register(false).addDrill("plankWood");
         new ItemHandler(new ItemSCDrill(Item.ToolMaterial.STONE), "steamcraft:drillStone", "steamcraft:tools/stonedrill", "drillStone")
-                .setTool("drill", 1).addDrill("cobblestone").register(false);
+                .setTool("drill", 1).addDrill("cobblestone");
         new ItemHandler(new ItemSCDrill(Item.ToolMaterial.EMERALD), "steamcraft:drillDiamond", "steamcraft:tools/diamonddrill", "drillDiamond").setTool(
-                "drill", 3).addDrill(Items.diamond).register(false);
+                "drill", 3).addDrill("gemDiamond");
         new ItemHandler(new ItemSCDrill(Item.ToolMaterial.GOLD), "steamcraft:drillGold", "steamcraft:tools/golddrill", "drillGold").setTool("drill", 0)
-                .addDrill(Items.gold_ingot).register(false);
-		new ItemHandler(new ItemCoreDrill(), "steamcraft:coreDrill", "steamcraft:coredrill")
+                .addDrill("ingotGold");
+		new ItemHandler(new ItemCoreDrill(), "steamcraft:coreDrill", "steamcraft:coredrill").register(true)
 				.addRecipe(true, "X", "#", "I",'#', "ingotPosphate",'X', "drillGold",'I', "itemDrillBase")
-				.addAchievement("heavenpiercing", 3, -1, "spiralnemesis").register(true);
+				.addAchievement("heavenpiercing", 3, -1, "spiralnemesis");
 		new ItemHandler(new ItemSCArmor(ARMOROBSIDIAN, 2, 0), "steamcraft:helmetObsidian", "steamcraft:armour/obsidianhelmet")
-				.addHelmet("slateObsidian").register(false);
+                .addHelmet("slateObsidian");
 		new ItemHandler(new ItemSCArmor(ARMOROBSIDIAN, 2, 1), "steamcraft:chestplateObsidian", "steamcraft:armour/obsidianplate")
-				.addPlate("slateObsidian").register(false);
+                .addPlate("slateObsidian");
 		new ItemHandler(new ItemSCArmor(ARMOROBSIDIAN, 2, 2), "steamcraft:leggingsObsidian", "steamcraft:armour/obsidianlegs")
-				.addLegs("slateObsidian").register(false);
+                .addLegs("slateObsidian");
 		new ItemHandler(new ItemSCArmor(ARMOROBSIDIAN, 2, 3), "steamcraft:bootsObsidian", "steamcraft:armour/obsidianboots")
-				.addBoots("slateObsidian").register(false);
-		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 0), "steamcraft:brassGoggles", "steamcraft:armour/brassgoggles").addRecipe(true,
-				"X#X", "# #",'X', Blocks.glass,'#', "ingotBrass").register(true);
-		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 1), "steamcraft:aqualung", "steamcraft:armour/aqualung")
-				.addRecipe(true, "XTX", "X X", "X#X",'X', "ingotBrass",'#', Blocks.piston,'T', Blocks.glass)
-				.addAchievement("jethrotull", 0, 3, AchievementList.acquireIron).register(true);
-		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 3), "steamcraft:rollerSkates", "steamcraft:armour/rollerskates").addRecipe(true,
-				"X X", "X X", "# #",'X', "ingotBrass",'#', Items.iron_ingot).register(true);
-		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 2), "steamcraft:legBraces", "steamcraft:armour/pneumaticbraces").addRecipe(
-				true, "XXX", "X X", "# #",'X', "ingotBrass",'#', Blocks.piston).register(true);
-		new ItemHandler(new ItemSCPickaxe(TOOLETHERIUM), "steamcraft:pickaxeEtherium", "steamcraft:tools/etheriumpick").setTool("pickaxe", 6).addPick(
-				"gemEtherium").register(false);
-		new ItemHandler(new ItemSpade(TOOLETHERIUM), "steamcraft:shovelEtherium", "steamcraft:tools/etheriumspade").setTool("shovel", 6).addShovel(
-				"gemEtherium").register(false);
-		new ItemHandler(new ItemSCAxe(TOOLETHERIUM), "steamcraft:hatchetEtherium", "steamcraft:tools/etheriumaxe").setTool("axe", 6).addAxe(
-				"gemEtherium").register(false);
-		new ItemHandler(new ItemHoe(TOOLETHERIUM), "steamcraft:hoeEtherium", "steamcraft:tools/etheriumhoe").addHoe("gemEtherium").register(false);
-		new ItemHandler(new ItemSCSword(TOOLETHERIUM), "steamcraft:swordEtherium", "steamcraft:tools/etheriumsword").addSword("gemEtherium").register(false);
+                .addBoots("slateObsidian");
+		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 0), "steamcraft:brassGoggles", "steamcraft:armour/brassgoggles").register(true)
+                .addRecipe(true, "X#X", "# #",'X', "blockGlass",'#', "ingotBrass");
+		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 1), "steamcraft:aqualung", "steamcraft:armour/aqualung").register(true)
+				.addRecipe(true, "XTX", "X X", "X#X",'X', "ingotBrass",'#', Blocks.piston,'T', "blockGlass")
+				.addAchievement("jethrotull", 0, 3, AchievementList.acquireIron);
+		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 3), "steamcraft:rollerSkates", "steamcraft:armour/rollerskates").register(true)
+                .addRecipe(true, "X X", "X X", "# #",'X', "ingotBrass",'#', "ingotIron");
+		new ItemHandler(new ItemSCArmor(ARMORBRASS, 1, 2), "steamcraft:legBraces", "steamcraft:armour/pneumaticbraces").register(true)
+                .addRecipe(true, "XXX", "X X", "# #",'X', "ingotBrass",'#', Blocks.piston);
+		new ItemHandler(new ItemSCPickaxe(TOOLETHERIUM), "steamcraft:pickaxeEtherium", "steamcraft:tools/etheriumpick").setTool("pickaxe", 6)
+                .addPick("gemEtherium");
+		new ItemHandler(new ItemSpade(TOOLETHERIUM), "steamcraft:shovelEtherium", "steamcraft:tools/etheriumspade").setTool("shovel", 6)
+                .addShovel("gemEtherium");
+		new ItemHandler(new ItemSCAxe(TOOLETHERIUM), "steamcraft:hatchetEtherium", "steamcraft:tools/etheriumaxe").setTool("axe", 6)
+                .addAxe("gemEtherium");
+		new ItemHandler(new ItemHoe(TOOLETHERIUM), "steamcraft:hoeEtherium", "steamcraft:tools/etheriumhoe").addHoe("gemEtherium");
+		new ItemHandler(new ItemSCSword(TOOLETHERIUM), "steamcraft:swordEtherium", "steamcraft:tools/etheriumsword").addSword("gemEtherium");
 		new ItemHandler(new ItemSCDrill(TOOLETHERIUM), "steamcraft:drillEtherium", "steamcraft:tools/etheriumdrill", "drillEtherium").setTool("drill",
-				6).addDrill("gemEtherium").register(false);
+				6).addDrill("gemEtherium");
 		new ItemHandler(new ItemSCArmor(ARMORETHERIUM, 0, 0), "steamcraft:helmetEtherium", "steamcraft:armour/etheriumhelmet")
-				.addHelmet("gemEtherium").register(false);
+                .addHelmet("gemEtherium");
 		new ItemHandler(new ItemSCArmor(ARMORETHERIUM, 0, 1), "steamcraft:chestplateEtherium", "steamcraft:armour/etheriumplate")
-				.addPlate("gemEtherium").register(false);
+                .addPlate("gemEtherium");
 		new ItemHandler(new ItemSCArmor(ARMORETHERIUM, 0, 2), "steamcraft:leggingsEtherium", "steamcraft:armour/etheriumlegs")
-				.addLegs("gemEtherium").register(false);
+                .addLegs("gemEtherium");
 		new ItemHandler(new ItemSCArmor(ARMORETHERIUM, 0, 3), "steamcraft:bootsEtherium", "steamcraft:armour/etheriumboots")
-				.addBoots("gemEtherium").register(false);
-		new ItemHandler(new ItemSCPickaxe(TOOLSTEAM), "steamcraft:pickaxeSteam", "steamcraft:tools/steampick").setTool("pickaxe", 7).addRecipe(true,
-				"XIX", " # ", " # ",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
-		new ItemHandler(new ItemSCSpade(TOOLSTEAM), "steamcraft:shovelSteam", "steamcraft:tools/steamspade").setTool("shovel", 7).addRecipe(true, "X",
-				"#", "I",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
-		new ItemHandler(new ItemSCAxe(TOOLSTEAM), "steamcraft:hatchetSteam", "steamcraft:tools/steamaxe").setTool("axe", 7).addRecipe(true, "X ", "XI",
-				"# ",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
-		new ItemHandler(new ItemSCHoe(TOOLSTEAM), "steamcraft:hoeSteam", "steamcraft:tools/steamhoe").addRecipe(true, "XI", " #", " #",
-				'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
-		new ItemHandler(new ItemSCSword(TOOLSTEAM), "steamcraft:swordSteam", "steamcraft:tools/steamsword").addRecipe(true, "X", "I", "#",
-				'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam").register(false);
+                .addBoots("gemEtherium");
+		new ItemHandler(new ItemSCPickaxe(TOOLSTEAM), "steamcraft:pickaxeSteam", "steamcraft:tools/steampick").setTool("pickaxe", 7)
+                .addRecipe(true, "XIX", " # ", " # ",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
+		new ItemHandler(new ItemSCSpade(TOOLSTEAM), "steamcraft:shovelSteam", "steamcraft:tools/steamspade").setTool("shovel", 7)
+                .addRecipe(true, "X", "#", "I",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
+		new ItemHandler(new ItemSCAxe(TOOLSTEAM), "steamcraft:hatchetSteam", "steamcraft:tools/steamaxe").setTool("axe", 7)
+                .addRecipe(true, "X ", "XI", "# ",'#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
+		new ItemHandler(new ItemSCHoe(TOOLSTEAM), "steamcraft:hoeSteam", "steamcraft:tools/steamhoe")
+                .addRecipe(true, "XI", " #", " #", '#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
+		new ItemHandler(new ItemSCSword(TOOLSTEAM), "steamcraft:swordSteam", "steamcraft:tools/steamsword")
+                .addRecipe(true, "X", "I", "#", '#', "stickWood",'X', "ingotBrass",'I', "furnaceSteam");
 		spanner = new ItemHandler(new Item().setFull3D().setMaxDamage(3).setMaxStackSize(1), "steamcraft:spanner"
-				, "steamcraft:tools/spanner", "spanner").get();
-        handler = new ItemHandler(new MultiItem(FIREARM_PARTS), "steamcraft:part", "steamcraft:");
-        handler.register(false);
-		part = handler.get();
-        handler = new ItemHandler(new ItemFirearm(), "steamcraft:firearm", "steamcraft:tools/");
+				, "steamcraft:tools/spanner", "spanner").register(false).getItem();
+        part = new ItemHandler(new MultiItem(FIREARM_PARTS), "steamcraft:part", "steamcraft:").register(false).getItem();
+        handler = (ItemHandler) new ItemHandler(new ItemFirearm(), "steamcraft:firearm", "steamcraft:tools/").register(true);
 		firearm = handler.get();
 
         flintlockMusket = new ItemStack(firearm, 1, 0);
 		ItemFirearm.setFirePower(flintlockMusket, 8);
 		ItemFirearm.setMaxDamage(flintlockMusket, 100);
-        handler.setOutput(flintlockMusket).addAchievement("lockstockbarrel", -1, 3, AchievementList.acquireIron).register(true);
+        handler.setOutput(flintlockMusket).addAchievement("lockstockbarrel", -1, 3, AchievementList.acquireIron);
 		matchlockMusket = new ItemStack(firearm, 1, 0);
 		ItemFirearm.setFirePower(matchlockMusket, 6);
 		ItemFirearm.setMaxDamage(matchlockMusket, 200);
@@ -424,23 +417,23 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		EntityHighwayman.heldItems[4] = percussionCapMusket;
 		EntityHighwayman.heldItems[5] = percussionCapRifle;
 		new ItemHandler(new ItemElectricLamp(HandlerRegistry.getBlock("steamcraft:electricLampOff").get()), "steamcraft:electricLamp",
-				"steamcraft:electriclamp", "lampElectric").addRecipe(true, "I", "#", "X",'#', "dustCopper",'X', "ingotCastIron",'I',
-				"itemLightBulb").register(true);
+				"steamcraft:electriclamp", "lampElectric").register(true).addRecipe(true, "I", "#", "X",'#', "dustCopper",'X', "ingotCastIron",'I',
+				"itemLightBulb");
 		new ItemHandler(new ItemElectricLamp(HandlerRegistry.getBlock("steamcraft:wirelessLampOff").get()), "steamcraft:wirelessLamp",
-				"steamcraft:wirelesslamp").addRecipe(true, "#", "X",'#', "lampElectric",'X', "teslaReceiver").register(true);
+				"steamcraft:wirelesslamp").register(true).addRecipe(true, "#", "X",'#', "lampElectric",'X', "teslaReceiver");
 		new ItemHandler(new ItemSeeds(HandlerRegistry.getBlock("steamcraft:teaplant").get(), Blocks.farmland), "steamcraft:teaSeeds",
-				"steamcraft:teaseed", "seedTea").addSeed(5).register(true);
+				"steamcraft:teaseed", "seedTea").register(true).addSeed(5);
 		new ItemHandler(new Item(), "steamcraft:teaLeaf", "steamcraft:tealeaves", "teaLeaves").register(true);
 		ItemHandler kettle = new ItemHandler(new ItemKettle(), "steamcraft:kettleHot", "steamcraft:kettle", "kettleHot");
 		kettle.register(true);
-		new ItemHandler(new ItemKettle(), "steamcraft:kettle", "steamcraft:kettle", "kettleFull").addSmelt(new ItemStack(kettle.get()), 1.0F)
-				.addRecipe(false, "kettle", Items.water_bucket, "teaLeaves").register(true);
-		new ItemHandler(new ItemTeacup(0), "steamcraft:teacupEmpty", "steamcraft:teacupempty", "teacup").addRecipe(true, "# #", " # ",
-				'#', Items.clay_ball).register(true);
-		new ItemHandler(new ItemTeacup(4), "steamcraft:teacup", "steamcraft:teacupfull", "teacupFull").addAchievement("timeforacuppa", -1, 2,
-				AchievementList.acquireIron).register(true);
-		new ItemHandler(new ItemKettle(), "steamcraft:kettleempty", "steamcraft:kettle", "kettle").addRecipe(true, "#  ", "###", " ##",
-				'#', "ingotCastIron").register(true);
+		new ItemHandler(new ItemKettle(), "steamcraft:kettle", "steamcraft:kettle", "kettleFull").register(true).addSmelt(new ItemStack(kettle.get()), 1.0F)
+				.addRecipe(false, "kettle", Items.water_bucket, "teaLeaves");
+		new ItemHandler(new ItemTeacup(0), "steamcraft:teacupEmpty", "steamcraft:teacupempty", "teacup").register(true).addRecipe(true, "# #", " # ",
+				'#', Items.clay_ball);
+		new ItemHandler(new ItemTeacup(4), "steamcraft:teacup", "steamcraft:teacupfull", "teacupFull").register(true).addAchievement("timeforacuppa", -1, 2,
+				AchievementList.acquireIron);
+		new ItemHandler(new ItemKettle(), "steamcraft:kettleempty", "steamcraft:kettle", "kettle").register(true).addRecipe(true, "#  ", "###", " ##",
+				'#', "ingotCastIron");
 		if (config.hasChanged())
 			config.save();
 		brimstoneGen = new WorldGenMinable(HandlerRegistry.getBlock("steamcraft:brimstone").get(), 8);
@@ -602,33 +595,33 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 3), "#", "#",'#', Blocks.obsidian));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.obsidian), "##", "##",'#', "slateObsidian"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.redstone, 8), "###",'#', "dustCopper"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 6), "I", "#", "X",'#', "wireCopper",'X', Items.iron_ingot,'I',
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 4, 6), "I", "#", "X",'#', "wireCopper",'X', "ingotIron",'I',
 				Blocks.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 1, 10), "###", "#X#", "###",'#', Blocks.obsidian,'X', "furnaceChemical"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 1, 11), "#X#", "# #", " # ",'#', Items.iron_ingot,'X', "gemEtherium"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(material, 1, 11), "#X#", "# #", " # ",'#', "ingotIron",'X', "gemEtherium"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 1, 4), "ingotZinc", "dustCopper"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(material, 2, 9), "oreUranium"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(spanner), "# #", "#X#", " # ",'#', "ingotBrass",'X', "gemEtherium"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.jukebox), "###", "#X#", "###",'#', "plankWood",'X', Items.quartz));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.golden_rail, 6), "XRX", "X#X", "XRX",'X', Items.gold_ingot,'R', "wireCopper",
+		GameRegistry.addRecipe(new ShapedOreRecipe(spanner, "# #", "#X#", " # ",'#', "ingotBrass",'X', "gemEtherium"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.jukebox, "###", "#X#", "###",'#', "plankWood",'X', "gemQuartz"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.golden_rail, 6), "XRX", "X#X", "XRX",'X', "ingotGold",'R', "wireCopper",
 				'#', "stickWood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.detector_rail, 6), "XRX", "X#X", "XRX",'X', Items.iron_ingot,'R', "wireCopper",
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.detector_rail, 6), "XRX", "X#X", "XRX",'X', "ingotIron",'R', "wireCopper",
 				'#', Blocks.stone_pressure_plate));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.lever), "X", "#", "I",'#', "cobblestone",'X', "stickWood",'I',
 				"battery"));
-		GameRegistry.addRecipe(new ItemStack(Items.clock), " # ", "#X#", " # ",'#', Items.gold_ingot,'X', Items.quartz);
-		GameRegistry.addRecipe(new ItemStack(Items.compass), " # ", "#X#", " # ",'#', Items.iron_ingot,'X', Items.quartz);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.stone_button), "#", "#", "X",'#', "stone",'X', "battery"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.stone_pressure_plate), "##", "X ",'#', "stone",'X', "battery"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.wooden_pressure_plate), "##", "X ",'#', "plankWood",'X', "battery"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.dispenser), "###", "#X#", "#R#",'#', "cobblestone",'X', Items.bow,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.clock, " # ", "#X#", " # ",'#', "ingotGold",'X', "gemQuartz"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.compass, " # ", "#X#", " # ",'#', "ingotIron",'X', "gemQuartz"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.stone_button, "#", "#", "X",'#', "stone",'X', "battery"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.stone_pressure_plate, "##", "X ",'#', "stone",'X', "battery"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.wooden_pressure_plate, "##", "X ",'#', "plankWood",'X', "battery"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.dispenser, "###", "#X#", "#R#",'#', "cobblestone",'X', Items.bow,
 				'R', Items.quartz));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.gunpowder), "#X#",'#', "oreSulphur",'X', Items.coal));
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.gunpowder, "#X#",'#', "oreSulphur",'X', Items.coal));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.glowstone_dust, 4), "X#X", "#I#", "X#X",'#', "ingotPosphate",'X', "oreSulphur",
 				'I', "oreUranium"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.piston), "TTT", "#X#", "#R#",'#', "cobblestone",'X', Items.iron_ingot,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.piston, "TTT", "#X#", "#R#",'#', "cobblestone",'X', "ingotIron",
 				'R', "dustCopper",'T', "plankWood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 2), "X ", "##",'#', Items.iron_ingot,'X', "ingotBrass"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 2), "X ", "##",'#', "ingotIron",'X', "ingotBrass"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 1, 5), "#  ", " # ", "  #",'#', "plankWood"));
 		GameRegistry.addRecipe(new ItemStack(part, 1, 3), "#  ", " # ", "  #",'#', Items.iron_ingot);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(part, 1, 4), "barrel", "chisel"));
@@ -652,7 +645,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		GameRegistry.addRecipe(new ItemStack(part, 8), "X", "#", "T",'#', Items.gunpowder,'X', Items.iron_ingot,'T', Items.paper);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(part, 8, 1), "T", "#", "X",'#', Items.gunpowder,'X', "ingotBrass",'T',
 				Items.paper));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.slime_ball), Items.water_bucket, "oreSulphur"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(Items.slime_ball, Items.water_bucket, "oreSulphur"));
 		addSpannerRecipes();
 	    addAchievements();
 	}
