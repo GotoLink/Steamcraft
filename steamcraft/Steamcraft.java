@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.registry.GameData;
@@ -246,7 +247,7 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
 		new BlockHandler(new BlockDiode(true).setStepSound(Block.soundTypeWood), "steamcraft:diodeactive", "steamcraft:diodeactive").setValues(0.0F,
 				0.625F).register(true);
 		new BlockHandler(new BlockPoweredRail(true).setStepSound(Block.soundTypeMetal), "steamcraft:rail", "steamcraft:rail").setValues(0.7F).register(true);
-		new BlockHandler(new BlockNetherSapling(), "steamcraft.nethersapling", "steamcraft:nethersapling", "saplingNether").register(true);
+		new BlockHandler(new BlockNetherSapling(), "steamcraft:nethersapling", "steamcraft:nethersapling", "saplingNether").register(true);
 		new BlockHandler(new BlockElectricLamp(TileEntityLamp.class, false), "steamcraft:electricLampOff", "steamcraft:electriclamp").setValues(0.0F)
 				.register(true);
 		new BlockHandler(new BlockElectricLamp(TileEntityLamp.class, true), "steamcraft:electricLampOn", "steamcraft:electriclamp").setValues(0.0F,
@@ -471,6 +472,21 @@ public class Steamcraft implements IWorldGenerator, IFuelHandler {
             OreDictionary.registerOre(data.get(obj), obj);
         }
 	}
+
+    @EventHandler
+    public void remap(FMLMissingMappingsEvent event){
+        for(FMLMissingMappingsEvent.MissingMapping missingMapping:event.get()){
+            if(missingMapping.name.equals("steamcraft:steamcraft.nethersapling"))
+                switch(missingMapping.type){
+                    case BLOCK:
+                        missingMapping.remap(HandlerRegistry.getBlock("steamcraft:nethersapling").get());
+                        break;
+                    case ITEM:
+                        missingMapping.remap(HandlerRegistry.getBlock("steamcraft:nethersapling").getItem());
+                        break;
+                }
+        }
+    }
 
     @SubscribeEvent
     public void livingHurt(LivingHurtEvent event){
