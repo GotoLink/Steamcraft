@@ -8,7 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import steamcraft.HandlerRegistry;
 
-public class RenderCopperWire extends RenderBlocks {
+public final class RenderCopperWire extends RenderBlocks {
 	public RenderCopperWire() {
 		//overrideBlockTexture = 0;
 	}

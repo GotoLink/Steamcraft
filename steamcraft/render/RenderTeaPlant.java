@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
 
-public class RenderTeaPlant extends RenderBlocks {
+public final class RenderTeaPlant extends RenderBlocks {
 	public RenderTeaPlant() {
 		//overrideBlockTexture = 0;
 	}

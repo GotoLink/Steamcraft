@@ -1,7 +1,5 @@
 package steamcraft;
 
-import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -10,6 +8,8 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenHighwaymanHideout extends WorldGenerator {
 	public WorldGenHighwaymanHideout() {

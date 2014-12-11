@@ -1,11 +1,11 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
+
+import java.util.Random;
 
 public class BlockWirelessLamp extends BlockElectricLamp {
 	public BlockWirelessLamp(Class<?> class1, boolean flag) {

@@ -1,11 +1,11 @@
 package steamcraft.blocks;
 
+import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.world.World;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.block.BlockRedstoneTorch;
-import net.minecraft.world.World;
 
 public class BlockRedstoneAccess extends BlockRedstoneTorch{
 

@@ -1,7 +1,7 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
 import steamcraft.TileEntityNukeFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockNukeFurnace extends BlockMainFurnace {
 	public BlockNukeFurnace(boolean flag) {

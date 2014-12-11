@@ -1,7 +1,7 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockRedstoneDiode;
 import net.minecraft.block.BlockRedstoneRepeater;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -10,8 +10,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import steamcraft.BlockHandler;
 import steamcraft.HandlerRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockDiode extends BlockRedstoneRepeater {
 	public static IIcon iconInverterIdle;

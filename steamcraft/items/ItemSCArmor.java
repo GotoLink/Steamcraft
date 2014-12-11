@@ -1,7 +1,7 @@
 package steamcraft.items;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -14,13 +14,11 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
 import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class ItemSCArmor extends ItemArmor {
 	public final static ResourceLocation goggles = new ResourceLocation("steamcraft", "misc/goggles.png");

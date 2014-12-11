@@ -2,18 +2,13 @@ package steamcraft;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import steamcraft.inventories.ContainerChemFurnace;
-import steamcraft.inventories.ContainerNukeFurnace;
-import steamcraft.inventories.ContainerSteamFurnace;
-import steamcraft.inventories.GuiChemFurnace;
-import steamcraft.inventories.GuiNukeFurnace;
-import steamcraft.inventories.GuiSteamFurnace;
+import steamcraft.inventories.*;
 import steamcraft.items.ItemSCArmor;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler {
 	@Override

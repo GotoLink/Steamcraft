@@ -1,7 +1,5 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
@@ -11,6 +9,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import steamcraft.HandlerRegistry;
+
+import java.util.Random;
 
 public class BlockNetherLeaves extends Block {
 	public BlockNetherLeaves(Material mat) {

@@ -4,13 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
 import steamcraft.HandlerRegistry;
 import steamcraft.TileEntityLamp;
 
-public class TileEntityLampRenderer extends TileEntitySpecialRenderer {
+public final class TileEntityLampRenderer extends TileEntitySpecialRenderer {
 	public static final ResourceLocation lampOn = new ResourceLocation("steamcraft", "item/lampon.png");
 	public static final ResourceLocation lampOff = new ResourceLocation("steamcraft", "item/lampoff.png");
 	private final ModelLampUp lampModelUp;

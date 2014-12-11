@@ -1,12 +1,12 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.item.Item;
 import steamcraft.HandlerRegistry;
 import steamcraft.Steamcraft;
+
+import java.util.Random;
 
 public class BlockSCOre extends BlockOre {
 	public BlockSCOre() {

@@ -1,5 +1,7 @@
 package steamcraft.inventories;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import steamcraft.TileEntityChemFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerChemFurnace extends Container {
 	public ContainerChemFurnace(InventoryPlayer inventoryplayer, TileEntityChemFurnace tileentitychemfurnace) {

@@ -1,11 +1,11 @@
 package steamcraft.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import steamcraft.HandlerRegistry;
+
+import java.util.Random;
 
 public class BlockTeslaCoil extends BlockRedstoneAccess {
 	private final boolean torchActive;

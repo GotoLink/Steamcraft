@@ -5,12 +5,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
 import steamcraft.EntityMusketBall;
 
-public class RenderMusketBall extends Render {
+public final class RenderMusketBall extends Render {
 	public final static ResourceLocation ball = new ResourceLocation("steamcraft", "item/musketball.png");
 
 	public void renderArrow(EntityMusketBall entityarrow, double d, double d1, double d2, float f, float f1) {

@@ -3,7 +3,7 @@ package steamcraft.render;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelLampUp extends ModelBase {
+public final class ModelLampUp extends ModelBase {
 	public ModelLampUp() {
 		Bracket = new ModelRenderer(this, 24, 3);
 		Bracket.addBox(-1F, 0F, -7.5F, 2, 3, 2);

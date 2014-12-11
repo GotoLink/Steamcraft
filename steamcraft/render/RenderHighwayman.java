@@ -7,12 +7,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
 import steamcraft.EntityHighwayman;
 
-public class RenderHighwayman extends RenderBiped {
+public final class RenderHighwayman extends RenderBiped {
 	public static final ResourceLocation cloak = new ResourceLocation("steamcraft", "textures/mob/highwaymancloak.png");
 	public static final ResourceLocation man = new ResourceLocation("steamcraft", "textures/mob/highwayman.png");
 

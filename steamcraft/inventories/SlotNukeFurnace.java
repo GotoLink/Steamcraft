@@ -6,7 +6,7 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import steamcraft.HandlerRegistry;
 
-public class SlotNukeFurnace extends SlotFurnace {
+public final class SlotNukeFurnace extends SlotFurnace {
 	private final EntityPlayer thePlayer;
 
 	public SlotNukeFurnace(EntityPlayer entityplayer, IInventory iinventory, int i, int j, int k) {

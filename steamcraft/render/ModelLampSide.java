@@ -3,7 +3,7 @@ package steamcraft.render;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelLampSide extends ModelBase {
+public final class ModelLampSide extends ModelBase {
 	public ModelLampSide() {
 		//constructor:
 		Bracket2 = new ModelRenderer(this, 13, 16);

@@ -1,5 +1,8 @@
 package steamcraft;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
@@ -14,16 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;
 import steamcraft.blocks.BlockCopperWire;
 import steamcraft.blocks.BlockTeaPlant;
-import steamcraft.render.RenderCopperWire;
-import steamcraft.render.RenderHighwayman;
-import steamcraft.render.RenderMusketBall;
-import steamcraft.render.RenderTeaPlant;
-import steamcraft.render.TileEntityLampRenderer;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import steamcraft.render.*;
 
-public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
+public final class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
 	public static final Minecraft minecraft = Minecraft.getMinecraft();
     public static final RenderCopperWire copperRender = new RenderCopperWire();
     public static final RenderTeaPlant teaRender = new RenderTeaPlant();

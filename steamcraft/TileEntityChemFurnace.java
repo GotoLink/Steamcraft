@@ -1,14 +1,14 @@
 package steamcraft;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import steamcraft.blocks.BlockChemFurnace;
 import steamcraft.blocks.BlockMainFurnace;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TileEntityChemFurnace extends FurnaceAccess {
 	public int currentItemBurnTimea;
